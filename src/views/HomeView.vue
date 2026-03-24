@@ -8,8 +8,11 @@
 </template>
 
 <script setup lang="ts">
+import { detectEnvironment } from '@/services/detection'
+
 function startScan() {
-  console.log('scan started')
+  const result = detectEnvironment()
+  console.log(result)
 }
 </script>
 
