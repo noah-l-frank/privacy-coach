@@ -11,12 +11,13 @@
 import { detectEnvironment } from '@/services/detection'
 import { useScanStore } from '@/stores/scan'
 
+const router = useRouter()
 const scanStore = useScanStore()
 
 function startScan() {
   const result = detectEnvironment()
   scanStore.setResult(result)
-  console.log(result)
+  router.push('/results')
 }
 </script>
 
