@@ -9,9 +9,13 @@
 
 <script setup lang="ts">
 import { detectEnvironment } from '@/services/detection'
+import { useScanStore } from '@/stores/scan'
+
+const scanStore = useScanStore()
 
 function startScan() {
   const result = detectEnvironment()
+  scanStore.setResult(result)
   console.log(result)
 }
 </script>
