@@ -13,7 +13,8 @@
               :name="question.id"
               type="radio"
               :value="option.value"
-              v-model="answers[question.id]"
+              :checked="questionsStore.answers[question.id] === option.value"
+              @change="updateAnswer(question.id, option.value)"
             />
             {{ option.label }}
           </label>
@@ -28,23 +29,27 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useScanStore } from '@/stores/scan'
+import { useQuestionsStore } from '@/stores/questions'
 import { getFollowUpQuestions } from '@/services/questions'
 
 const router = useRouter()
 const scanStore = useScanStore()
-
-const answers = reactive<Record<string, string>>({})
+const questionsStore = useQuestionsStore()
 
 const questions = computed(() => {
   if (!scanStore.result) return []
   return getFollowUpQuestions(scanStore.result)
 })
 
+function updateAnswer(questionId: string, value: string) {
+  questionsStore.setAnswer(questionId, value)
+}
+
 function goToResults() {
-  console.log(answers)
+  console.log(questionsStore.answers)
   router.push('/results')
 }
 </script>
