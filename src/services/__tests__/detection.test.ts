@@ -1,5 +1,23 @@
 import { describe, it, expect } from 'vitest'
-import { detectBrowser, detectEnvironment } from '../detection'
+import { detectOS, detectBrowser, detectEnvironment } from '../detection'
+
+describe('detectOS', () => {
+  it('detects windows', () => {
+    expect(detectOS('windows nt 10.0')).toBe('windows')
+  })
+
+  it('detects macos', () => {
+    expect(detectOS('macintosh')).toBe('macos')
+  })
+
+  it('detects linux', () => {
+    expect(detectOS('linux x86_64')).toBe('linux')
+  })
+
+  it('returns unknown for unsupported systems', () => {
+    expect(detectOS('some-random-os')).toBe('unknown')
+  })
+})
 
 describe('detectEnvironment', () => {
   it('returns all required fields', () => {

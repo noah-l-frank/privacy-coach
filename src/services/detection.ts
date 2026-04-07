@@ -10,6 +10,13 @@ type DetectionResult = {
   adblock: boolean
 }
 
+export function detectOS(userAgent: string): string {
+  if (userAgent.includes('win')) return 'windows'
+  if (userAgent.includes('mac')) return 'macos'
+  if (userAgent.includes('linux')) return 'linux'
+  return 'unknown'
+}
+
 export function detectBrowser(userAgent: string): { browserFamily: string; browser: string } {
   if (userAgent.includes('firefox')) {
     return {
@@ -50,10 +57,7 @@ export function detectEnvironment(): DetectionResult {
 
   const { browserFamily, browser } = detectBrowser(userAgent)
 
-  let os = 'unknown'
-  if (userAgent.includes('win')) os = 'windows'
-  else if (userAgent.includes('mac')) os = 'macos'
-  else if (userAgent.includes('linux')) os = 'linux'
+  const os = detectOS(userAgent)
 
   const language = navigator.language
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
