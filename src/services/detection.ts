@@ -10,7 +10,7 @@ type DetectionResult = {
   adblock: boolean
 }
 
-function detectBrowser(userAgent: string): { browserFamily: string; browser: string } {
+export function detectBrowser(userAgent: string): { browserFamily: string; browser: string } {
   if (userAgent.includes('firefox')) {
     return {
       browserFamily: 'firefox',
