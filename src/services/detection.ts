@@ -1,4 +1,5 @@
 type DetectionResult = {
+  browserFamily: string
   browser: string
   os: string
   language: string
@@ -9,12 +10,45 @@ type DetectionResult = {
   adblock: boolean
 }
 
+function detectBrowser(userAgent: string): { browserFamily: string; browser: string } {
+  if (userAgent.includes('firefox')) {
+    return {
+      browserFamily: 'firefox',
+      browser: 'firefox',
+    }
+  }
+
+  if (userAgent.includes('edg')) {
+    return {
+      browserFamily: 'chromium',
+      browser: 'edge',
+    }
+  }
+
+  if (userAgent.includes('opr') || userAgent.includes('opera')) {
+    return {
+      browserFamily: 'chromium',
+      browser: 'opera',
+    }
+  }
+
+  if (userAgent.includes('chrome') || userAgent.includes('chromium')) {
+    return {
+      browserFamily: 'chromium',
+      browser: 'chrome',
+    }
+  }
+
+  return {
+    browserFamily: 'unknown',
+    browser: 'unknown',
+  }
+}
+
 export function detectEnvironment(): DetectionResult {
   const userAgent = navigator.userAgent.toLowerCase()
 
-  let browser = 'unknown'
-  if (userAgent.includes('firefox')) browser = 'firefox'
-  else if (userAgent.includes('chrome') || userAgent.includes('chromium')) browser = 'chromium'
+  const { browserFamily, browser } = detectBrowser(userAgent)
 
   let os = 'unknown'
   if (userAgent.includes('win')) os = 'windows'
@@ -31,6 +65,7 @@ export function detectEnvironment(): DetectionResult {
   const adblock = false // TODO: Implement adblock detection logic
 
   return {
+    browserFamily,
     browser,
     os,
     language,
