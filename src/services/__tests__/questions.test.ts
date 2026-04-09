@@ -4,6 +4,7 @@ import { getFollowUpQuestions } from '../questions'
 describe('getFollowUpQuestions', () => {
   it('returns follow-up questions for disabled do not track and enabled cookies', () => {
     const result = {
+      browserFamily: 'chromium',
       browser: 'chromium',
       os: 'linux',
       language: 'de-DE',
@@ -25,6 +26,7 @@ describe('getFollowUpQuestions', () => {
 
   it('returns no follow-up questions when no follow-up is needed', () => {
     const result = {
+      browserFamily: 'chromium',
       browser: 'chromium',
       os: 'linux',
       language: 'de-DE',
