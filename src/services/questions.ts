@@ -1,14 +1,4 @@
-export type DetectionResult = {
-  browserFamily: string
-  browser: string
-  os: string
-  language: string
-  timezone: string
-  dnt: boolean
-  cookiesEnabled: boolean
-  https: boolean
-  adblock: boolean
-}
+import type { DetectionResult } from './detection'
 
 export type FollowUpQuestion = {
   id: string

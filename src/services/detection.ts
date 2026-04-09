@@ -1,4 +1,4 @@
-type DetectionResult = {
+export type DetectionResult = {
   browserFamily: string
   browser: string
   os: string
