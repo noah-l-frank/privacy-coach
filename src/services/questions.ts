@@ -1,4 +1,5 @@
 export type DetectionResult = {
+  browserFamily: string
   browser: string
   os: string
   language: string
@@ -44,6 +45,19 @@ export function getFollowUpQuestions(result: DetectionResult): FollowUpQuestion[
         { value: 'privacy', label: 'I prefer more privacy' },
         { value: 'balanced', label: 'I want a balance' },
         { value: 'convenience', label: 'I prefer convenience' },
+      ],
+    })
+  }
+
+  if (result.browser === 'chrome') {
+    questions.push({
+      id: 'browser_switch_similarity',
+      title: 'How important is it to keep a similar look and feel when switching browsers?',
+      description: 'You are currently using Google Chrome.',
+      options: [
+        { value: 'high', label: 'Very important' },
+        { value: 'medium', label: 'Somewhat important' },
+        { value: 'low', label: 'Not important' },
       ],
     })
   }
