@@ -24,10 +24,79 @@ describe('getFollowUpQuestions', () => {
     ])
   })
 
-  it('returns no follow-up questions when no follow-up is needed', () => {
+  it('adds the Chrome browser switch similarity question for Chrome users', () => {
     const result = {
       browserFamily: 'chromium',
-      browser: 'chromium',
+      browser: 'chrome',
+      os: 'linux',
+      language: 'de-DE',
+      timezone: 'Europe/Berlin',
+      dnt: true,
+      cookiesEnabled: false,
+      https: true,
+      adblock: false,
+    }
+
+    const questions = getFollowUpQuestions(result)
+
+    expect(questions).toHaveLength(1)
+
+    const [question] = questions
+    if (!question) throw new Error('Expected one question')
+
+    expect(question.id).toBe('browser_switch_similarity')
+  })
+
+  it('adds the browser switch willingness question for Edge users', () => {
+    const result = {
+      browserFamily: 'chromium',
+      browser: 'edge',
+      os: 'windows',
+      language: 'de-DE',
+      timezone: 'Europe/Berlin',
+      dnt: true,
+      cookiesEnabled: false,
+      https: true,
+      adblock: false,
+    }
+
+    const questions = getFollowUpQuestions(result)
+
+    expect(questions).toHaveLength(1)
+
+    const [question] = questions
+    if (!question) throw new Error('Expected one question')
+
+    expect(question.id).toBe('browser_switch_willingness')
+  })
+
+  it('adds the Firefox privacy importance question for Firefox users', () => {
+    const result = {
+      browserFamily: 'firefox',
+      browser: 'firefox',
+      os: 'linux',
+      language: 'de-DE',
+      timezone: 'Europe/Berlin',
+      dnt: true,
+      cookiesEnabled: false,
+      https: true,
+      adblock: false,
+    }
+
+    const questions = getFollowUpQuestions(result)
+
+    expect(questions).toHaveLength(1)
+
+    const [question] = questions
+    if (!question) throw new Error('Expected one question')
+
+    expect(question.id).toBe('firefox_privacy_importance')
+  })
+
+  it('returns no follow-up questions when no follow-up is needed', () => {
+    const result = {
+      browserFamily: 'unknown',
+      browser: 'unknown',
       os: 'linux',
       language: 'de-DE',
       timezone: 'Europe/Berlin',
