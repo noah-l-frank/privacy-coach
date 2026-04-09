@@ -52,5 +52,31 @@ export function getFollowUpQuestions(result: DetectionResult): FollowUpQuestion[
     })
   }
 
+  if (result.browser === 'edge' || result.browser === 'opera') {
+    questions.push({
+      id: 'browser_switch_willingness',
+      title: 'How willing are you to switch to a different browser for better privacy?',
+      description: 'You are currently using a Chromium-based browser.',
+      options: [
+        { value: 'yes', label: 'Yes' },
+        { value: 'maybe', label: 'Maybe' },
+        { value: 'no', label: 'No' },
+      ],
+    })
+  }
+
+  if (result.browser === 'firefox') {
+    questions.push({
+      id: 'firefox_privacy_importance',
+      title: 'How important is privacy to you when browsing the web?',
+      description: 'You are already using Firefox.',
+      options: [
+        { value: 'high', label: 'Very important' },
+        { value: 'medium', label: 'Somewhat important' },
+        { value: 'low', label: 'Not very important' },
+      ],
+    })
+  }
+
   return questions
 }
