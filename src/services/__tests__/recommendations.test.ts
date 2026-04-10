@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { generateRecommendations } from '../recommendations'
 
 describe('generateRecommendations', () => {
-  it('returns a Chrome-specific recommendation for Chrome users', () => {
+  it('recommends Firefox for Chrome users who prefer privacy and do not need a similar look and feel', () => {
     const result = {
       browserFamily: 'chromium',
       browser: 'chrome',
@@ -15,80 +15,99 @@ describe('generateRecommendations', () => {
       adblock: false,
     }
 
-    const recommendations = generateRecommendations(result)
+    const answers = {
+      cookie_preference: 'privacy',
+      browser_switch_similarity: 'low',
+    }
+
+    const recommendations = generateRecommendations(result, answers)
 
     expect(recommendations).toHaveLength(1)
-    expect(recommendations[0]).toEqual({
-      id: 'chrome-privacy',
-      title: 'Consider a more privacy-focused browser',
+
+    const [recommendation] = recommendations
+    if (!recommendation) throw new Error('Expected one recommendation')
+
+    expect(recommendation).toEqual({
+      id: 'switch-to-firefox',
+      title: 'Switch to a privacy-focused browser',
       description:
-        'Google Chrome is convenient and widely used, but it is less privacy-friendly than some alternatives.',
+        'Since privacy is important to you and you do not mind a different look and feel, consider switching to Firefox for stronger built-in privacy protections.',
     })
   })
-})
 
-it('returns an Edge-specific recommendation for Edge users', () => {
-  const result = {
-    browserFamily: 'chromium',
-    browser: 'edge',
-    os: 'windows',
-    language: 'de-DE',
-    timezone: 'Europe/Berlin',
-    dnt: false,
-    cookiesEnabled: true,
-    https: true,
-    adblock: false,
-  }
+  it('recommends a privacy-friendly Chromium browser for Chrome users who prefer privacy and want a similar look and feel', () => {
+    const result = {
+      browserFamily: 'chromium',
+      browser: 'chrome',
+      os: 'linux',
+      language: 'de-DE',
+      timezone: 'Europe/Berlin',
+      dnt: false,
+      cookiesEnabled: true,
+      https: true,
+      adblock: false,
+    }
 
-  const recommendations = generateRecommendations(result)
+    const answers = {
+      cookie_preference: 'privacy',
+      browser_switch_similarity: 'high',
+    }
 
-  expect(recommendations).toHaveLength(1)
-  expect(recommendations[0]).toEqual({
-    id: 'edge-privacy',
-    title: 'Review Microsoft Edge privacy settings',
-    description:
-      'Microsoft Edge includes tracking prevention features, but some settings may still share data with Microsoft services.',
+    const recommendations = generateRecommendations(result, answers)
+
+    expect(recommendations).toHaveLength(1)
+
+    const [recommendation] = recommendations
+    if (!recommendation) throw new Error('Expected one recommendation')
+
+    expect(recommendation).toEqual({
+      id: 'switch-to-brave',
+      title: 'Consider a more private Chromium-based browser',
+      description:
+        'Since you prefer a familiar experience, you might consider a privacy-focused Chromium browser like Brave, which offers better default privacy settings than Chrome.',
+    })
   })
-})
 
-it('returns a Firefox-specific recommendation for Firefox users', () => {
-  const result = {
-    browserFamily: 'firefox',
-    browser: 'firefox',
-    os: 'linux',
-    language: 'de-DE',
-    timezone: 'Europe/Berlin',
-    dnt: false,
-    cookiesEnabled: true,
-    https: true,
-    adblock: false,
-  }
+  it('returns no browser switch recommendation for Chrome users who do not prefer privacy', () => {
+    const result = {
+      browserFamily: 'chromium',
+      browser: 'chrome',
+      os: 'linux',
+      language: 'de-DE',
+      timezone: 'Europe/Berlin',
+      dnt: false,
+      cookiesEnabled: true,
+      https: true,
+      adblock: false,
+    }
 
-  const recommendations = generateRecommendations(result)
+    const answers = {
+      cookie_preference: 'convenience',
+      browser_switch_similarity: 'low',
+    }
 
-  expect(recommendations).toHaveLength(1)
-  expect(recommendations[0]).toEqual({
-    id: 'firefox-privacy',
-    title: 'Check Firefox privacy protections',
-    description:
-      'Firefox already offers strong privacy features. Reviewing its privacy settings can further improve protection.',
+    const recommendations = generateRecommendations(result, answers)
+
+    expect(recommendations).toHaveLength(0)
   })
-})
 
-it('returns no recommendations for unknown browser', () => {
-  const result = {
-    browserFamily: 'unknown',
-    browser: 'unknown',
-    os: 'linux',
-    language: 'de-DE',
-    timezone: 'Europe/Berlin',
-    dnt: false,
-    cookiesEnabled: true,
-    https: true,
-    adblock: false,
-  }
+  it('returns no recommendations for unknown browser', () => {
+    const result = {
+      browserFamily: 'unknown',
+      browser: 'unknown',
+      os: 'linux',
+      language: 'de-DE',
+      timezone: 'Europe/Berlin',
+      dnt: false,
+      cookiesEnabled: true,
+      https: true,
+      adblock: false,
+    }
 
-  const recommendations = generateRecommendations(result)
+    const answers = {}
 
-  expect(recommendations).toHaveLength(0)
+    const recommendations = generateRecommendations(result, answers)
+
+    expect(recommendations).toHaveLength(0)
+  })
 })
