@@ -10,7 +10,7 @@ describe('generateRecommendations', () => {
       language: 'de-DE',
       timezone: 'Europe/Berlin',
       dnt: false,
-      cookiesEnabled: true,
+      cookiesEnabled: false,
       https: true,
       adblock: false,
     }
@@ -43,7 +43,7 @@ describe('generateRecommendations', () => {
       language: 'de-DE',
       timezone: 'Europe/Berlin',
       dnt: false,
-      cookiesEnabled: true,
+      cookiesEnabled: false,
       https: true,
       adblock: false,
     }
@@ -89,6 +89,76 @@ describe('generateRecommendations', () => {
     const recommendations = generateRecommendations(result, answers)
 
     expect(recommendations).toHaveLength(0)
+  })
+
+  it('recommends Firefox optimization for Firefox users who prefer privacy', () => {
+    const result = {
+      browserFamily: 'firefox',
+      browser: 'firefox',
+      os: 'linux',
+      language: 'de-DE',
+      timezone: 'Europe/Berlin',
+      dnt: false,
+      cookiesEnabled: true,
+      https: true,
+      adblock: false,
+    }
+
+    const answers = {
+      cookie_preference: 'privacy',
+    }
+
+    const recommendations = generateRecommendations(result, answers)
+
+    expect(recommendations.some((recommendation) => recommendation.id === 'optimize-firefox')).toBe(
+      true,
+    )
+  })
+
+  it('recommends enabling Do Not Track when it is disabled and tracking protection is important', () => {
+    const result = {
+      browserFamily: 'chromium',
+      browser: 'chrome',
+      os: 'linux',
+      language: 'de-DE',
+      timezone: 'Europe/Berlin',
+      dnt: false,
+      cookiesEnabled: true,
+      https: true,
+      adblock: false,
+    }
+
+    const answers = {
+      dnt_preference: 'high',
+    }
+
+    const recommendations = generateRecommendations(result, answers)
+
+    expect(recommendations.some((recommendation) => recommendation.id === 'enable-dnt')).toBe(true)
+  })
+
+  it('recommends reducing cookies when cookies are enabled and privacy is preferred', () => {
+    const result = {
+      browserFamily: 'chromium',
+      browser: 'edge',
+      os: 'windows',
+      language: 'de-DE',
+      timezone: 'Europe/Berlin',
+      dnt: false,
+      cookiesEnabled: true,
+      https: true,
+      adblock: false,
+    }
+
+    const answers = {
+      cookie_preference: 'privacy',
+    }
+
+    const recommendations = generateRecommendations(result, answers)
+
+    expect(recommendations.some((recommendation) => recommendation.id === 'reduce-cookies')).toBe(
+      true,
+    )
   })
 
   it('returns no recommendations for unknown browser', () => {
