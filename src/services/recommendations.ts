@@ -16,7 +16,10 @@ export type Recommendation = {
   description: string
 }
 
-export function generateRecommendations(result: DetectionResult): Recommendation[] {
+export function generateRecommendations(
+  result: DetectionResult,
+  answers: Record<string, string>,
+): Recommendation[] {
   const recommendations: Recommendation[] = []
 
   if (result.browser === 'chrome') {
