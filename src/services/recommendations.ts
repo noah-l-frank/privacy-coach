@@ -45,5 +45,32 @@ export function generateRecommendations(
     }
   }
 
+  if (result.browser === 'firefox' && answers.cookie_preference === 'privacy') {
+    recommendations.push({
+      id: 'optimize-firefox',
+      title: 'Optimize your Firefox privacy settings',
+      description:
+        'You are already using Firefox. Reviewing its privacy settings can further improve your protection.',
+    })
+  }
+
+  if (!result.dnt && answers.dnt_preference === 'high') {
+    recommendations.push({
+      id: 'enable-dnt',
+      title: 'Enable Do Not Track',
+      description:
+        'Since tracking protection is important to you, consider enabling Do Not Track in your browser settings.',
+    })
+  }
+
+  if (result.cookiesEnabled && answers.cookie_preference === 'privacy') {
+    recommendations.push({
+      id: 'reduce-cookies',
+      title: 'Reduce cookie and tracking exposure',
+      description:
+        'Since privacy is important to you, consider reducing tracking and third-party cookie usage in your browser.',
+    })
+  }
+
   return recommendations
 }
