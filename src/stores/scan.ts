@@ -1,15 +1,5 @@
 import { defineStore } from 'pinia'
-
-type DetectionResult = {
-  browser: string
-  os: string
-  language: string
-  timezone: string
-  dnt: boolean
-  cookiesEnabled: boolean
-  https: boolean
-  adblock: boolean
-}
+import type { DetectionResult } from '@/services/detection'
 
 export const useScanStore = defineStore('scan', {
   state: () => ({
