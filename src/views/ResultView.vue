@@ -4,30 +4,28 @@ import { useRouter } from 'vue-router'
 import { useScanStore } from '@/stores/scan'
 import { useQuestionsStore } from '@/stores/questions'
 import { calculatePrivacyScore } from '@/services/scoring'
+import { generateRecommendations } from '@/services/recommendations'
 
 const router = useRouter()
 const scanStore = useScanStore()
 const questionsStore = useQuestionsStore()
 
-const mockRecommendations = computed(() => [
-  {
-    title: 'Use a privacy-friendly browser',
-    description: 'Your current browser may collect more data than necessary.',
-    effort: 'easy',
-  },
-  {
-    title: 'Enable tracker blocking',
-    description: 'Blocking trackers reduces cross-site profiling and improves privacy.',
-    effort: 'easy',
-  },
-  {
-    title: 'Review your search engine',
-    description: 'A privacy-respecting search engine can reduce unnecessary data collection.',
-    effort: 'medium',
-  },
-])
+const recommendations = computed(() => {
+  if (!scanStore.result) return []
+  return generateRecommendations(scanStore.result, questionsStore.answers)
+})
 
-const positiveFindings = computed(() => ['HTTPS is enabled', 'Do Not Track is active'])
+const positiveFindings = computed(() => {
+  if (!scanStore.result) return []
+
+  const positives: string[] = []
+
+  if (scanStore.result.https) positives.push('HTTPS is enabled')
+  if (scanStore.result.dnt) positives.push('Do Not Track is active')
+  if (scanStore.result.adblock) positives.push('Ad blocker is active')
+
+  return positives
+})
 
 const privacyScore = computed(() => {
   if (!scanStore.result) return 0
@@ -102,10 +100,10 @@ function restartScan() {
         Based on your scan results and answers, here are the most relevant next steps.
       </p>
 
-      <div class="recommendations-list">
+      <div v-if="recommendations.length" class="recommendations-list">
         <article
-          v-for="recommendation in mockRecommendations"
-          :key="recommendation.title"
+          v-for="recommendation in recommendations"
+          :key="recommendation.id"
           class="recommendation-card"
         >
           <div class="recommendation-header">
@@ -116,9 +114,11 @@ function restartScan() {
           <p>{{ recommendation.description }}</p>
         </article>
       </div>
+
+      <p v-else class="empty-state">No specific recommendations right now.</p>
     </section>
 
-    <section class="positives-section">
+    <section v-if="positiveFindings.length" class="positives-section">
       <h2>You are already doing well here</h2>
 
       <ul class="positives-list">
@@ -246,9 +246,17 @@ function restartScan() {
   margin-bottom: 2rem;
 }
 
+.subtitle {
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 60ch;
+  opacity: 0.85;
+}
+
 .recommendations-list {
   display: grid;
   gap: 1rem;
+  margin-top: 1.5rem;
 }
 
 .recommendation-card {
@@ -286,6 +294,11 @@ function restartScan() {
 
 .positives-list li + li {
   margin-top: 0.5rem;
+}
+
+.empty-state {
+  margin-top: 1rem;
+  opacity: 0.75;
 }
 
 .actions {
