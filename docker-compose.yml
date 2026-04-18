@@ -1,0 +1,11 @@
+services:
+  privacy-coach:
+    build: .
+    container_name: privacy-coach
+    restart: unless-stopped
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
