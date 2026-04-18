@@ -18,6 +18,7 @@ describe('scan store', () => {
 
     const result = {
       browser: 'chromium',
+      browserFamily: 'chromium',
       os: 'linux',
       language: 'de-DE',
       timezone: 'Europe/Berlin',
