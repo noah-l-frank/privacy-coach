@@ -3,6 +3,8 @@ services:
     build: .
     container_name: privacy-coach
     restart: unless-stopped
+    ports:
+      - '5699:5699'
     networks:
       - proxy
 
