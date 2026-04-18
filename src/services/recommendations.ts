@@ -14,6 +14,7 @@ export type Recommendation = {
   id: string
   title: string
   description: string
+  effort: 'easy' | 'medium' | 'advanced'
 }
 
 export function generateRecommendations(
@@ -25,13 +26,16 @@ export function generateRecommendations(
   const similarity = answers.browser_switch_similarity ?? 'medium'
   const cookiePreference = answers.cookie_preference ?? 'balanced'
 
-  if (result.browser === 'chrome' && cookiePreference === 'privacy') {
+  const browser = result.browser.toLowerCase()
+
+  if (browser.includes('chrome') && cookiePreference === 'privacy') {
     if (similarity === 'low') {
       recommendations.push({
         id: 'switch-to-firefox',
         title: 'Switch to a privacy-focused browser',
         description:
           'Since privacy is important to you and you do not mind a different look and feel, consider switching to Firefox for stronger built-in privacy protections.',
+        effort: 'medium',
       })
     }
 
@@ -41,16 +45,18 @@ export function generateRecommendations(
         title: 'Consider a more private Chromium-based browser',
         description:
           'Since you prefer a familiar experience, you might consider a privacy-focused Chromium browser like Brave, which offers better default privacy settings than Chrome.',
+        effort: 'easy',
       })
     }
   }
 
-  if (result.browser === 'firefox' && answers.cookie_preference === 'privacy') {
+  if (browser.includes('firefox') && cookiePreference === 'privacy') {
     recommendations.push({
       id: 'optimize-firefox',
       title: 'Optimize your Firefox privacy settings',
       description:
         'You are already using Firefox. Reviewing its privacy settings can further improve your protection.',
+      effort: 'easy',
     })
   }
 
@@ -60,15 +66,17 @@ export function generateRecommendations(
       title: 'Enable Do Not Track',
       description:
         'Since tracking protection is important to you, consider enabling Do Not Track in your browser settings.',
+      effort: 'easy',
     })
   }
 
-  if (result.cookiesEnabled && answers.cookie_preference === 'privacy') {
+  if (result.cookiesEnabled && cookiePreference === 'privacy') {
     recommendations.push({
       id: 'reduce-cookies',
       title: 'Reduce cookie and tracking exposure',
       description:
         'Since privacy is important to you, consider reducing tracking and third-party cookie usage in your browser.',
+      effort: 'medium',
     })
   }
 
