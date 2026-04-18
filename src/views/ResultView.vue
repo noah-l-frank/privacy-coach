@@ -52,6 +52,33 @@ const scoreColor = computed(() => {
   return '#22c55e'
 })
 
+const getEffortStyle = (effort: string) => {
+  if (effort === 'easy') {
+    return {
+      color: '#22c55e',
+      background: 'rgba(34, 197, 94, 0.12)',
+      border: '1px solid rgba(34, 197, 94, 0.25)',
+      boxShadow: '0 0 8px rgba(34, 197, 94, 0.25)',
+    }
+  }
+
+  if (effort === 'medium') {
+    return {
+      color: '#facc15',
+      background: 'rgba(250, 204, 21, 0.12)',
+      border: '1px solid rgba(250, 204, 21, 0.25)',
+      boxShadow: '0 0 8px rgba(250, 204, 21, 0.25)',
+    }
+  }
+
+  return {
+    color: '#ef4444',
+    background: 'rgba(239, 68, 68, 0.12)',
+    border: '1px solid rgba(239, 68, 68, 0.25)',
+    boxShadow: '0 0 8px rgba(239, 68, 68, 0.25)',
+  }
+}
+
 function restartScan() {
   scanStore.$reset()
   questionsStore.$reset()
@@ -108,7 +135,9 @@ function restartScan() {
         >
           <div class="recommendation-header">
             <h3>{{ recommendation.title }}</h3>
-            <span class="effort-badge">{{ recommendation.effort }}</span>
+            <span class="effort-badge" :style="getEffortStyle(recommendation.effort)">
+              {{ recommendation.effort }}
+            </span>
           </div>
 
           <p>{{ recommendation.description }}</p>
@@ -172,7 +201,6 @@ function restartScan() {
   font-weight: 800;
   margin: 0;
   letter-spacing: -0.03em;
-  transition: color 0.3s ease;
 }
 
 .score-pill {
@@ -186,10 +214,6 @@ function restartScan() {
   font-weight: 700;
   background: transparent;
   border: 2px solid;
-  transition:
-    color 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
 }
 
 .score-bar-wrapper {
@@ -203,19 +227,12 @@ function restartScan() {
   border-radius: 999px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.12);
-  box-shadow:
-    inset 0 2px 6px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .score-bar-fill {
   height: 100%;
   border-radius: 999px;
   background: linear-gradient(90deg, #ef4444 0%, #f59e0b 40%, #facc15 60%, #22c55e 100%);
-  box-shadow:
-    0 0 18px rgba(250, 204, 21, 0.2),
-    0 0 30px rgba(34, 197, 94, 0.14);
-  transition: width 0.45s ease;
 }
 
 .score-marker {
@@ -227,10 +244,6 @@ function restartScan() {
   transform: translateY(-50%);
   background: white;
   border: 3px solid #111827;
-  box-shadow:
-    0 0 0 4px rgba(255, 255, 255, 0.12),
-    0 6px 14px rgba(0, 0, 0, 0.3);
-  transition: left 0.45s ease;
 }
 
 .score-scale {
@@ -239,18 +252,6 @@ function restartScan() {
   margin-top: 0.65rem;
   font-size: 0.82rem;
   opacity: 0.78;
-}
-
-.recommendations-section,
-.positives-section {
-  margin-bottom: 2rem;
-}
-
-.subtitle {
-  font-size: 1rem;
-  line-height: 1.6;
-  max-width: 60ch;
-  opacity: 0.85;
 }
 
 .recommendations-list {
@@ -270,46 +271,25 @@ function restartScan() {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
   margin-bottom: 0.75rem;
 }
 
-.recommendation-header h3 {
-  margin: 0;
-  font-size: 1.1rem;
-}
-
 .effort-badge {
-  font-size: 0.85rem;
-  padding: 0.3rem 0.65rem;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.6rem;
   border-radius: 999px;
-  background: #eef2ff;
-  color: #3730a3;
-  white-space: nowrap;
+  font-weight: 600;
+  text-transform: capitalize;
 }
 
 .positives-list {
   padding-left: 1.25rem;
 }
 
-.positives-list li + li {
-  margin-top: 0.5rem;
-}
-
-.empty-state {
-  margin-top: 1rem;
-  opacity: 0.75;
-}
-
-.actions {
-  margin-top: 2rem;
-}
-
 .primary-button {
   border: none;
   border-radius: 12px;
   padding: 0.9rem 1.2rem;
-  font: inherit;
   font-weight: 600;
   cursor: pointer;
   background: #111827;
