@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useScanStore } from '@/stores/scan'
 import { useQuestionsStore } from '@/stores/questions'
+import { calculatePrivacyScore } from '@/services/scoring'
 
 const router = useRouter()
 const scanStore = useScanStore()
@@ -28,7 +29,10 @@ const mockRecommendations = computed(() => [
 
 const positiveFindings = computed(() => ['HTTPS is enabled', 'Do Not Track is active'])
 
-const privacyScore = computed(() => 62)
+const privacyScore = computed(() => {
+  if (!scanStore.result) return 0
+  return calculatePrivacyScore(scanStore.result)
+})
 
 const scoreBarStyle = computed(() => ({
   width: `${privacyScore.value}%`,
