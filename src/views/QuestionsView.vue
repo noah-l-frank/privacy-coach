@@ -2,26 +2,15 @@
   <main>
     <h1>Follow-up Questions</h1>
 
-    <div v-if="questions.length > 0">
-      <div v-for="question in questions" :key="question.id">
-        <h2>{{ question.title }}</h2>
-        <p>{{ question.description }}</p>
+    <div v-if="currentQuestion">
+      <h2>{{ currentQuestion.title }}</h2>
+      <p>{{ currentQuestion.description }}</p>
 
-        <div v-for="option in question.options" :key="option.value">
-          <label>
-            <input
-              :name="question.id"
-              type="radio"
-              :value="option.value"
-              :checked="questionsStore.answers[question.id] === option.value"
-              @change="updateAnswer(question.id, option.value)"
-            />
-            {{ option.label }}
-          </label>
-        </div>
+      <div v-for="option in currentQuestion.options" :key="option.value">
+        <button @click="updateAnswer(currentQuestion.id, option.value)">
+          {{ option.label }}
+        </button>
       </div>
-
-      <button @click="goToResults">Continue</button>
     </div>
 
     <p v-else>No follow-up questions needed.</p>
@@ -29,27 +18,28 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useScanStore } from '@/stores/scan'
 import { useQuestionsStore } from '@/stores/questions'
-import { getFollowUpQuestions } from '@/services/questions'
+import { getNextFollowUpQuestion } from '@/services/questions'
 
 const router = useRouter()
 const scanStore = useScanStore()
 const questionsStore = useQuestionsStore()
 
-const questions = computed(() => {
-  if (!scanStore.result) return []
-  return getFollowUpQuestions(scanStore.result)
+const currentQuestion = computed(() => {
+  if (!scanStore.result) return null
+  return getNextFollowUpQuestion(scanStore.result, questionsStore.answers)
 })
 
 function updateAnswer(questionId: string, value: string) {
   questionsStore.setAnswer(questionId, value)
 }
 
-function goToResults() {
-  console.log(questionsStore.answers)
-  router.push('/results')
-}
+watch(currentQuestion, (question) => {
+  if (scanStore.result && question === null) {
+    router.push('/results')
+  }
+})
 </script>

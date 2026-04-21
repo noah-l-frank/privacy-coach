@@ -10,73 +10,90 @@ export type FollowUpQuestion = {
   }[]
 }
 
-export function getFollowUpQuestions(result: DetectionResult): FollowUpQuestion[] {
-  const questions: FollowUpQuestion[] = []
+export function getNextFollowUpQuestion(
+  result: DetectionResult,
+  answers: Record<string, string>,
+): FollowUpQuestion | null {
+  const browser = result.browser.toLowerCase()
 
-  if (!result.dnt) {
-    questions.push({
-      id: 'dnt_preference',
-      title: 'How important is tracking protection to you?',
-      description: 'Your browser is not sending a Do Not Track signal.',
-      options: [
-        { value: 'high', label: 'Very important' },
-        { value: 'medium', label: 'Somewhat important' },
-        { value: 'low', label: 'Not very important' },
-      ],
-    })
-  }
-
-  if (result.cookiesEnabled) {
-    questions.push({
+  if (result.cookiesEnabled && !answers.cookie_preference) {
+    return {
       id: 'cookie_preference',
-      title: 'How do you feel about website convenience vs. privacy?',
-      description: 'Cookies are enabled in your browser.',
+      title: 'What matters more to you while browsing?',
+      description: 'Some browser settings improve convenience, while others improve privacy.',
       options: [
         { value: 'privacy', label: 'I prefer more privacy' },
         { value: 'balanced', label: 'I want a balance' },
         { value: 'convenience', label: 'I prefer convenience' },
       ],
-    })
+    }
   }
 
-  if (result.browser === 'chrome') {
-    questions.push({
-      id: 'browser_switch_similarity',
-      title: 'How important is it to keep a similar look and feel when switching browsers?',
-      description: 'You are currently using Google Chrome.',
-      options: [
-        { value: 'high', label: 'Very important' },
-        { value: 'medium', label: 'Somewhat important' },
-        { value: 'low', label: 'Not important' },
-      ],
-    })
-  }
-
-  if (result.browser === 'edge' || result.browser === 'opera') {
-    questions.push({
-      id: 'browser_switch_willingness',
-      title: 'How willing are you to switch to a different browser for better privacy?',
-      description: 'You are currently using a Chromium-based browser.',
+  if (!result.adblock && !answers.adblock_interest) {
+    return {
+      id: 'adblock_interest',
+      title: 'Would you like fewer ads and less tracking while browsing?',
+      description: 'Ad and tracker blocking can improve privacy and reduce distractions.',
       options: [
         { value: 'yes', label: 'Yes' },
         { value: 'maybe', label: 'Maybe' },
         { value: 'no', label: 'No' },
       ],
-    })
+    }
   }
 
-  if (result.browser === 'firefox') {
-    questions.push({
-      id: 'firefox_privacy_importance',
-      title: 'How important is privacy to you when browsing the web?',
-      description: 'You are already using Firefox.',
+  if (isChromiumLike(browser) && !answers.browser_switch_willingness) {
+    return {
+      id: 'browser_switch_willingness',
+      title: 'Would you be open to trying a different browser for better privacy?',
+      description: 'Some browsers offer stronger privacy protections by default.',
+      options: [
+        { value: 'yes', label: 'Yes' },
+        { value: 'maybe', label: 'Maybe' },
+        { value: 'no', label: 'No' },
+      ],
+    }
+  }
+
+  if (
+    isChromiumLike(browser) &&
+    (answers.browser_switch_willingness === 'yes' ||
+      answers.browser_switch_willingness === 'maybe') &&
+    !answers.browser_switch_similarity
+  ) {
+    return {
+      id: 'browser_switch_similarity',
+      title: 'How important is it that a new browser feels familiar?',
+      description: 'Some alternatives feel very similar, while others are more different.',
       options: [
         { value: 'high', label: 'Very important' },
         { value: 'medium', label: 'Somewhat important' },
-        { value: 'low', label: 'Not very important' },
+        { value: 'low', label: 'Not important' },
       ],
-    })
+    }
   }
 
-  return questions
+  if (!result.dnt && !answers.tracking_protection_preference) {
+    return {
+      id: 'tracking_protection_preference',
+      title: 'Would you like your browser to reduce tracking as much as possible?',
+      description: 'Some browsers and settings can reduce tracking more aggressively than others.',
+      options: [
+        { value: 'high', label: 'Yes, as much as possible' },
+        { value: 'medium', label: 'Somewhat' },
+        { value: 'low', label: 'Not really' },
+      ],
+    }
+  }
+
+  return null
+}
+
+function isChromiumLike(browser: string): boolean {
+  return (
+    browser.includes('chrome') ||
+    browser.includes('edge') ||
+    browser.includes('opera') ||
+    browser.includes('brave')
+  )
 }
