@@ -148,13 +148,15 @@ function restartScan() {
     </section>
 
     <section v-if="positiveFindings.length" class="positives-section">
-      <h2>You are already doing well here</h2>
+      <p class="positives-eyebrow">Positive signals</p>
+      <h2 class="positives-title">You are already doing well here</h2>
 
-      <ul class="positives-list">
-        <li v-for="item in positiveFindings" :key="item">
-          {{ item }}
-        </li>
-      </ul>
+      <div class="positives-list">
+        <div v-for="item in positiveFindings" :key="item" class="positive-item">
+          <span class="positive-icon">✓</span>
+          <span>{{ item }}</span>
+        </div>
+      </div>
     </section>
 
     <section class="actions">
@@ -282,11 +284,66 @@ function restartScan() {
   text-transform: capitalize;
 }
 
+.positives-section {
+  margin-bottom: 2rem;
+}
+
+.positives-section {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.positives-eyebrow {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #16a34a;
+  margin-bottom: 0.4rem;
+}
+
+.positives-title {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
 .positives-list {
-  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.positive-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(34, 197, 94, 0.08);
+  color: #166534;
+}
+
+.positive-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: #22c55e;
+  color: white;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
 }
 
 .primary-button {
+  min-width: 220px;
   border: none;
   border-radius: 12px;
   padding: 0.9rem 1.2rem;
