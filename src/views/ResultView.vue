@@ -57,25 +57,25 @@ const getEffortStyle = (effort: string) => {
     return {
       color: '#22c55e',
       background: 'rgba(34, 197, 94, 0.12)',
-      border: '1px solid rgba(34, 197, 94, 0.25)',
-      boxShadow: '0 0 8px rgba(34, 197, 94, 0.25)',
+      border: '1px solid rgba(34, 197, 94, 0.22)',
+      boxShadow: '0 0 10px rgba(34, 197, 94, 0.16)',
     }
   }
 
   if (effort === 'medium') {
     return {
-      color: '#facc15',
-      background: 'rgba(250, 204, 21, 0.12)',
-      border: '1px solid rgba(250, 204, 21, 0.25)',
-      boxShadow: '0 0 8px rgba(250, 204, 21, 0.25)',
+      color: '#eab308',
+      background: 'rgba(234, 179, 8, 0.12)',
+      border: '1px solid rgba(234, 179, 8, 0.22)',
+      boxShadow: '0 0 10px rgba(234, 179, 8, 0.14)',
     }
   }
 
   return {
     color: '#ef4444',
     background: 'rgba(239, 68, 68, 0.12)',
-    border: '1px solid rgba(239, 68, 68, 0.25)',
-    boxShadow: '0 0 8px rgba(239, 68, 68, 0.25)',
+    border: '1px solid rgba(239, 68, 68, 0.22)',
+    boxShadow: '0 0 10px rgba(239, 68, 68, 0.14)',
   }
 }
 
@@ -100,7 +100,7 @@ function restartScan() {
           :style="{
             color: scoreColor,
             borderColor: scoreColor,
-            boxShadow: `0 0 12px ${scoreColor}33`,
+            boxShadow: `0 0 12px ${scoreColor}26`,
           }"
         >
           {{ scoreLabel }}
@@ -122,10 +122,12 @@ function restartScan() {
     </section>
 
     <section class="recommendations-section">
-      <h1>Privacy recommendations</h1>
-      <p class="subtitle">
-        Based on your scan results and answers, here are the most relevant next steps.
-      </p>
+      <div class="section-header">
+        <h1 class="section-title">Privacy recommendations</h1>
+        <p class="section-subtitle">
+          Based on your scan results and answers, here are the most relevant next steps.
+        </p>
+      </div>
 
       <div v-if="recommendations.length" class="recommendations-list">
         <article
@@ -140,7 +142,7 @@ function restartScan() {
             </span>
           </div>
 
-          <p>{{ recommendation.description }}</p>
+          <p class="recommendation-description">{{ recommendation.description }}</p>
         </article>
       </div>
 
@@ -148,8 +150,14 @@ function restartScan() {
     </section>
 
     <section v-if="positiveFindings.length" class="positives-section">
-      <p class="positives-eyebrow">Positive signals</p>
-      <h2 class="positives-title">You are already doing well here</h2>
+      <div class="positives-divider"></div>
+
+      <div class="positives-header">
+        <h2 class="positives-title">What is already working well</h2>
+        <p class="positives-subtitle">
+          These settings already support a more privacy-friendly setup.
+        </p>
+      </div>
 
       <div class="positives-list">
         <div v-for="item in positiveFindings" :key="item" class="positive-item">
@@ -173,14 +181,14 @@ function restartScan() {
 }
 
 .score-card {
-  background: linear-gradient(180deg, #111827 0%, #1f2937 100%);
+  background: linear-gradient(180deg, #111827 0%, #1e293b 100%);
   color: white;
-  border-radius: 20px;
+  border-radius: 24px;
   padding: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 18px 40px rgba(15, 23, 42, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .score-top-row {
@@ -193,12 +201,12 @@ function restartScan() {
 
 .score-label {
   font-size: 0.95rem;
-  opacity: 0.8;
+  opacity: 0.82;
   margin: 0 0 0.35rem;
 }
 
 .score-value {
-  font-size: 2.4rem;
+  font-size: 2.5rem;
   line-height: 1;
   font-weight: 800;
   margin: 0;
@@ -209,12 +217,12 @@ function restartScan() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 36px;
-  padding: 0.45rem 0.85rem;
+  min-height: 38px;
+  padding: 0.45rem 0.9rem;
   border-radius: 999px;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.02);
   border: 2px solid;
 }
 
@@ -228,7 +236,7 @@ function restartScan() {
   height: 18px;
   border-radius: 999px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .score-bar-fill {
@@ -246,79 +254,125 @@ function restartScan() {
   transform: translateY(-50%);
   background: white;
   border: 3px solid #111827;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .score-scale {
   display: flex;
   justify-content: space-between;
-  margin-top: 0.65rem;
-  font-size: 0.82rem;
-  opacity: 0.78;
+  margin-top: 0.7rem;
+  font-size: 0.84rem;
+  opacity: 0.8;
+}
+
+.recommendations-section {
+  margin-bottom: 2.5rem;
+}
+
+.section-header {
+  margin-bottom: 1.4rem;
+}
+
+.section-title {
+  font-size: 2.1rem;
+  line-height: 1.15;
+  margin: 0 0 0.55rem;
+  letter-spacing: -0.02em;
+}
+
+.section-subtitle {
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: #4b5563;
+  max-width: 70ch;
+  margin: 0;
 }
 
 .recommendations-list {
   display: grid;
   gap: 1rem;
-  margin-top: 1.5rem;
 }
 
 .recommendation-card {
   border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  padding: 1rem;
+  border-radius: 18px;
+  padding: 1.15rem 1.2rem;
   background: white;
+  box-shadow:
+    0 8px 24px rgba(15, 23, 42, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .recommendation-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.recommendation-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.recommendation-description {
+  margin: 0;
+  line-height: 1.65;
+  color: #374151;
 }
 
 .effort-badge {
-  font-size: 0.8rem;
-  padding: 0.25rem 0.6rem;
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  padding: 0.28rem 0.65rem;
   border-radius: 999px;
   font-weight: 600;
   text-transform: capitalize;
 }
 
-.positives-section {
-  margin-bottom: 2rem;
+.empty-state {
+  color: #4b5563;
 }
 
 .positives-section {
-  margin-top: 2.5rem;
-  padding-top: 2rem;
-  border-top: 1px solid #e5e7eb;
+  margin-bottom: 2.25rem;
 }
 
-.positives-eyebrow {
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #16a34a;
-  margin-bottom: 0.4rem;
+.positives-divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin-bottom: 1.5rem;
+}
+
+.positives-header {
+  margin-bottom: 1rem;
 }
 
 .positives-title {
-  font-size: 1.4rem;
-  margin-bottom: 1rem;
+  font-size: 1.35rem;
+  line-height: 1.25;
+  margin: 0 0 0.35rem;
+}
+
+.positives-subtitle {
+  margin: 0;
+  color: #4b5563;
+  line-height: 1.6;
 }
 
 .positives-list {
   display: grid;
-  gap: 0.6rem;
+  gap: 0.65rem;
 }
 
 .positive-item {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.75rem 0.9rem;
-  border-radius: 12px;
+  gap: 0.65rem;
+  padding: 0.8rem 0.95rem;
+  border-radius: 14px;
   background: rgba(34, 197, 94, 0.08);
   color: #166534;
 }
@@ -327,29 +381,46 @@ function restartScan() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 1.35rem;
+  height: 1.35rem;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 700;
   background: #22c55e;
   color: white;
+  flex-shrink: 0;
 }
 
 .actions {
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: 2.25rem;
 }
 
 .primary-button {
   min-width: 220px;
   border: none;
-  border-radius: 12px;
-  padding: 0.9rem 1.2rem;
+  border-radius: 14px;
+  padding: 0.95rem 1.3rem;
+  font: inherit;
   font-weight: 600;
   cursor: pointer;
-  background: #111827;
+  background: #0f172a;
   color: white;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.18);
+  background: #111827;
+}
+
+.primary-button:active {
+  transform: translateY(0);
 }
 </style>
