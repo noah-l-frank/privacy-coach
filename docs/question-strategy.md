@@ -1,37 +1,65 @@
 # Question Strategy
 
-The follow-up question system is designed to personalize recommendations without overwhelming the user.
+The follow-up question system is designed to personalize recommendations in a simple and user-friendly way.
 
 ## Goal
 
-The purpose of follow-up questions is to collect a small amount of additional context that cannot be reliably derived from browser-side detection alone. These answers are then combined with detected signals to generate more relevant recommendations.
+The goal of the question system is to collect just enough additional context to improve recommendation quality, without overwhelming the user.
 
-## General Principles
+The system focuses on understanding:
 
-- Only ask questions when they are relevant to the detected browser environment or settings
-- Keep the number of questions low
-- Avoid technical wording where possible
-- Use questions to clarify user preferences rather than facts that can already be detected automatically
+- user preferences (privacy vs convenience)
+- willingness to change behavior
+- tolerance for complexity
 
-## Current Question Types
-
-### 1. Tracking preference
-
-Shown when:
-
-- Do Not Track is disabled
-
-Question:
-
-- How important is tracking protection to you?
-
-Purpose:
-
-- Determines how strongly the system should recommend enabling Do Not Track
+These inputs are combined with detected signals to generate more relevant and actionable recommendations.
 
 ---
 
-### 2. Cookie and privacy preference
+## Core Approach
+
+The system uses a **dynamic, step-by-step question flow** instead of showing all questions at once.
+
+This means:
+
+- only one question is shown at a time
+- each answer influences which question comes next
+- unnecessary questions are skipped automatically
+
+This approach reduces cognitive load and creates a more natural interaction.
+
+---
+
+## General Principles
+
+- Ask only relevant questions based on detected signals
+- Keep the total number of questions low (typically 2–4)
+- Avoid technical terminology
+- Focus on user preferences rather than technical details
+- Prioritize clarity and ease of understanding
+- Adapt dynamically based on previous answers
+
+---
+
+## Question Flow Strategy
+
+The question flow follows a **progressive refinement model**:
+
+1. Start with high-impact, easy-to-understand questions
+2. Branch into more specific questions only if needed
+3. Stop as soon as enough information is collected
+
+Example:
+
+- Ask if the user is open to switching browsers
+- Only ask about similarity if the user is open to switching
+- Skip all related questions if the user is not willing to switch
+
+---
+
+## Current Question Types
+
+### 1. Privacy vs. convenience preference
 
 Shown when:
 
@@ -39,72 +67,122 @@ Shown when:
 
 Question:
 
-- How do you feel about website convenience vs. privacy?
+- What matters more to you while browsing?
 
 Purpose:
 
-- Helps distinguish between users who prefer stronger privacy protections and users who prioritize convenience
+- Determines how strongly privacy-focused the recommendations should be
 
 ---
 
-### 3. Browser switch similarity preference
+### 2. Ad and tracking reduction interest
 
 Shown when:
 
-- Browser is Google Chrome
+- No ad blocker is detected
 
 Question:
 
-- How important is it to keep a similar look and feel when switching browsers?
+- Would you like fewer ads and less tracking while browsing?
 
 Purpose:
 
-- Helps decide whether the system should recommend Firefox or a more privacy-friendly Chromium-based browser
+- Identifies interest in simple, high-impact improvements
 
 ---
 
-### 4. Browser switch willingness
+### 3. Browser switch willingness
 
 Shown when:
 
-- Browser is Edge or Opera
+- A less privacy-friendly browser is detected (e.g. Chromium-based)
 
 Question:
 
-- How willing are you to switch to a different browser for better privacy?
+- Would you be open to trying a different browser for better privacy?
 
 Purpose:
 
-- Helps determine whether a browser switch recommendation is appropriate
+- Determines whether browser change recommendations are appropriate
 
 ---
 
-### 5. Firefox privacy importance
+### 4. Browser similarity preference
 
 Shown when:
 
-- Browser is Firefox
+- User is open to switching browsers
 
 Question:
 
-- How important is privacy to you when browsing the web?
+- How important is it that a new browser feels familiar?
 
 Purpose:
 
-- Helps decide whether to recommend further Firefox privacy optimizations
+- Helps choose between different types of browser recommendations
+
+---
+
+### 5. Tracking protection preference
+
+Shown when:
+
+- Do Not Track is disabled
+
+Question:
+
+- Would you like your browser to reduce tracking as much as possible?
+
+Purpose:
+
+- Determines how strongly tracking protection features should be recommended
+
+---
 
 ## Conditional Logic
 
-Questions are shown conditionally based on scan results.
+Questions are generated dynamically based on:
 
-This means:
+- scan results
+- previously given answers
 
-- not every user sees the same questions
-- the question flow adapts to the detected environment
-- recommendations can be more context-aware without requiring a long static questionnaire
+This ensures that:
+
+- users only see relevant questions
+- unnecessary steps are skipped
+- the flow adapts in real time
+
+---
+
+## Stopping Condition
+
+The question flow stops when:
+
+- no further relevant questions can be generated
+- enough context is collected to produce meaningful recommendations
+
+At this point, the system transitions to the results view.
+
+---
+
+## Design Rationale
+
+This approach was chosen because:
+
+- most users are not privacy experts
+- long forms reduce completion rates
+- step-by-step interaction feels simpler and more engaging
+
+By minimizing complexity while maintaining relevance, the system balances usability and personalization.
+
+---
 
 ## Current Scope
 
-The current version focuses on a small set of targeted questions that directly influence recommendation quality.
+The current implementation focuses on a small number of high-impact questions.
 
-Additional questions may be added later.
+Future improvements may include:
+
+- more granular branching logic
+- prioritization based on expected impact
+- adaptive question ordering
