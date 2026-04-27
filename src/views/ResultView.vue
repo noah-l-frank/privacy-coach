@@ -32,6 +32,8 @@ const privacyScore = computed(() => {
   return calculatePrivacyScore(scanStore.result)
 })
 
+const userScore = computed(() => 75) // TODO: use pinia store to save user score and display it here
+
 const scoreBarStyle = computed(() => ({
   width: `${privacyScore.value}%`,
 }))
@@ -119,6 +121,17 @@ function restartScan() {
           <span>Strong</span>
         </div>
       </div>
+    </section>
+
+    <section class="user-score-card">
+      <div>
+        <p class="score-label">Personal Goal Score</p>
+        <h2 class="user-score-value">{{ userScore }}</h2>
+      </div>
+
+      <p class="user-score-text">
+        This score shows how close you are to your personal privacy goal.
+      </p>
     </section>
 
     <section class="recommendations-section">
@@ -422,5 +435,34 @@ function restartScan() {
 
 .primary-button:active {
   transform: translateY(0);
+}
+
+.user-score-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 22px;
+  padding: 1.25rem 1.4rem;
+  margin: -1.25rem 0 2.5rem;
+  background: white;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+}
+
+.user-score-value {
+  font-size: 2rem;
+  line-height: 1;
+  font-weight: 800;
+  margin: 0;
+  color: #2563eb;
+  letter-spacing: -0.03em;
+}
+
+.user-score-text {
+  max-width: 46ch;
+  margin: 0;
+  color: #4b5563;
+  line-height: 1.6;
 }
 </style>
