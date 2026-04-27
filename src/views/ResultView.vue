@@ -5,10 +5,12 @@ import { useScanStore } from '@/stores/scan'
 import { useQuestionsStore } from '@/stores/questions'
 import { calculatePrivacyScore } from '@/services/scoring'
 import { generateRecommendations } from '@/services/recommendations'
+import { useProgressStore } from '@/stores/progress'
 
 const router = useRouter()
 const scanStore = useScanStore()
 const questionsStore = useQuestionsStore()
+const progressStore = useProgressStore()
 
 const recommendations = computed(() => {
   if (!scanStore.result) return []
@@ -32,7 +34,7 @@ const privacyScore = computed(() => {
   return calculatePrivacyScore(scanStore.result)
 })
 
-const userScore = computed(() => 75) // TODO: use pinia store to save user score and display it here
+const userScore = computed(() => progressStore.userScore)
 
 const scoreBarStyle = computed(() => ({
   width: `${privacyScore.value}%`,
@@ -126,7 +128,7 @@ function restartScan() {
     <section class="user-score-card">
       <div>
         <p class="score-label">Personal Goal Score</p>
-        <h2 class="user-score-value">{{ userScore }}</h2>
+        <h2 class="user-score-value">{{ userScore }}/100</h2>
       </div>
 
       <p class="user-score-text">
