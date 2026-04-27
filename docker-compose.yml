@@ -1,6 +1,6 @@
 services:
   privacy-coach:
-    build: .
+    image: ghcr.io/noah-be/privacy-coach:latest
     container_name: privacy-coach
     restart: unless-stopped
     ports:
