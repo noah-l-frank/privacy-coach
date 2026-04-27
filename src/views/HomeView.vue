@@ -16,9 +16,9 @@ const router = useRouter()
 const scanStore = useScanStore()
 
 function startScan() {
+  router.push('/scan')
   const result = detectEnvironment()
   scanStore.setResult(result)
-  router.push('/questions')
 }
 </script>
 
