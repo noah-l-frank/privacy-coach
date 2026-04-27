@@ -149,15 +149,27 @@ function restartScan() {
           v-for="recommendation in recommendations"
           :key="recommendation.id"
           class="recommendation-card"
+          :class="{ completed: progressStore.isRecommendationCompleted(recommendation.id) }"
         >
-          <div class="recommendation-header">
-            <h3>{{ recommendation.title }}</h3>
-            <span class="effort-badge" :style="getEffortStyle(recommendation.effort)">
-              {{ recommendation.effort }}
-            </span>
-          </div>
+          <button
+            class="recommendation-check"
+            type="button"
+            :aria-label="`Mark ${recommendation.title} as completed`"
+            @click="progressStore.toggleRecommendation(recommendation.id)"
+          >
+            <span v-if="progressStore.isRecommendationCompleted(recommendation.id)">✓</span>
+          </button>
 
-          <p class="recommendation-description">{{ recommendation.description }}</p>
+          <div class="recommendation-content">
+            <div class="recommendation-header">
+              <h3>{{ recommendation.title }}</h3>
+              <span class="effort-badge" :style="getEffortStyle(recommendation.effort)">
+                {{ recommendation.effort }}
+              </span>
+            </div>
+
+            <p class="recommendation-description">{{ recommendation.description }}</p>
+          </div>
         </article>
       </div>
 
@@ -316,6 +328,13 @@ function restartScan() {
   box-shadow:
     0 8px 24px rgba(15, 23, 42, 0.04),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .recommendation-header {
@@ -466,5 +485,46 @@ function restartScan() {
   margin: 0;
   color: #4b5563;
   line-height: 1.6;
+}
+
+.recommendation-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.45rem;
+  height: 1.45rem;
+  margin-top: 0.1rem;
+  border-radius: 999px;
+  border: 2px solid #cbd5e1;
+  background: white;
+  color: white;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.recommendation-check:hover {
+  border-color: #22c55e;
+}
+
+.recommendation-content {
+  flex: 1;
+}
+
+.recommendation-card.completed {
+  background: #f8fafc;
+  opacity: 0.72;
+}
+
+.recommendation-card.completed .recommendation-check {
+  background: #22c55e;
+  border-color: #22c55e;
+}
+
+.recommendation-card.completed h3,
+.recommendation-card.completed .recommendation-description {
+  text-decoration: line-through;
 }
 </style>
