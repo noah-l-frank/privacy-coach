@@ -23,11 +23,12 @@ export function generateRecommendations(
   const recommendations: Recommendation[] = []
 
   const similarity = answers.browser_switch_similarity ?? 'medium'
-  const cookiePreference = answers.cookie_preference ?? 'balanced'
+  const privacyPreference = answers.privacy_preference
+  const isPrivacyFocused = privacyPreference === 'privacy' || privacyPreference === 'balanced'
 
   const browser = result.browser.toLowerCase()
 
-  if (browser.includes('chrome') && cookiePreference === 'privacy') {
+  if (browser.includes('chrome') && privacyPreference === 'privacy') {
     if (similarity === 'low') {
       recommendations.push({
         id: 'switch-to-firefox',
@@ -49,7 +50,7 @@ export function generateRecommendations(
     }
   }
 
-  if (browser.includes('firefox') && cookiePreference === 'privacy') {
+  if (browser.includes('firefox') && privacyPreference === 'privacy') {
     recommendations.push({
       id: 'optimize-firefox',
       title: 'Optimize your Firefox privacy settings',
@@ -59,7 +60,7 @@ export function generateRecommendations(
     })
   }
 
-  if (!result.dnt && answers.dnt_preference === 'high') {
+  if (!result.dnt && answers.tracking_protection_preference === 'high') {
     recommendations.push({
       id: 'enable-dnt',
       title: 'Enable Do Not Track',
@@ -69,13 +70,47 @@ export function generateRecommendations(
     })
   }
 
-  if (result.cookiesEnabled && cookiePreference === 'privacy') {
+  if (result.cookiesEnabled && privacyPreference === 'privacy') {
     recommendations.push({
       id: 'reduce-cookies',
       title: 'Reduce cookie and tracking exposure',
       description:
         'Since privacy is important to you, consider reducing tracking and third-party cookie usage in your browser.',
       effort: 'medium',
+    })
+  }
+
+  if (isPrivacyFocused && answers.adblock_usage === 'no') {
+    recommendations.push({
+      id: 'use-adblock',
+      title: 'Use an ad blocker',
+      description:
+        'An ad blocker can reduce tracking, improve privacy, and make browsing less distracting.',
+      effort: 'easy',
+    })
+  }
+
+  if (
+    isPrivacyFocused &&
+    answers.password_management &&
+    answers.password_management !== 'manager'
+  ) {
+    recommendations.push({
+      id: 'use-password-manager',
+      title: 'Use a password manager',
+      description:
+        'A password manager helps you use strong, unique passwords and protects your accounts more effectively.',
+      effort: 'easy',
+    })
+  }
+
+  if (privacyPreference === 'privacy' && answers.vpn_usage === 'no') {
+    recommendations.push({
+      id: 'use-vpn',
+      title: 'Use a VPN for better privacy',
+      description:
+        'A VPN can hide your IP address and protect your data, especially on public networks.',
+      effort: 'advanced',
     })
   }
 

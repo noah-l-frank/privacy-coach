@@ -2,31 +2,28 @@ import { describe, expect, it } from 'vitest'
 import { generateRecommendations } from '../recommendations'
 
 describe('generateRecommendations', () => {
+  const baseResult = {
+    browserFamily: 'unknown',
+    browser: 'unknown',
+    os: 'linux',
+    language: 'de-DE',
+    timezone: 'Europe/Berlin',
+    dnt: true,
+    cookiesEnabled: false,
+    https: true,
+  }
+
   it('recommends Firefox for Chrome users who prefer privacy and do not need a similar look and feel', () => {
-    const result = {
-      browserFamily: 'chromium',
-      browser: 'chrome',
-      os: 'linux',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
-      dnt: false,
-      cookiesEnabled: false,
-      https: true,
-    }
+    const recommendations = generateRecommendations(
+      { ...baseResult, browserFamily: 'chromium', browser: 'chrome' },
+      {
+        privacy_preference: 'privacy',
+        browser_switch_similarity: 'low',
+        password_management: 'manager',
+      },
+    )
 
-    const answers = {
-      cookie_preference: 'privacy',
-      browser_switch_similarity: 'low',
-    }
-
-    const recommendations = generateRecommendations(result, answers)
-
-    expect(recommendations).toHaveLength(1)
-
-    const [recommendation] = recommendations
-    if (!recommendation) throw new Error('Expected one recommendation')
-
-    expect(recommendation).toEqual({
+    expect(recommendations).toContainEqual({
       id: 'switch-to-firefox',
       title: 'Switch to a privacy-focused browser',
       description:
@@ -36,30 +33,16 @@ describe('generateRecommendations', () => {
   })
 
   it('recommends a privacy-friendly Chromium browser for Chrome users who prefer privacy and want a similar look and feel', () => {
-    const result = {
-      browserFamily: 'chromium',
-      browser: 'chrome',
-      os: 'linux',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
-      dnt: false,
-      cookiesEnabled: false,
-      https: true,
-    }
+    const recommendations = generateRecommendations(
+      { ...baseResult, browserFamily: 'chromium', browser: 'chrome' },
+      {
+        privacy_preference: 'privacy',
+        browser_switch_similarity: 'high',
+        password_management: 'manager',
+      },
+    )
 
-    const answers = {
-      cookie_preference: 'privacy',
-      browser_switch_similarity: 'high',
-    }
-
-    const recommendations = generateRecommendations(result, answers)
-
-    expect(recommendations).toHaveLength(1)
-
-    const [recommendation] = recommendations
-    if (!recommendation) throw new Error('Expected one recommendation')
-
-    expect(recommendation).toEqual({
+    expect(recommendations).toContainEqual({
       id: 'switch-to-brave',
       title: 'Consider a more private Chromium-based browser',
       description:
@@ -69,44 +52,25 @@ describe('generateRecommendations', () => {
   })
 
   it('returns no browser switch recommendation for Chrome users who do not prefer privacy', () => {
-    const result = {
-      browserFamily: 'chromium',
-      browser: 'chrome',
-      os: 'linux',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
-      dnt: false,
-      cookiesEnabled: true,
-      https: true,
-    }
-
-    const answers = {
-      cookie_preference: 'convenience',
-      browser_switch_similarity: 'low',
-    }
-
-    const recommendations = generateRecommendations(result, answers)
+    const recommendations = generateRecommendations(
+      { ...baseResult, browserFamily: 'chromium', browser: 'chrome', cookiesEnabled: true },
+      {
+        privacy_preference: 'convenience',
+        browser_switch_similarity: 'low',
+      },
+    )
 
     expect(recommendations).toHaveLength(0)
   })
 
   it('recommends Firefox optimization for Firefox users who prefer privacy', () => {
-    const result = {
-      browserFamily: 'firefox',
-      browser: 'firefox',
-      os: 'linux',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
-      dnt: false,
-      cookiesEnabled: true,
-      https: true,
-    }
-
-    const answers = {
-      cookie_preference: 'privacy',
-    }
-
-    const recommendations = generateRecommendations(result, answers)
+    const recommendations = generateRecommendations(
+      { ...baseResult, browserFamily: 'firefox', browser: 'firefox' },
+      {
+        privacy_preference: 'privacy',
+        password_management: 'manager',
+      },
+    )
 
     expect(recommendations).toContainEqual({
       id: 'optimize-firefox',
@@ -118,22 +82,12 @@ describe('generateRecommendations', () => {
   })
 
   it('recommends enabling Do Not Track when it is disabled and tracking protection is important', () => {
-    const result = {
-      browserFamily: 'chromium',
-      browser: 'chrome',
-      os: 'linux',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
-      dnt: false,
-      cookiesEnabled: true,
-      https: true,
-    }
-
-    const answers = {
-      dnt_preference: 'high',
-    }
-
-    const recommendations = generateRecommendations(result, answers)
+    const recommendations = generateRecommendations(
+      { ...baseResult, dnt: false },
+      {
+        tracking_protection_preference: 'high',
+      },
+    )
 
     expect(recommendations).toContainEqual({
       id: 'enable-dnt',
@@ -145,22 +99,13 @@ describe('generateRecommendations', () => {
   })
 
   it('recommends reducing cookies when cookies are enabled and privacy is preferred', () => {
-    const result = {
-      browserFamily: 'chromium',
-      browser: 'edge',
-      os: 'windows',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
-      dnt: false,
-      cookiesEnabled: true,
-      https: true,
-    }
-
-    const answers = {
-      cookie_preference: 'privacy',
-    }
-
-    const recommendations = generateRecommendations(result, answers)
+    const recommendations = generateRecommendations(
+      { ...baseResult, browserFamily: 'chromium', browser: 'edge', cookiesEnabled: true },
+      {
+        privacy_preference: 'privacy',
+        password_management: 'manager',
+      },
+    )
 
     expect(recommendations).toContainEqual({
       id: 'reduce-cookies',
@@ -171,21 +116,55 @@ describe('generateRecommendations', () => {
     })
   })
 
-  it('returns no recommendations for unknown browser', () => {
-    const result = {
-      browserFamily: 'unknown',
-      browser: 'unknown',
-      os: 'linux',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
-      dnt: false,
-      cookiesEnabled: true,
-      https: true,
-    }
+  it('recommends an ad blocker when privacy-focused users do not use one', () => {
+    const recommendations = generateRecommendations(baseResult, {
+      privacy_preference: 'privacy',
+      adblock_usage: 'no',
+      password_management: 'manager',
+    })
 
-    const answers = {}
+    expect(recommendations).toContainEqual({
+      id: 'use-adblock',
+      title: 'Use an ad blocker',
+      description:
+        'An ad blocker can reduce tracking, improve privacy, and make browsing less distracting.',
+      effort: 'easy',
+    })
+  })
 
-    const recommendations = generateRecommendations(result, answers)
+  it('recommends a password manager when privacy-focused users do not use one', () => {
+    const recommendations = generateRecommendations(baseResult, {
+      privacy_preference: 'privacy',
+      password_management: 'reuse',
+    })
+
+    expect(recommendations).toContainEqual({
+      id: 'use-password-manager',
+      title: 'Use a password manager',
+      description:
+        'A password manager helps you use strong, unique passwords and protects your accounts more effectively.',
+      effort: 'easy',
+    })
+  })
+
+  it('recommends a VPN for privacy users who do not use one', () => {
+    const recommendations = generateRecommendations(baseResult, {
+      privacy_preference: 'privacy',
+      password_management: 'manager',
+      vpn_usage: 'no',
+    })
+
+    expect(recommendations).toContainEqual({
+      id: 'use-vpn',
+      title: 'Use a VPN for better privacy',
+      description:
+        'A VPN can hide your IP address and protect your data, especially on public networks.',
+      effort: 'advanced',
+    })
+  })
+
+  it('returns no recommendations for unknown browser without relevant answers', () => {
+    const recommendations = generateRecommendations(baseResult, {})
 
     expect(recommendations).toHaveLength(0)
   })

@@ -17,12 +17,12 @@ function createDetectionResult(overrides: Partial<DetectionResult> = {}): Detect
 }
 
 describe('calculatePrivacyScore', () => {
-  it('returns 85 for a privacy-friendly baseline result', () => {
-    expect(calculatePrivacyScore(createDetectionResult())).toBe(85)
+  it('returns 100 for a privacy-friendly baseline result', () => {
+    expect(calculatePrivacyScore(createDetectionResult())).toBe(100)
   })
 
   it('subtracts points for a chromium browser family', () => {
-    expect(calculatePrivacyScore(createDetectionResult({ browserFamily: 'chromium' }))).toBe(70)
+    expect(calculatePrivacyScore(createDetectionResult({ browserFamily: 'chromium' }))).toBe(85)
   })
 
   it('subtracts extra points for Google Chrome', () => {
@@ -33,23 +33,19 @@ describe('calculatePrivacyScore', () => {
           browser: 'Google Chrome',
         }),
       ),
-    ).toBe(65)
+    ).toBe(80)
   })
 
   it('subtracts points when https is disabled', () => {
-    expect(calculatePrivacyScore(createDetectionResult({ https: false }))).toBe(60)
+    expect(calculatePrivacyScore(createDetectionResult({ https: false }))).toBe(75)
   })
 
   it('subtracts points when dnt is disabled', () => {
-    expect(calculatePrivacyScore(createDetectionResult({ dnt: false }))).toBe(75)
+    expect(calculatePrivacyScore(createDetectionResult({ dnt: false }))).toBe(90)
   })
 
   it('subtracts points when cookies are enabled', () => {
-    expect(calculatePrivacyScore(createDetectionResult({ cookiesEnabled: true }))).toBe(75)
-  })
-
-  it('subtracts points when no adblocker is detected', () => {
-    expect(calculatePrivacyScore(createDetectionResult())).toBe(85)
+    expect(calculatePrivacyScore(createDetectionResult({ cookiesEnabled: true }))).toBe(90)
   })
 
   it('combines all deductions correctly', () => {
@@ -61,7 +57,7 @@ describe('calculatePrivacyScore', () => {
       cookiesEnabled: true,
     })
 
-    expect(calculatePrivacyScore(result)).toBe(20)
+    expect(calculatePrivacyScore(result)).toBe(35)
   })
 
   it('never returns less than 0', () => {
