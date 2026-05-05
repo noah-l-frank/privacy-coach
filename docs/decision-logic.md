@@ -14,7 +14,6 @@ The current detection layer provides the following data:
 - dnt
 - cookiesEnabled
 - https
-- adblock
 
 ## Currently Used Inputs
 
@@ -25,4 +24,4 @@ For the initial version of the decision logic, only a subset of the available de
 - dnt
 - cookiesEnabled
 
-Additional detected values such as os, language, timezone, https, and adblock are already collected and may be incorporated into future recommendation rules as the system evolves.
+Additional detected values such as os, language, timezone, and https are already collected and may be incorporated into future recommendation rules as the system evolves.

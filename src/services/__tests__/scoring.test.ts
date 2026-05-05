@@ -12,65 +12,44 @@ function createDetectionResult(overrides: Partial<DetectionResult> = {}): Detect
     dnt: true,
     cookiesEnabled: false,
     https: true,
-    adblock: true,
     ...overrides,
   }
 }
 
 describe('calculatePrivacyScore', () => {
-  it('returns 100 for a privacy-friendly baseline result', () => {
-    const result = createDetectionResult()
-
-    expect(calculatePrivacyScore(result)).toBe(100)
+  it('returns 85 for a privacy-friendly baseline result', () => {
+    expect(calculatePrivacyScore(createDetectionResult())).toBe(85)
   })
 
   it('subtracts points for a chromium browser family', () => {
-    const result = createDetectionResult({
-      browserFamily: 'chromium',
-    })
-
-    expect(calculatePrivacyScore(result)).toBe(85)
+    expect(calculatePrivacyScore(createDetectionResult({ browserFamily: 'chromium' }))).toBe(70)
   })
 
   it('subtracts extra points for Google Chrome', () => {
-    const result = createDetectionResult({
-      browserFamily: 'chromium',
-      browser: 'Google Chrome',
-    })
-
-    expect(calculatePrivacyScore(result)).toBe(80)
+    expect(
+      calculatePrivacyScore(
+        createDetectionResult({
+          browserFamily: 'chromium',
+          browser: 'Google Chrome',
+        }),
+      ),
+    ).toBe(65)
   })
 
   it('subtracts points when https is disabled', () => {
-    const result = createDetectionResult({
-      https: false,
-    })
-
-    expect(calculatePrivacyScore(result)).toBe(75)
+    expect(calculatePrivacyScore(createDetectionResult({ https: false }))).toBe(60)
   })
 
   it('subtracts points when dnt is disabled', () => {
-    const result = createDetectionResult({
-      dnt: false,
-    })
-
-    expect(calculatePrivacyScore(result)).toBe(90)
+    expect(calculatePrivacyScore(createDetectionResult({ dnt: false }))).toBe(75)
   })
 
   it('subtracts points when cookies are enabled', () => {
-    const result = createDetectionResult({
-      cookiesEnabled: true,
-    })
-
-    expect(calculatePrivacyScore(result)).toBe(90)
+    expect(calculatePrivacyScore(createDetectionResult({ cookiesEnabled: true }))).toBe(75)
   })
 
   it('subtracts points when no adblocker is detected', () => {
-    const result = createDetectionResult({
-      adblock: false,
-    })
-
-    expect(calculatePrivacyScore(result)).toBe(85)
+    expect(calculatePrivacyScore(createDetectionResult())).toBe(85)
   })
 
   it('combines all deductions correctly', () => {
@@ -80,7 +59,6 @@ describe('calculatePrivacyScore', () => {
       https: false,
       dnt: false,
       cookiesEnabled: true,
-      adblock: false,
     })
 
     expect(calculatePrivacyScore(result)).toBe(20)
@@ -93,7 +71,6 @@ describe('calculatePrivacyScore', () => {
       https: false,
       dnt: false,
       cookiesEnabled: true,
-      adblock: false,
     })
 
     expect(calculatePrivacyScore(result)).toBeGreaterThanOrEqual(0)

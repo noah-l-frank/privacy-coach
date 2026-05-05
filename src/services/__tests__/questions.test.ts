@@ -2,204 +2,232 @@ import { describe, it, expect } from 'vitest'
 import { getNextFollowUpQuestion } from '../questions'
 
 describe('getNextFollowUpQuestion', () => {
-  it('returns the cookie preference question first when cookies are enabled', () => {
-    const result = {
-      browserFamily: 'chromium',
-      browser: 'chromium',
-      os: 'linux',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
-      dnt: false,
-      cookiesEnabled: true,
-      https: true,
-      adblock: false,
-    }
+  const baseResult = {
+    browserFamily: 'unknown',
+    browser: 'unknown',
+    os: 'linux',
+    language: 'de-DE',
+    timezone: 'Europe/Berlin',
+    dnt: true,
+    cookiesEnabled: false,
+    https: true,
+  }
 
-    const question = getNextFollowUpQuestion(result, {})
+  it('returns the privacy preference question first when cookies are enabled', () => {
+    const question = getNextFollowUpQuestion({ ...baseResult, cookiesEnabled: true }, {})
 
-    expect(question).not.toBeNull()
-    expect(question?.id).toBe('cookie_preference')
+    expect(question?.id).toBe('privacy_preference')
   })
 
-  it('returns the adblock interest question after cookie preference was answered', () => {
-    const result = {
-      browserFamily: 'chromium',
-      browser: 'chromium',
-      os: 'linux',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
-      dnt: false,
-      cookiesEnabled: true,
-      https: true,
-      adblock: false,
-    }
-
-    const question = getNextFollowUpQuestion(result, {
-      cookie_preference: 'privacy',
+  it('returns the search engine question for privacy-focused users', () => {
+    const question = getNextFollowUpQuestion(baseResult, {
+      privacy_preference: 'privacy',
     })
 
-    expect(question).not.toBeNull()
-    expect(question?.id).toBe('adblock_interest')
+    expect(question?.id).toBe('search_engine')
   })
 
-  it('returns the browser switch willingness question for Chrome users after earlier questions are answered', () => {
-    const result = {
-      browserFamily: 'chromium',
-      browser: 'chrome',
-      os: 'linux',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
-      dnt: true,
-      cookiesEnabled: false,
-      https: true,
-      adblock: false,
-    }
-
-    const question = getNextFollowUpQuestion(result, {
-      adblock_interest: 'yes',
+  it('returns the password management question after search engine was answered', () => {
+    const question = getNextFollowUpQuestion(baseResult, {
+      privacy_preference: 'privacy',
+      search_engine: 'google',
     })
 
-    expect(question).not.toBeNull()
-    expect(question?.id).toBe('browser_switch_willingness')
+    expect(question?.id).toBe('password_management')
   })
 
-  it('returns the browser switch willingness question for Edge users', () => {
-    const result = {
-      browserFamily: 'chromium',
-      browser: 'edge',
-      os: 'windows',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
-      dnt: true,
-      cookiesEnabled: false,
-      https: true,
-      adblock: true,
-    }
-
-    const question = getNextFollowUpQuestion(result, {})
-
-    expect(question).not.toBeNull()
-    expect(question?.id).toBe('browser_switch_willingness')
-  })
-
-  it('returns the browser similarity question only after the user is open to switching', () => {
-    const result = {
-      browserFamily: 'chromium',
-      browser: 'chrome',
-      os: 'linux',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
-      dnt: true,
-      cookiesEnabled: false,
-      https: true,
-      adblock: true,
-    }
-
-    const question = getNextFollowUpQuestion(result, {
-      browser_switch_willingness: 'yes',
+  it('returns the vpn usage question for privacy users after password management was answered', () => {
+    const question = getNextFollowUpQuestion(baseResult, {
+      privacy_preference: 'privacy',
+      search_engine: 'google',
+      password_management: 'manager',
     })
 
-    expect(question).not.toBeNull()
-    expect(question?.id).toBe('browser_switch_similarity')
+    expect(question?.id).toBe('vpn_usage')
   })
 
-  it('does not return the browser similarity question if the user does not want to switch', () => {
-    const result = {
-      browserFamily: 'chromium',
-      browser: 'chrome',
-      os: 'linux',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
-      dnt: true,
-      cookiesEnabled: false,
-      https: true,
-      adblock: true,
-    }
+  it('returns the adblock usage question for privacy users after earlier privacy questions are answered', () => {
+    const question = getNextFollowUpQuestion(baseResult, {
+      privacy_preference: 'privacy',
+      search_engine: 'google',
+      password_management: 'manager',
+      vpn_usage: 'yes',
+    })
 
-    const question = getNextFollowUpQuestion(result, {
-      browser_switch_willingness: 'no',
+    expect(question?.id).toBe('adblock_usage')
+  })
+
+  it('skips vpn usage for balanced users', () => {
+    const question = getNextFollowUpQuestion(baseResult, {
+      privacy_preference: 'balanced',
+      search_engine: 'google',
+      password_management: 'manager',
+    })
+
+    expect(question?.id).toBe('adblock_usage')
+  })
+
+  it('skips privacy questions for convenience users', () => {
+    const question = getNextFollowUpQuestion(baseResult, {
+      privacy_preference: 'convenience',
     })
 
     expect(question).toBeNull()
   })
 
+  it('returns the browser switch willingness question for Chrome users after earlier questions are answered', () => {
+    const question = getNextFollowUpQuestion(
+      { ...baseResult, browserFamily: 'chromium', browser: 'chrome' },
+      {
+        privacy_preference: 'privacy',
+        search_engine: 'google',
+        password_management: 'manager',
+        vpn_usage: 'yes',
+        adblock_usage: 'yes',
+      },
+    )
+
+    expect(question?.id).toBe('browser_switch_willingness')
+  })
+
+  it('returns the browser switch willingness question for Edge users', () => {
+    const question = getNextFollowUpQuestion(
+      { ...baseResult, browserFamily: 'chromium', browser: 'edge' },
+      {
+        privacy_preference: 'privacy',
+        search_engine: 'google',
+        password_management: 'manager',
+        vpn_usage: 'yes',
+        adblock_usage: 'yes',
+      },
+    )
+
+    expect(question?.id).toBe('browser_switch_willingness')
+  })
+
+  it('returns the browser similarity question only after the user is open to switching', () => {
+    const question = getNextFollowUpQuestion(
+      { ...baseResult, browserFamily: 'chromium', browser: 'chrome' },
+      {
+        privacy_preference: 'privacy',
+        search_engine: 'google',
+        password_management: 'manager',
+        vpn_usage: 'yes',
+        adblock_usage: 'yes',
+        browser_switch_willingness: 'yes',
+      },
+    )
+
+    expect(question?.id).toBe('browser_switch_similarity')
+  })
+
+  it('does not return the browser similarity question if the user does not want to switch', () => {
+    const question = getNextFollowUpQuestion(
+      { ...baseResult, browserFamily: 'chromium', browser: 'chrome' },
+      {
+        privacy_preference: 'privacy',
+        search_engine: 'google',
+        password_management: 'manager',
+        vpn_usage: 'yes',
+        adblock_usage: 'yes',
+        browser_switch_willingness: 'no',
+      },
+    )
+
+    expect(question).toBeNull()
+  })
+
   it('returns the tracking protection preference question when do not track is disabled', () => {
-    const result = {
-      browserFamily: 'unknown',
-      browser: 'unknown',
-      os: 'linux',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
-      dnt: false,
-      cookiesEnabled: false,
-      https: true,
-      adblock: true,
-    }
+    const question = getNextFollowUpQuestion(
+      { ...baseResult, dnt: false },
+      {
+        privacy_preference: 'convenience',
+      },
+    )
 
-    const question = getNextFollowUpQuestion(result, {})
-
-    expect(question).not.toBeNull()
     expect(question?.id).toBe('tracking_protection_preference')
   })
 
   it('returns no follow-up question when no follow-up is needed', () => {
-    const result = {
-      browserFamily: 'unknown',
-      browser: 'unknown',
-      os: 'linux',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
-      dnt: true,
-      cookiesEnabled: false,
-      https: true,
-      adblock: true,
-    }
-
-    const question = getNextFollowUpQuestion(result, {})
+    const question = getNextFollowUpQuestion(baseResult, {
+      privacy_preference: 'convenience',
+    })
 
     expect(question).toBeNull()
   })
 
   it('returns the next unanswered relevant question in the correct order', () => {
     const result = {
+      ...baseResult,
       browserFamily: 'chromium',
       browser: 'chrome',
-      os: 'linux',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
       dnt: false,
       cookiesEnabled: true,
-      https: true,
-      adblock: false,
     }
 
-    const firstQuestion = getNextFollowUpQuestion(result, {})
-    expect(firstQuestion?.id).toBe('cookie_preference')
+    expect(getNextFollowUpQuestion(result, {})?.id).toBe('privacy_preference')
 
-    const secondQuestion = getNextFollowUpQuestion(result, {
-      cookie_preference: 'privacy',
-    })
-    expect(secondQuestion?.id).toBe('adblock_interest')
+    expect(
+      getNextFollowUpQuestion(result, {
+        privacy_preference: 'privacy',
+      })?.id,
+    ).toBe('search_engine')
 
-    const thirdQuestion = getNextFollowUpQuestion(result, {
-      cookie_preference: 'privacy',
-      adblock_interest: 'yes',
-    })
-    expect(thirdQuestion?.id).toBe('browser_switch_willingness')
+    expect(
+      getNextFollowUpQuestion(result, {
+        privacy_preference: 'privacy',
+        search_engine: 'google',
+      })?.id,
+    ).toBe('password_management')
 
-    const fourthQuestion = getNextFollowUpQuestion(result, {
-      cookie_preference: 'privacy',
-      adblock_interest: 'yes',
-      browser_switch_willingness: 'yes',
-    })
-    expect(fourthQuestion?.id).toBe('browser_switch_similarity')
+    expect(
+      getNextFollowUpQuestion(result, {
+        privacy_preference: 'privacy',
+        search_engine: 'google',
+        password_management: 'manager',
+      })?.id,
+    ).toBe('vpn_usage')
 
-    const fifthQuestion = getNextFollowUpQuestion(result, {
-      cookie_preference: 'privacy',
-      adblock_interest: 'yes',
-      browser_switch_willingness: 'yes',
-      browser_switch_similarity: 'high',
-    })
-    expect(fifthQuestion?.id).toBe('tracking_protection_preference')
+    expect(
+      getNextFollowUpQuestion(result, {
+        privacy_preference: 'privacy',
+        search_engine: 'google',
+        password_management: 'manager',
+        vpn_usage: 'yes',
+      })?.id,
+    ).toBe('adblock_usage')
+
+    expect(
+      getNextFollowUpQuestion(result, {
+        privacy_preference: 'privacy',
+        search_engine: 'google',
+        password_management: 'manager',
+        vpn_usage: 'yes',
+        adblock_usage: 'yes',
+      })?.id,
+    ).toBe('browser_switch_willingness')
+
+    expect(
+      getNextFollowUpQuestion(result, {
+        privacy_preference: 'privacy',
+        search_engine: 'google',
+        password_management: 'manager',
+        vpn_usage: 'yes',
+        adblock_usage: 'yes',
+        browser_switch_willingness: 'yes',
+      })?.id,
+    ).toBe('browser_switch_similarity')
+
+    expect(
+      getNextFollowUpQuestion(result, {
+        privacy_preference: 'privacy',
+        search_engine: 'google',
+        password_management: 'manager',
+        vpn_usage: 'yes',
+        adblock_usage: 'yes',
+        browser_switch_willingness: 'yes',
+        browser_switch_similarity: 'high',
+      })?.id,
+    ).toBe('tracking_protection_preference')
   })
 })

@@ -7,7 +7,6 @@ export type DetectionResult = {
   dnt: boolean
   cookiesEnabled: boolean
   https: boolean
-  adblock: boolean
 }
 
 export type Recommendation = {

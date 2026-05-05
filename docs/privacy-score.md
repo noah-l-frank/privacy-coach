@@ -27,7 +27,6 @@ The final score is clamped between **0 and 100**.
 | HTTPS                    | https === false              | -25     |
 | Do Not Track             | dnt === false                | -10     |
 | Cookies                  | cookiesEnabled === true      | -10     |
-| Ad Blocker               | adblock === false            | -15     |
 
 ---
 

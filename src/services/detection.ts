@@ -7,7 +7,6 @@ export type DetectionResult = {
   dnt: boolean
   cookiesEnabled: boolean
   https: boolean
-  adblock: boolean
 }
 
 export function detectOS(userAgent: string): string {
@@ -66,8 +65,6 @@ export function detectEnvironment(): DetectionResult {
   const cookiesEnabled = navigator.cookieEnabled
   const https = window.location.protocol === 'https:'
 
-  const adblock = false // TODO: Implement adblock detection logic
-
   return {
     browserFamily,
     browser,
@@ -77,6 +74,5 @@ export function detectEnvironment(): DetectionResult {
     dnt,
     cookiesEnabled,
     https,
-    adblock,
   }
 }

@@ -12,7 +12,6 @@ describe('generateRecommendations', () => {
       dnt: false,
       cookiesEnabled: false,
       https: true,
-      adblock: false,
     }
 
     const answers = {
@@ -46,7 +45,6 @@ describe('generateRecommendations', () => {
       dnt: false,
       cookiesEnabled: false,
       https: true,
-      adblock: false,
     }
 
     const answers = {
@@ -80,7 +78,6 @@ describe('generateRecommendations', () => {
       dnt: false,
       cookiesEnabled: true,
       https: true,
-      adblock: false,
     }
 
     const answers = {
@@ -103,7 +100,6 @@ describe('generateRecommendations', () => {
       dnt: false,
       cookiesEnabled: true,
       https: true,
-      adblock: false,
     }
 
     const answers = {
@@ -131,7 +127,6 @@ describe('generateRecommendations', () => {
       dnt: false,
       cookiesEnabled: true,
       https: true,
-      adblock: false,
     }
 
     const answers = {
@@ -159,7 +154,6 @@ describe('generateRecommendations', () => {
       dnt: false,
       cookiesEnabled: true,
       https: true,
-      adblock: false,
     }
 
     const answers = {
@@ -187,7 +181,6 @@ describe('generateRecommendations', () => {
       dnt: false,
       cookiesEnabled: true,
       https: true,
-      adblock: false,
     }
 
     const answers = {}

@@ -24,7 +24,6 @@ const positiveFindings = computed(() => {
 
   if (scanStore.result.https) positives.push('HTTPS is enabled')
   if (scanStore.result.dnt) positives.push('Do Not Track is active')
-  if (scanStore.result.adblock) positives.push('Ad blocker is active')
 
   return positives
 })

@@ -31,7 +31,6 @@ describe('detectEnvironment', () => {
     expect(result).toHaveProperty('dnt')
     expect(result).toHaveProperty('cookiesEnabled')
     expect(result).toHaveProperty('https')
-    expect(result).toHaveProperty('adblock')
   })
 
   it('returns values with the expected types', () => {
@@ -45,7 +44,6 @@ describe('detectEnvironment', () => {
     expect(typeof result.dnt).toBe('boolean')
     expect(typeof result.cookiesEnabled).toBe('boolean')
     expect(typeof result.https).toBe('boolean')
-    expect(typeof result.adblock).toBe('boolean')
   })
 })
 

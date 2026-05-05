@@ -31,7 +31,6 @@ os: "linux",
 dnt: true,
 cookiesEnabled: true,
 https: true,
-adblock: false
 }
 
 ---

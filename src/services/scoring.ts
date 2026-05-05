@@ -8,7 +8,6 @@ export function calculatePrivacyScore(result: DetectionResult): number {
   if (!result.https) score -= 25
   if (!result.dnt) score -= 10
   if (result.cookiesEnabled) score -= 10
-  if (!result.adblock) score -= 15
 
   return Math.max(0, Math.min(100, score))
 }

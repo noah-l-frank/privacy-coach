@@ -74,15 +74,15 @@ export function getNextFollowUpQuestion(
     }
   }
 
-  if (!result.adblock && !answers.adblock_interest) {
+  if (answers.privacy_preference !== 'convenience' && !answers.adblock_usage) {
     return {
-      id: 'adblock_interest',
-      title: 'Would you like fewer ads and less tracking while browsing?',
-      description: 'Ad and tracker blocking can improve privacy and reduce distractions.',
+      id: 'adblock_usage',
+      title: 'Do you use an ad blocker?',
+      description: 'Ad blockers can reduce tracking and improve privacy while browsing.',
       options: [
         { value: 'yes', label: 'Yes' },
-        { value: 'maybe', label: 'Maybe' },
         { value: 'no', label: 'No' },
+        { value: 'not_sure', label: 'Not sure' },
       ],
     }
   }

@@ -19,7 +19,6 @@ The system detects the following client-side signals:
 - Do Not Track status
 - Cookie availability
 - HTTPS context
-- Adblock usage (heuristic)
 
 All detection is performed locally in the browser.
 
@@ -73,7 +72,7 @@ All detection is performed locally in the browser.
 - Mobile browsers
 - Private browsing mode
 - Logged-in account states
-- Browser extensions (except adblock heuristic detection)
+- Browser extensions
 - Backend services
 - Persistent user accounts
 

@@ -25,7 +25,6 @@ describe('scan store', () => {
       dnt: false,
       cookiesEnabled: true,
       https: true,
-      adblock: false,
     }
 
     scanStore.setResult(result)
