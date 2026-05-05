@@ -29,6 +29,25 @@ export function getNextFollowUpQuestion(
     }
   }
 
+  if (
+    (answers.privacy_preference === 'privacy' || answers.privacy_preference === 'balanced') &&
+    !answers.search_engine
+  ) {
+    return {
+      id: 'search_engine',
+      title: 'Which search engine do you usually use?',
+      description:
+        'Your search engine choice affects how much of your browsing behavior is tracked.',
+      options: [
+        { value: 'google', label: 'Google' },
+        { value: 'duckduckgo', label: 'DuckDuckGo' },
+        { value: 'startpage', label: 'Startpage' },
+        { value: 'ecosia', label: 'Ecosia' },
+        { value: 'other', label: 'Other' },
+      ],
+    }
+  }
+
   if (!result.adblock && !answers.adblock_interest) {
     return {
       id: 'adblock_interest',
