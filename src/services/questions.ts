@@ -16,9 +16,9 @@ export function getNextFollowUpQuestion(
 ): FollowUpQuestion | null {
   const browser = result.browser.toLowerCase()
 
-  if (result.cookiesEnabled && !answers.cookie_preference) {
+  if (result.cookiesEnabled && !answers.privacy_preference) {
     return {
-      id: 'cookie_preference',
+      id: 'privacy_preference',
       title: 'What matters more to you while browsing?',
       description: 'Some browser settings improve convenience, while others improve privacy.',
       options: [
