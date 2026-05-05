@@ -33,7 +33,12 @@ const privacyScore = computed(() => {
   return calculatePrivacyScore(scanStore.result)
 })
 
-const userScore = computed(() => progressStore.userScore)
+const userScore = computed(() =>
+  progressStore.calculateUserScore(
+    recommendations.value.map((recommendation) => recommendation.id),
+    privacyScore.value,
+  ),
+)
 
 const scoreBarStyle = computed(() => ({
   width: `${privacyScore.value}%`,

@@ -5,10 +5,6 @@ export const useProgressStore = defineStore('progress', {
     completedRecommendationIds: [] as string[],
   }),
 
-  getters: {
-    userScore: () => 75, // TODO: calculate user score based on scan results, answers to questions, and completed recommendations
-  },
-
   actions: {
     toggleRecommendation(id: string) {
       if (this.completedRecommendationIds.includes(id)) {
@@ -23,6 +19,18 @@ export const useProgressStore = defineStore('progress', {
 
     isRecommendationCompleted(id: string) {
       return this.completedRecommendationIds.includes(id)
+    },
+
+    calculateUserScore(recommendationIds: string[], privacyScore: number) {
+      if (!recommendationIds.length) return 100
+
+      const completedCount = recommendationIds.filter((id) =>
+        this.completedRecommendationIds.includes(id),
+      ).length
+
+      const completionRatio = completedCount / recommendationIds.length
+
+      return Math.round(privacyScore + completionRatio * (100 - privacyScore))
     },
   },
 })
