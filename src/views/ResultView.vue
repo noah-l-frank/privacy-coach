@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
+import confetti from 'canvas-confetti'
 import { useRouter } from 'vue-router'
 import { useScanStore } from '@/stores/scan'
 import { useQuestionsStore } from '@/stores/questions'
@@ -39,6 +40,16 @@ const userScore = computed(() =>
     privacyScore.value,
   ),
 )
+
+watch(userScore, (newScore, oldScore) => {
+  if (newScore === 100 && oldScore !== 100) {
+    confetti({
+      particleCount: 120,
+      spread: 80,
+      origin: { y: 0.6 },
+    })
+  }
+})
 
 const scoreBarStyle = computed(() => ({
   width: `${privacyScore.value}%`,
