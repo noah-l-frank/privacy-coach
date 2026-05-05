@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import confetti from 'canvas-confetti'
 import tadaSoundFile from '@/assets/sounds/tada_sound.wav'
 import { useRouter } from 'vue-router'
@@ -13,6 +13,8 @@ const router = useRouter()
 const scanStore = useScanStore()
 const questionsStore = useQuestionsStore()
 const progressStore = useProgressStore()
+
+const showRecommendations = ref(true)
 
 const confettiSound = new Audio(tadaSoundFile)
 confettiSound.volume = 0.6
@@ -166,7 +168,21 @@ function restartScan() {
         </p>
       </div>
 
-      <div v-if="recommendations.length" class="recommendations-list">
+      <button
+        v-if="recommendations.length"
+        class="recommendations-toggle"
+        type="button"
+        @click="showRecommendations = !showRecommendations"
+      >
+        <span class="toggle-title">Recommended actions</span>
+
+        <span class="toggle-meta">
+          {{ recommendations.length }} items
+          <span class="toggle-chevron" :class="{ open: showRecommendations }">›</span>
+        </span>
+      </button>
+
+      <div v-if="showRecommendations && recommendations.length" class="recommendations-list">
         <article
           v-for="recommendation in recommendations"
           :key="recommendation.id"
@@ -195,7 +211,9 @@ function restartScan() {
         </article>
       </div>
 
-      <p v-else class="empty-state">No specific recommendations right now.</p>
+      <p v-else-if="!recommendations.length" class="empty-state">
+        No specific recommendations right now.
+      </p>
     </section>
 
     <section v-if="positiveFindings.length" class="positives-section">
@@ -314,12 +332,41 @@ function restartScan() {
   opacity: 0.8;
 }
 
+.user-score-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 22px;
+  padding: 1.25rem 1.4rem;
+  margin: -1.25rem 0 2.75rem;
+  background: white;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+}
+
+.user-score-value {
+  font-size: 2rem;
+  line-height: 1;
+  font-weight: 800;
+  margin: 0;
+  color: #2563eb;
+  letter-spacing: -0.03em;
+}
+
+.user-score-text {
+  max-width: 60ch;
+  margin: 0;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
 .recommendations-section {
   margin-bottom: 2.5rem;
 }
 
 .section-header {
-  margin-bottom: 1.4rem;
+  margin-bottom: 1.2rem;
 }
 
 .section-title {
@@ -335,6 +382,67 @@ function restartScan() {
   color: #4b5563;
   max-width: 70ch;
   margin: 0;
+}
+
+.recommendations-toggle {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.95rem 1.15rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #f8fafc;
+  color: #111827;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font: inherit;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.04);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.recommendations-toggle:hover {
+  transform: translateY(-1px);
+  border-color: #cbd5e1;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+}
+
+.toggle-title {
+  font-weight: 700;
+}
+
+.toggle-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #64748b;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.toggle-chevron {
+  display: grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background: white;
+  color: #64748b;
+  font-size: 1rem;
+  line-height: 1;
+  box-shadow: inset 0 0 0 1px #e5e7eb;
+  transform: rotate(90deg);
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+
+.toggle-chevron.open {
+  transform: rotate(-90deg);
+  color: #0f172a;
 }
 
 .recommendations-list {
@@ -357,6 +465,32 @@ function restartScan() {
     border-color 0.2s ease,
     background-color 0.2s ease,
     opacity 0.2s ease;
+}
+
+.recommendation-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.45rem;
+  height: 1.45rem;
+  margin-top: 0.1rem;
+  border-radius: 999px;
+  border: 2px solid #cbd5e1;
+  background: white;
+  color: white;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.recommendation-check:hover {
+  border-color: #22c55e;
+}
+
+.recommendation-content {
+  flex: 1;
 }
 
 .recommendation-header {
@@ -386,6 +520,21 @@ function restartScan() {
   border-radius: 999px;
   font-weight: 600;
   text-transform: capitalize;
+}
+
+.recommendation-card.completed {
+  background: #f8fafc;
+  opacity: 0.72;
+}
+
+.recommendation-card.completed .recommendation-check {
+  background: #22c55e;
+  border-color: #22c55e;
+}
+
+.recommendation-card.completed h3,
+.recommendation-card.completed .recommendation-description {
+  text-decoration: line-through;
 }
 
 .empty-state {
@@ -478,75 +627,5 @@ function restartScan() {
 
 .primary-button:active {
   transform: translateY(0);
-}
-
-.user-score-card {
-  display: flex;
-  justify-content: space-between;
-  gap: 1.5rem;
-  align-items: center;
-  border: 1px solid #e5e7eb;
-  border-radius: 22px;
-  padding: 1.25rem 1.4rem;
-  margin: -1.25rem 0 2.5rem;
-  background: white;
-  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
-}
-
-.user-score-value {
-  font-size: 2rem;
-  line-height: 1;
-  font-weight: 800;
-  margin: 0;
-  color: #2563eb;
-  letter-spacing: -0.03em;
-}
-
-.user-score-text {
-  max-width: 60ch;
-  margin: 0;
-  color: #4b5563;
-  line-height: 1.6;
-}
-
-.recommendation-check {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.45rem;
-  height: 1.45rem;
-  margin-top: 0.1rem;
-  border-radius: 999px;
-  border: 2px solid #cbd5e1;
-  background: white;
-  color: white;
-  font: inherit;
-  font-size: 0.8rem;
-  font-weight: 800;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.recommendation-check:hover {
-  border-color: #22c55e;
-}
-
-.recommendation-content {
-  flex: 1;
-}
-
-.recommendation-card.completed {
-  background: #f8fafc;
-  opacity: 0.72;
-}
-
-.recommendation-card.completed .recommendation-check {
-  background: #22c55e;
-  border-color: #22c55e;
-}
-
-.recommendation-card.completed h3,
-.recommendation-card.completed .recommendation-description {
-  text-decoration: line-through;
 }
 </style>
