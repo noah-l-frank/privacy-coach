@@ -48,6 +48,32 @@ export function getNextFollowUpQuestion(
     }
   }
 
+  if (answers.privacy_preference !== 'convenience' && !answers.password_management) {
+    return {
+      id: 'password_management',
+      title: 'How do you manage your passwords?',
+      description: 'Strong, unique passwords are essential for protecting your accounts.',
+      options: [
+        { value: 'manager', label: 'I use a password manager' },
+        { value: 'reuse', label: 'I reuse passwords' },
+        { value: 'memory', label: 'I remember them myself' },
+      ],
+    }
+  }
+
+  if (answers.privacy_preference === 'privacy' && !answers.vpn_usage) {
+    return {
+      id: 'vpn_usage',
+      title: 'Do you use a VPN when browsing the internet?',
+      description: 'A VPN can help hide your IP address and improve privacy on untrusted networks.',
+      options: [
+        { value: 'yes', label: 'Yes, regularly' },
+        { value: 'sometimes', label: 'Sometimes' },
+        { value: 'no', label: 'No' },
+      ],
+    }
+  }
+
   if (!result.adblock && !answers.adblock_interest) {
     return {
       id: 'adblock_interest',
