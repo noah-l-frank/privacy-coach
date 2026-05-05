@@ -503,7 +503,7 @@ function restartScan() {
 }
 
 .user-score-text {
-  max-width: 46ch;
+  max-width: 60ch;
   margin: 0;
   color: #4b5563;
   line-height: 1.6;
