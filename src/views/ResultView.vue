@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import confetti from 'canvas-confetti'
+import tadaSoundFile from '@/assets/sounds/tada_sound.wav'
 import { useRouter } from 'vue-router'
 import { useScanStore } from '@/stores/scan'
 import { useQuestionsStore } from '@/stores/questions'
@@ -12,6 +13,9 @@ const router = useRouter()
 const scanStore = useScanStore()
 const questionsStore = useQuestionsStore()
 const progressStore = useProgressStore()
+
+const confettiSound = new Audio(tadaSoundFile)
+confettiSound.volume = 0.6
 
 const recommendations = computed(() => {
   if (!scanStore.result) return []
@@ -48,6 +52,9 @@ watch(userScore, (newScore, oldScore) => {
       spread: 80,
       origin: { y: 0.6 },
     })
+
+    confettiSound.currentTime = 0
+    confettiSound.play().catch(() => {})
   }
 })
 
