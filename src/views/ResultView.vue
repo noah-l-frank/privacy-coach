@@ -16,12 +16,21 @@ const progressStore = useProgressStore()
 
 const showRecommendations = ref(true)
 
+const effortOrder = {
+  easy: 0,
+  medium: 1,
+  advanced: 2,
+}
+
 const confettiSound = new Audio(tadaSoundFile)
 confettiSound.volume = 0.6
 
 const recommendations = computed(() => {
   if (!scanStore.result) return []
-  return generateRecommendations(scanStore.result, questionsStore.answers)
+
+  return generateRecommendations(scanStore.result, questionsStore.answers).sort(
+    (a, b) => effortOrder[a.effort] - effortOrder[b.effort],
+  )
 })
 
 const positiveFindings = computed(() => {
