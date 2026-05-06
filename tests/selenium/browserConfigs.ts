@@ -12,7 +12,7 @@ export const browserConfigs = [
     browser: 'chrome',
     expected: {
       browserFamily: 'chromium',
-      browser: 'google-chrome',
+      browser: 'chrome',
     },
   },
 ]
