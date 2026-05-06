@@ -1,19 +1,11 @@
-import { By, until } from 'selenium-webdriver'
 import { createDriver } from './helpers/createDriver'
-
-const appUrl = 'http://localhost:5173/debug/scan'
+import { readScanResult } from './helpers/readScanResult'
 
 async function run() {
   const driver = await createDriver('firefox')
 
   try {
-    await driver.get(appUrl)
-
-    const pre = await driver.wait(until.elementLocated(By.css('[data-testid="scan-result"]')), 5000)
-
-    const rawJson = await pre.getText()
-
-    const result = JSON.parse(rawJson)
+    const result = await readScanResult(driver)
 
     if (result.browserFamily !== 'firefox') {
       throw new Error(`Expected firefox browserFamily but got ${result.browserFamily}`)
