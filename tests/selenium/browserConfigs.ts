@@ -15,4 +15,12 @@ export const browserConfigs = [
       browser: 'chrome',
     },
   },
+  {
+    name: 'edge-default',
+    browser: 'MicrosoftEdge',
+    expected: {
+      browserFamily: 'chromium',
+      browser: 'microsoft-edge',
+    },
+  },
 ]
