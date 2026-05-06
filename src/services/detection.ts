@@ -8,8 +8,6 @@ export type DetectionResult = {
   browserFamily: string
   browser: string
   os: string
-  language: string
-  timezone: string
   gpc: boolean
   cookiesEnabled: boolean
   https: boolean
@@ -59,16 +57,9 @@ export function detectBrowser(userAgent: string): { browserFamily: string; brows
 
 export function detectEnvironment(): DetectionResult {
   const userAgent = navigator.userAgent.toLowerCase()
-
   const { browserFamily, browser } = detectBrowser(userAgent)
-
   const os = detectOS(userAgent)
-
-  const language = navigator.language
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
-
   const gpc = (navigator as NavigatorWithGPC).globalPrivacyControl === true
-
   const cookiesEnabled = navigator.cookieEnabled
   const https = window.location.protocol === 'https:'
 
@@ -76,8 +67,6 @@ export function detectEnvironment(): DetectionResult {
     browserFamily,
     browser,
     os,
-    language,
-    timezone,
     gpc,
     cookiesEnabled,
     https,
