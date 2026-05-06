@@ -19,6 +19,7 @@ export const browserConfigs = [
       browserFamily: 'firefox',
       browser: 'firefox',
       os: expectedOs,
+      cookiesEnabled: true,
     },
   },
   {
@@ -28,6 +29,7 @@ export const browserConfigs = [
       browserFamily: 'chromium',
       browser: 'chrome',
       os: expectedOs,
+      cookiesEnabled: true,
     },
   },
   {
@@ -37,6 +39,7 @@ export const browserConfigs = [
       browserFamily: 'chromium',
       browser: 'edge',
       os: expectedOs,
+      cookiesEnabled: true,
     },
   },
 ]

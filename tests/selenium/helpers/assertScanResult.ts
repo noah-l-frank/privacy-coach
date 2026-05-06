@@ -17,8 +17,12 @@ export function assertScanResult(result: DetectionResult, config: BrowserConfig)
   }
 
   if (result.os !== config.expected.os) {
-  throw new Error(
-    `${config.name}: expected os ${config.expected.os} but got ${result.os}`,
-  )
-}
+    throw new Error(`${config.name}: expected os ${config.expected.os} but got ${result.os}`)
+  }
+
+  if (result.cookiesEnabled !== config.expected.cookiesEnabled) {
+    throw new Error(
+      `${config.name}: expected cookiesEnabled ${config.expected.cookiesEnabled} but got ${result.cookiesEnabled}`,
+    )
+  }
 }
