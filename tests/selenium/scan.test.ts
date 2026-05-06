@@ -4,19 +4,19 @@ import { browserConfigs } from './browserConfigs'
 import { assertScanResult } from './helpers/assertScanResult'
 
 async function run() {
-  const config = browserConfigs[0]
+  for (const config of browserConfigs) {
+    const driver = await createDriver(config.browser)
 
-  const driver = await createDriver(config.browser)
+    try {
+      const result = await readScanResult(driver)
 
-  try {
-    const result = await readScanResult(driver)
+      assertScanResult(result, config)
 
-    assertScanResult(result, config)
-
-    console.log('✅ Firefox scan test passed')
-    console.log(result)
-  } finally {
-    await driver.quit()
+      console.log(`✅ ${config.name} scan test passed`)
+      console.log(result)
+    } finally {
+      await driver.quit()
+    }
   }
 }
 
