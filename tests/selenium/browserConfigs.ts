@@ -20,7 +20,7 @@ export const browserConfigs = [
     browser: 'MicrosoftEdge',
     expected: {
       browserFamily: 'chromium',
-      browser: 'microsoft-edge',
+      browser: 'edge',
     },
   },
 ]
