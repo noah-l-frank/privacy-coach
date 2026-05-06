@@ -15,4 +15,10 @@ export function assertScanResult(result: DetectionResult, config: BrowserConfig)
       `${config.name}: expected browser ${config.expected.browser} but got ${result.browser}`,
     )
   }
+
+  if (result.os !== config.expected.os) {
+  throw new Error(
+    `${config.name}: expected os ${config.expected.os} but got ${result.os}`,
+  )
+}
 }
