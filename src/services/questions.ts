@@ -118,7 +118,7 @@ export function getNextFollowUpQuestion(
     }
   }
 
-  if (!result.dnt && !answers.tracking_protection_preference) {
+  if (!result.gpc && !answers.tracking_protection_preference) {
     return {
       id: 'tracking_protection_preference',
       title: 'Would you like your browser to reduce tracking as much as possible?',

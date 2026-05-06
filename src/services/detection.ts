@@ -1,10 +1,16 @@
+// globalPrivacyControl is not yet included in TypeScript's Navigator type
+
+type NavigatorWithGPC = Navigator & {
+  globalPrivacyControl?: boolean
+}
+
 export type DetectionResult = {
   browserFamily: string
   browser: string
   os: string
   language: string
   timezone: string
-  dnt: boolean
+  gpc: boolean
   cookiesEnabled: boolean
   https: boolean
 }
@@ -61,7 +67,8 @@ export function detectEnvironment(): DetectionResult {
   const language = navigator.language
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
-  const dnt = navigator.doNotTrack === '1'
+  const gpc = (navigator as NavigatorWithGPC).globalPrivacyControl === true
+
   const cookiesEnabled = navigator.cookieEnabled
   const https = window.location.protocol === 'https:'
 
@@ -71,7 +78,7 @@ export function detectEnvironment(): DetectionResult {
     os,
     language,
     timezone,
-    dnt,
+    gpc,
     cookiesEnabled,
     https,
   }
