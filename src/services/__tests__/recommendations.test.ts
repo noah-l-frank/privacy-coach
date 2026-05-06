@@ -8,7 +8,7 @@ describe('generateRecommendations', () => {
     os: 'linux',
     language: 'de-DE',
     timezone: 'Europe/Berlin',
-    dnt: true,
+    gpc: true,
     cookiesEnabled: false,
     https: true,
   }
@@ -83,14 +83,14 @@ describe('generateRecommendations', () => {
 
   it('recommends enabling Do Not Track when it is disabled and tracking protection is important', () => {
     const recommendations = generateRecommendations(
-      { ...baseResult, dnt: false },
+      { ...baseResult, gpc: false },
       {
         tracking_protection_preference: 'high',
       },
     )
 
     expect(recommendations).toContainEqual({
-      id: 'enable-dnt',
+      id: 'enable-gpc',
       title: 'Enable Do Not Track',
       description:
         'Since tracking protection is important to you, consider enabling Do Not Track in your browser settings.',

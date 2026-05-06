@@ -25,7 +25,7 @@ The final score is clamped between **0 and 100**.
 | Browser (Chromium-based) | browserFamily === 'chromium' | -15     |
 | Browser (Google Chrome)  | browser === 'Google Chrome'  | -5      |
 | HTTPS                    | https === false              | -25     |
-| Do Not Track             | dnt === false                | -10     |
+| Do Not Track             | gpc === false                | -10     |
 | Cookies                  | cookiesEnabled === true      | -10     |
 
 ---

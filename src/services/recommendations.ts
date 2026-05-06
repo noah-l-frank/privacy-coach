@@ -4,7 +4,7 @@ export type DetectionResult = {
   os: string
   language: string
   timezone: string
-  dnt: boolean
+  gpc: boolean
   cookiesEnabled: boolean
   https: boolean
 }
@@ -60,9 +60,9 @@ export function generateRecommendations(
     })
   }
 
-  if (!result.dnt && answers.tracking_protection_preference === 'high') {
+  if (!result.gpc && answers.tracking_protection_preference === 'high') {
     recommendations.push({
-      id: 'enable-dnt',
+      id: 'enable-gpc',
       title: 'Enable Do Not Track',
       description:
         'Since tracking protection is important to you, consider enabling Do Not Track in your browser settings.',

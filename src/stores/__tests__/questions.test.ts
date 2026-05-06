@@ -27,11 +27,11 @@ describe('questions store', () => {
     const questionsStore = useQuestionsStore()
 
     questionsStore.setAnswer('cookie_preference', 'privacy')
-    questionsStore.setAnswer('dnt_preference', 'high')
+    questionsStore.setAnswer('gpc_preference', 'high')
 
     expect(questionsStore.answers).toEqual({
       cookie_preference: 'privacy',
-      dnt_preference: 'high',
+      gpc_preference: 'high',
     })
   })
 })

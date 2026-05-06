@@ -28,7 +28,7 @@ Example:
 {
 browser: "chromium",
 os: "linux",
-dnt: true,
+gpc: true,
 cookiesEnabled: true,
 https: true,
 }

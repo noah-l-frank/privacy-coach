@@ -11,7 +11,7 @@ The current detection layer provides the following data:
 - os
 - language
 - timezone
-- dnt
+- gpc
 - cookiesEnabled
 - https
 
@@ -21,7 +21,7 @@ For the initial version of the decision logic, only a subset of the available de
 
 - browser
 - browserFamily
-- dnt
+- gpc
 - cookiesEnabled
 
 Additional detected values such as os, language, timezone, and https are already collected and may be incorporated into future recommendation rules as the system evolves.

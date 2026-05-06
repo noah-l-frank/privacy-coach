@@ -22,7 +22,7 @@ describe('scan store', () => {
       os: 'linux',
       language: 'de-DE',
       timezone: 'Europe/Berlin',
-      dnt: false,
+      gpc: false,
       cookiesEnabled: true,
       https: true,
     }

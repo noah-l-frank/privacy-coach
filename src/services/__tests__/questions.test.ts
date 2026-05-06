@@ -8,7 +8,7 @@ describe('getNextFollowUpQuestion', () => {
     os: 'linux',
     language: 'de-DE',
     timezone: 'Europe/Berlin',
-    dnt: true,
+    gpc: true,
     cookiesEnabled: false,
     https: true,
   }
@@ -139,7 +139,7 @@ describe('getNextFollowUpQuestion', () => {
 
   it('returns the tracking protection preference question when do not track is disabled', () => {
     const question = getNextFollowUpQuestion(
-      { ...baseResult, dnt: false },
+      { ...baseResult, gpc: false },
       {
         privacy_preference: 'convenience',
       },
@@ -161,7 +161,7 @@ describe('getNextFollowUpQuestion', () => {
       ...baseResult,
       browserFamily: 'chromium',
       browser: 'chrome',
-      dnt: false,
+      gpc: false,
       cookiesEnabled: true,
     }
 

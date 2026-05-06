@@ -9,7 +9,7 @@ function createDetectionResult(overrides: Partial<DetectionResult> = {}): Detect
     os: 'Linux',
     language: 'en-US',
     timezone: 'Europe/Berlin',
-    dnt: true,
+    gpc: true,
     cookiesEnabled: false,
     https: true,
     ...overrides,
@@ -40,8 +40,8 @@ describe('calculatePrivacyScore', () => {
     expect(calculatePrivacyScore(createDetectionResult({ https: false }))).toBe(75)
   })
 
-  it('subtracts points when dnt is disabled', () => {
-    expect(calculatePrivacyScore(createDetectionResult({ dnt: false }))).toBe(90)
+  it('subtracts points when gpc is disabled', () => {
+    expect(calculatePrivacyScore(createDetectionResult({ gpc: false }))).toBe(90)
   })
 
   it('subtracts points when cookies are enabled', () => {
@@ -53,7 +53,7 @@ describe('calculatePrivacyScore', () => {
       browserFamily: 'chromium',
       browser: 'Google Chrome',
       https: false,
-      dnt: false,
+      gpc: false,
       cookiesEnabled: true,
     })
 
@@ -65,7 +65,7 @@ describe('calculatePrivacyScore', () => {
       browserFamily: 'chromium',
       browser: 'Google Chrome',
       https: false,
-      dnt: false,
+      gpc: false,
       cookiesEnabled: true,
     })
 
