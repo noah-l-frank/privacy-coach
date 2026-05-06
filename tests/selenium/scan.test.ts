@@ -4,6 +4,8 @@ import { browserConfigs } from './browserConfigs'
 import { assertScanResult } from './helpers/assertScanResult'
 
 async function run() {
+  const verbose = process.env.VERBOSE === 'true'
+
   for (const config of browserConfigs) {
     const driver = await createDriver(config.browser)
 
@@ -12,8 +14,10 @@ async function run() {
 
       assertScanResult(result, config)
 
-      console.log(`✅ ${config.name} scan test passed`)
-      console.log(result)
+      console.log(`${config.name} ✅`)
+      if (verbose) {
+        console.log(result)
+      }
     } finally {
       await driver.quit()
     }
