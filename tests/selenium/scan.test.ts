@@ -1,9 +1,10 @@
-import { Builder, By, until } from 'selenium-webdriver'
+import { By, until } from 'selenium-webdriver'
+import { createDriver } from './helpers/createDriver'
 
 const appUrl = 'http://localhost:5173/debug/scan'
 
 async function run() {
-  const driver = await new Builder().forBrowser('firefox').build()
+  const driver = await createDriver('firefox')
 
   try {
     await driver.get(appUrl)
