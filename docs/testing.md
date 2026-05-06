@@ -57,3 +57,30 @@ Rationale:
 - enables automated cross-browser validation
 - separates slower integration tests from fast unit tests
 - simplifies scaling to additional browsers and configurations
+
+## Selenium Test Structure
+
+Selenium tests are structured as matrix-based scan tests.
+
+The goal is to run the same scan validation against multiple browser configurations instead of writing separate test files for each browser.
+
+Planned structure:
+
+```text
+tests/
+  selenium/
+    scan.test.ts
+    browserConfigs.ts
+    helpers/
+      createDriver.ts
+      readScanResult.ts
+      assertScanResult.ts
+```
+
+Rationale:
+
+- keeps browser configurations separate from test logic
+- makes it easy to add more browsers later
+- avoids duplicated test code
+- keeps scan reading and scan validation reusable
+- supports future expansion to Selenium Grid or BrowserStack
