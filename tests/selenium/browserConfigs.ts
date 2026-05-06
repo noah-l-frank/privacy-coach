@@ -7,4 +7,12 @@ export const browserConfigs = [
       browser: 'firefox',
     },
   },
+  {
+    name: 'chrome-default',
+    browser: 'chrome',
+    expected: {
+      browserFamily: 'chromium',
+      browser: 'google-chrome',
+    },
+  },
 ]
