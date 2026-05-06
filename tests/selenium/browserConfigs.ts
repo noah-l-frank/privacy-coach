@@ -7,6 +7,8 @@ function getExpectedOs() {
 
 // The expected OS depends on the platform the Selenium tests are executed on.
 // This keeps the tests portable across Linux, macOS, and Windows environments.
+// TODO: Validate OS detection against real operating systems using
+// Selenium Grid or BrowserStack instead of relying on the local host OS.
 const expectedOs = getExpectedOs()
 
 export const browserConfigs = [
