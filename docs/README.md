@@ -5,4 +5,4 @@
 - [Architecture](architecture.md)
 - [Testing](testing.md)
 - [CI/CD](ci-cd.md)
-- [Deployment](deployment.md) <!-- TODO: Add deployment docs -->
+- [Deployment](deployment.md)
