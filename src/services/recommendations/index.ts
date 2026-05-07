@@ -1,11 +1,5 @@
 import type { DetectionResult } from '@/services/detection'
-
-export type Recommendation = {
-  id: string
-  title: string
-  description: string
-  effort: 'easy' | 'medium' | 'advanced'
-}
+import type { Recommendation } from './types'
 
 export function generateRecommendations(
   result: DetectionResult,
