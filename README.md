@@ -20,6 +20,11 @@ It helps users better understand and improve their browser privacy through local
 
 ## Installation
 
+```sh
+npm install
+npm run dev
+```
+
 ## Usage
 
 ## Tech Stack
