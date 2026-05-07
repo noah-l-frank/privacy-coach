@@ -41,3 +41,5 @@ After completing the installation steps, open the application in your browser an
 More detailed project documentation can be found in the [docs](docs/README.md) directory.
 
 ## License
+
+This project is licensed under the GNU GPLv3 License.
