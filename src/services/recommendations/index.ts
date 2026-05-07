@@ -1,5 +1,6 @@
 import type { DetectionResult } from '@/services/detection'
 import type { Recommendation } from './types'
+import { recommendationContent } from './recommendationContent'
 
 export function generateRecommendations(
   result: DetectionResult,
@@ -15,64 +16,28 @@ export function generateRecommendations(
 
   if (browser.includes('chrome') && privacyPreference === 'privacy') {
     if (similarity === 'low') {
-      recommendations.push({
-        id: 'switch-to-firefox',
-        title: 'Switch to a privacy-focused browser',
-        description:
-          'Since privacy is important to you and you do not mind a different look and feel, consider switching to Firefox for stronger built-in privacy protections.',
-        effort: 'medium',
-      })
+      recommendations.push(recommendationContent.switch_to_firefox)
     }
 
     if (similarity === 'high') {
-      recommendations.push({
-        id: 'switch-to-brave',
-        title: 'Consider a more private Chromium-based browser',
-        description:
-          'Since you prefer a familiar experience, you might consider a privacy-focused Chromium browser like Brave, which offers better default privacy settings than Chrome.',
-        effort: 'easy',
-      })
+      recommendations.push(recommendationContent.switch_to_brave)
     }
   }
 
   if (browser.includes('firefox') && privacyPreference === 'privacy') {
-    recommendations.push({
-      id: 'optimize-firefox',
-      title: 'Optimize your Firefox privacy settings',
-      description:
-        'You are already using Firefox. Reviewing its privacy settings can further improve your protection.',
-      effort: 'easy',
-    })
+    recommendations.push(recommendationContent.optimize_firefox)
   }
 
   if (!result.gpc && answers.tracking_protection_preference === 'high') {
-    recommendations.push({
-      id: 'enable-gpc',
-      title: 'Enable Do Not Track',
-      description:
-        'Since tracking protection is important to you, consider enabling Do Not Track in your browser settings.',
-      effort: 'easy',
-    })
+    recommendations.push(recommendationContent.enable_gpc)
   }
 
   if (result.cookiesEnabled && privacyPreference === 'privacy') {
-    recommendations.push({
-      id: 'reduce-cookies',
-      title: 'Reduce cookie and tracking exposure',
-      description:
-        'Since privacy is important to you, consider reducing tracking and third-party cookie usage in your browser.',
-      effort: 'medium',
-    })
+    recommendations.push(recommendationContent.reduce_cookies)
   }
 
   if (isPrivacyFocused && answers.adblock_usage === 'no') {
-    recommendations.push({
-      id: 'use-adblock',
-      title: 'Use an ad blocker',
-      description:
-        'An ad blocker can reduce tracking, improve privacy, and make browsing less distracting.',
-      effort: 'easy',
-    })
+    recommendations.push(recommendationContent.use_adblock)
   }
 
   if (
@@ -80,23 +45,11 @@ export function generateRecommendations(
     answers.password_management &&
     answers.password_management !== 'manager'
   ) {
-    recommendations.push({
-      id: 'use-password-manager',
-      title: 'Use a password manager',
-      description:
-        'A password manager helps you use strong, unique passwords and protects your accounts more effectively.',
-      effort: 'easy',
-    })
+    recommendations.push(recommendationContent.use_password_manager)
   }
 
   if (privacyPreference === 'privacy' && answers.vpn_usage === 'no') {
-    recommendations.push({
-      id: 'use-vpn',
-      title: 'Use a VPN for better privacy',
-      description:
-        'A VPN can hide your IP address and protect your data, especially on public networks.',
-      effort: 'advanced',
-    })
+    recommendations.push(recommendationContent.use_vpn)
   }
 
   return recommendations
