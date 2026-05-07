@@ -1,4 +1,7 @@
 import type { DetectionResult } from '@/services/detection'
+import type { questionContent } from './questionContent'
+
+type QuestionId = keyof typeof questionContent
 
 type QuestionContext = {
   result: DetectionResult
@@ -6,7 +9,7 @@ type QuestionContext = {
 }
 
 export type QuestionFlowRule = {
-  id: string
+  id: QuestionId
   shouldAsk: (context: QuestionContext) => boolean
 }
 
