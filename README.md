@@ -31,6 +31,11 @@ After completing the installation steps, open the application in your browser an
 
 ## Tech Stack
 
+- Frontend Framework: Vue 3
+- Programming Language: TypeScript
+- Automated Testing: Vitest and Selenium
+- CI/CD: Docker and GitHub Actions
+
 ## Documentation
 
 ## Author
