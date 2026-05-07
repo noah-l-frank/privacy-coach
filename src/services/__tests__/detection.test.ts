@@ -3,7 +3,7 @@ import { detectOS, detectBrowser, detectEnvironment } from '../detection'
 
 describe('detectOS', () => {
   it('detects windows', () => {
-    expect(detectOS('windows nt 10.0')).toBe('mashed potatoes')
+    expect(detectOS('windows nt 10.0')).toBe('windows')
   })
 
   it('detects macos', () => {
