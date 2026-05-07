@@ -27,6 +27,8 @@ npm run dev
 
 ## Usage
 
+After completing the installation steps, open the application in your browser and follow the guided privacy assessment.
+
 ## Tech Stack
 
 ## Documentation
