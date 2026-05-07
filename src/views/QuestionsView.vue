@@ -32,8 +32,8 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useScanStore } from '@/stores/scan'
-import { useQuestionsStore } from '@/stores/questions'
+import { useScanStore } from '@/stores/scanStore'
+import { useQuestionsStore } from '@/stores/questionsStore'
 import { getNextFollowUpQuestion } from '@/services/questions'
 
 const router = useRouter()

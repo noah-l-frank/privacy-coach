@@ -2,11 +2,13 @@
 
 ## Overview
 
-The application is a client-side web application built with Vue 3 and TypeScript.  
-It follows a modular architecture separating detection, decision logic, and UI.
+The application is a client-side web application built with Vue 3 and TypeScript.
+
+It follows a modular architecture that separates browser detection, rule-based decision logic, state management, and UI rendering.
 
 Flow:
-UI (Start Scan) → Detection → Decision Engine → Adaptive Flow → UI (Questions / Results)
+
+UI (Start Scan) → Detection → Rule-Based Services → Adaptive Flow → UI (Questions / Results)
 
 ---
 
@@ -25,35 +27,62 @@ Outputs:
 - Structured detection result object
 
 Example:
+
+```ts
 {
-browser: "chromium",
-os: "linux",
-gpc: true,
-cookiesEnabled: true,
-https: true,
+  browserFamily: 'chromium',
+  browser: 'chrome',
+  os: 'linux',
+  gpc: true,
+  cookiesEnabled: true,
+  https: true,
 }
+```
+
+Implementation:
+
+- [`detection.ts`](../src/services/detection.ts)
 
 ---
 
-### 2. Decision Engine
+### 2. Rule-Based Services
 
-Processes detection results and maps them to privacy insights.
+Processes detection results and user answers.
 
-Responsibilities:
+The application uses small rule-based services instead of large centralized decision functions.
 
-- Evaluate rules
-- Combine multiple signals
-- Generate recommendations
-- Decide if follow-up questions are needed
+The goal is to keep the decision logic readable, maintainable, and easy to extend without introducing unnecessary complexity.
 
-Inputs:
+#### Questions
 
-- Detection result
+Responsible for deciding which follow-up question should be shown next.
 
-Outputs:
+Structure:
 
-- Recommendations
-- Optional questions
+- [`questionContent.ts`](../src/services/questions/questionContent.ts) → question texts and answer options
+- [`questionFlow.ts`](../src/services/questions/questionFlow.ts) → rules defining when questions are shown
+- [`index.ts`](../src/services/questions/index.ts) → engine selecting the next matching question
+- [`types.ts`](../src/services/questions/types.ts) → shared question types
+
+#### Recommendations
+
+Responsible for generating personalized recommendations.
+
+Structure:
+
+- [`recommendationContent.ts`](../src/services/recommendations/recommendationContent.ts) → recommendation texts
+- [`recommendationRules.ts`](../src/services/recommendations/recommendationRules.ts) → rules defining when recommendations are shown
+- [`index.ts`](../src/services/recommendations/index.ts) → engine returning all matching recommendations
+- [`types.ts`](../src/services/recommendations/types.ts) → shared recommendation types
+
+#### Scoring
+
+Responsible for calculating the privacy score.
+
+Structure:
+
+- [`scoringRules.ts`](../src/services/scoring/scoringRules.ts) → penalties and conditions
+- [`index.ts`](../src/services/scoring/index.ts) → engine calculating the final score
 
 ---
 
@@ -64,14 +93,14 @@ Controls the user journey dynamically.
 Flow:
 
 - Start scan
-- Show questions (if needed)
-- Show results
+- Show follow-up questions when needed
+- Show personalized results
 
 Responsibilities:
 
 - State handling
 - Navigation logic
-- Dynamic step generation
+- Dynamic question flow
 
 ---
 
@@ -81,25 +110,29 @@ Responsible for rendering the interface.
 
 Structure:
 
-- Views (pages)
-- Components (reusable UI parts)
+- [`src/views/`](../src/views/) → route-level application pages
 
 Examples:
 
-- HomeView
-- ScanView
-- ResultView
+- [`HomeView.vue`](../src/views/HomeView.vue) → landing page and scan entry point
+- [`QuestionsView.vue`](../src/views/QuestionsView.vue) → adaptive follow-up question flow
+- [`ResultView.vue`](../src/views/ResultView.vue) → personalized privacy results and recommendations
 
 ---
 
 ## State Management
 
-Managed via Pinia.
+State management is implemented using Pinia.
+
+Structure:
+
+- [`src/stores/`](../src/stores/) → centralized application state management
 
 Stores:
 
-- scanStore (detection results)
-- flowStore (current step, questions, answers)
+- [`scan.ts`](../src/stores/scan.ts) → stores browser detection results
+- [`questions.ts`](../src/stores/questions.ts) → stores follow-up questions and user answers
+- [`progress.ts`](../src/stores/progress.ts) → stores completed recommendations and user progress
 
 ---
 
@@ -107,38 +140,46 @@ Stores:
 
 Vue Router is used for navigation.
 
-Planned routes:
+Main routes:
 
-- /
-- /scan
-- /results
+- `/`
+- `/scan`
+- `/questions`
+- `/results`
+
+Implementation:
+
+- [`router`](../src/router/index.ts)
 
 ---
 
 ## Data Flow
 
 1. User starts scan
-2. Detection Layer collects signals
-3. Data passed to Decision Engine
-4. Decision Engine returns:
-   - recommendations
-   - optional questions
-5. Adaptive Flow controls UI steps
-6. UI displays results
+2. Detection Layer collects browser signals
+3. Detection result is stored in Pinia
+4. Question service decides which follow-up question should be shown
+5. User answers follow-up questions
+6. Recommendation service generates matching recommendations
+7. Scoring service calculates the privacy score
+8. UI displays personalized results
 
 ---
 
 ## Technical Decisions
 
-- Client-side only (no backend)
-- Modular separation of concerns
-- Rule-based system instead of machine learning models
-- Privacy-by-design (no data leaves browser)
+- Client-side only
+- No backend
+- No external APIs required
+- Rule-based system instead of machine learning
+- Local browser detection only
+- Privacy-by-design: no scan data leaves the browser
+- Modular separation of content, rules, and execution logic
 
 ---
 
 ## Constraints
 
 - Must run in modern desktop browsers
-- No reliance on external APIs
-- No persistent storage required
+- Mobile and tablet usage is currently outside the main scope
+- Detection is limited to browser-exposed signals

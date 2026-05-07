@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { detectEnvironment } from '@/services/detection'
-import { useScanStore } from '@/stores/scan'
+import { useScanStore } from '@/stores/scanStore'
 
 const router = useRouter()
 const scanStore = useScanStore()

@@ -3,11 +3,11 @@ import { computed, ref, watch } from 'vue'
 import confetti from 'canvas-confetti'
 import tadaSoundFile from '@/assets/sounds/tada_sound.wav'
 import { useRouter } from 'vue-router'
-import { useScanStore } from '@/stores/scan'
-import { useQuestionsStore } from '@/stores/questions'
+import { useScanStore } from '@/stores/scanStore'
+import { useQuestionsStore } from '@/stores/questionsStore'
 import { calculatePrivacyScore } from '@/services/scoring'
 import { generateRecommendations } from '@/services/recommendations'
-import { useProgressStore } from '@/stores/progress'
+import { useProgressStore } from '@/stores/progressStore'
 
 const router = useRouter()
 const scanStore = useScanStore()
