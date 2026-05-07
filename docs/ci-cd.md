@@ -1,0 +1,16 @@
+# CI/CD Pipeline
+
+This project uses a simple CI/CD pipeline based on GitHub Actions.
+
+The pipeline automatically runs on every push to the `main` and `dev` branches to ensure that the application remains stable and production-ready.
+
+Currently, the pipeline includes:
+
+- TypeScript type checking
+- Unit tests with Vitest
+- Production build validation
+- Automatic Docker image builds and publishing via GitHub Container Registry (GHCR)
+
+Docker images are tagged based on the branch name to separate development and stable versions of the application.
+
+The goal of this setup is to detect errors early, reduce manual testing effort, and improve overall code quality during development.
