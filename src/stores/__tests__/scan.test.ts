@@ -20,8 +20,6 @@ describe('scan store', () => {
       browser: 'chromium',
       browserFamily: 'chromium',
       os: 'linux',
-      language: 'de-DE',
-      timezone: 'Europe/Berlin',
       gpc: false,
       cookiesEnabled: true,
       https: true,

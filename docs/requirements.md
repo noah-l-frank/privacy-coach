@@ -14,8 +14,6 @@ The system detects the following client-side signals:
 
 - Browser type (Chromium-based or Firefox)
 - Operating system
-- Language
-- Timezone
 - Do Not Track status
 - Cookie availability
 - HTTPS context

@@ -6,8 +6,6 @@ describe('generateRecommendations', () => {
     browserFamily: 'unknown',
     browser: 'unknown',
     os: 'linux',
-    language: 'de-DE',
-    timezone: 'Europe/Berlin',
     gpc: true,
     cookiesEnabled: false,
     https: true,

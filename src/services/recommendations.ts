@@ -2,8 +2,6 @@ export type DetectionResult = {
   browserFamily: string
   browser: string
   os: string
-  language: string
-  timezone: string
   gpc: boolean
   cookiesEnabled: boolean
   https: boolean

@@ -7,8 +7,6 @@ function createDetectionResult(overrides: Partial<DetectionResult> = {}): Detect
     browserFamily: 'firefox',
     browser: 'Firefox',
     os: 'Linux',
-    language: 'en-US',
-    timezone: 'Europe/Berlin',
     gpc: true,
     cookiesEnabled: false,
     https: true,
