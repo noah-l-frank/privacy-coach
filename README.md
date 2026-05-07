@@ -10,6 +10,14 @@ It helps users better understand and improve their browser privacy through local
 
 ## Features
 
+- Local browser privacy scan
+- Personalized privacy recommendations
+- Adaptive follow-up questions
+- Privacy scoring system
+- Fully client-side analysis
+- Modern responsive UI
+- Automated testing and deployment pipeline
+
 ## Installation
 
 ## Usage
