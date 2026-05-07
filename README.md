@@ -40,6 +40,4 @@ After completing the installation steps, open the application in your browser an
 
 More detailed project documentation can be found in the [docs](docs/README.md) directory.
 
-## Author
-
 ## License
