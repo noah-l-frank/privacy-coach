@@ -1,4 +1,4 @@
-import type { DetectionResult } from './detection'
+import type { DetectionResult } from '../detection'
 
 export type FollowUpQuestion = {
   id: string
