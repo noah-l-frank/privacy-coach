@@ -1,14 +1,6 @@
 import type { DetectionResult } from '../detection'
 
-export type FollowUpQuestion = {
-  id: string
-  title: string
-  description: string
-  options: {
-    value: string
-    label: string
-  }[]
-}
+import type { FollowUpQuestion } from './types'
 
 export function getNextFollowUpQuestion(
   result: DetectionResult,
