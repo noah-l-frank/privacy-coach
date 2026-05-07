@@ -1,5 +1,7 @@
 // globalPrivacyControl is not yet included in TypeScript's Navigator type
 
+const test: string = 123
+
 type NavigatorWithGPC = Navigator & {
   globalPrivacyControl?: boolean
 }
