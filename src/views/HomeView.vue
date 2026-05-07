@@ -43,6 +43,8 @@
 </template>
 
 <script setup lang="ts">
+import brokenBuildTest from '@/assets/this-file-does-not-exist.png'
+
 import { useRouter } from 'vue-router'
 import { detectEnvironment } from '@/services/detection'
 import { useScanStore } from '@/stores/scan'
