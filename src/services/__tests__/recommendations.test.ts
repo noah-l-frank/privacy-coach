@@ -79,7 +79,7 @@ describe('generateRecommendations', () => {
     })
   })
 
-  it('recommends enabling Do Not Track when it is disabled and tracking protection is important', () => {
+  it('recommends enabling Global Privacy Control when it is disabled and tracking protection is important', () => {
     const recommendations = generateRecommendations(
       { ...baseResult, gpc: false },
       {
@@ -89,9 +89,9 @@ describe('generateRecommendations', () => {
 
     expect(recommendations).toContainEqual({
       id: 'enable-gpc',
-      title: 'Enable Do Not Track',
+      title: 'Enable Global Privacy Control',
       description:
-        'Since tracking protection is important to you, consider enabling Do Not Track in your browser settings.',
+        'Since tracking protection is important to you, consider enabling Global Privacy Control in your browser settings.',
       effort: 'easy',
     })
   })
