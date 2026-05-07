@@ -1,11 +1,4 @@
-export type DetectionResult = {
-  browserFamily: string
-  browser: string
-  os: string
-  gpc: boolean
-  cookiesEnabled: boolean
-  https: boolean
-}
+import type { DetectionResult } from '@/services/detection'
 
 export type Recommendation = {
   id: string
