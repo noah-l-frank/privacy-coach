@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { generateRecommendations } from '../recommendations'
+import { generateRecommendations } from '../../recommendations'
 
 describe('generateRecommendations', () => {
   const baseResult = {
