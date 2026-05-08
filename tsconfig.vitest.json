@@ -8,7 +8,8 @@
     "env.d.ts",
     "src/services/__tests__/integration/recommendations.test.ts",
     "src/services/__tests__/integration/scoring.test.ts",
-    "src/services/__tests__/unit/detection.test.ts"
+    "src/services/__tests__/unit/detection.test.ts",
+    "src/stores/__tests__/unit/questionsStore.test.ts"
   ],
   "exclude": [],
 
