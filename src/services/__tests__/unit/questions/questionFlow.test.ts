@@ -170,4 +170,32 @@ describe('questionFlow', () => {
       }),
     ).toBe(true)
   })
+
+  it('does not ask password management when it is already answered', () => {
+    const rule = getRule('password_management')
+
+    expect(
+      rule.shouldAsk({
+        result: createDetectionResult(),
+        answers: {
+          privacy_preference: 'privacy',
+          password_management: 'manager',
+        },
+      }),
+    ).toBe(false)
+  })
+
+  it('does not ask adblock usage when it is already answered', () => {
+    const rule = getRule('adblock_usage')
+
+    expect(
+      rule.shouldAsk({
+        result: createDetectionResult(),
+        answers: {
+          privacy_preference: 'privacy',
+          adblock_usage: 'yes',
+        },
+      }),
+    ).toBe(false)
+  })
 })
