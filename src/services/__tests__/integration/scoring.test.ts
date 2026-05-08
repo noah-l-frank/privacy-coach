@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { calculatePrivacyScore } from '../scoring'
-import type { DetectionResult } from '../detection'
+import { calculatePrivacyScore } from '../../scoring'
+import type { DetectionResult } from '../../detection'
 
 function createDetectionResult(overrides: Partial<DetectionResult> = {}): DetectionResult {
   return {
