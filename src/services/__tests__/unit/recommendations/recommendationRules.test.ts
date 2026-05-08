@@ -159,4 +159,46 @@ describe('recommendationRules', () => {
       }),
     ).toBe(true)
   })
+
+  it('matches adblock recommendation for balanced users', () => {
+    const rule = getRule('use_adblock')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult(),
+        answers: {
+          privacy_preference: 'balanced',
+          adblock_usage: 'no',
+        },
+      }),
+    ).toBe(true)
+  })
+
+  it('does not match adblock recommendation when adblock is already used', () => {
+    const rule = getRule('use_adblock')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult(),
+        answers: {
+          privacy_preference: 'privacy',
+          adblock_usage: 'yes',
+        },
+      }),
+    ).toBe(false)
+  })
+
+  it('matches password manager recommendation for balanced users who reuse passwords', () => {
+    const rule = getRule('use_password_manager')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult(),
+        answers: {
+          privacy_preference: 'balanced',
+          password_management: 'reuse',
+        },
+      }),
+    ).toBe(true)
+  })
 })
