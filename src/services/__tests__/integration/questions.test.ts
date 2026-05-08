@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { getNextFollowUpQuestion } from '../questions'
+import { getNextFollowUpQuestion } from '../../questions'
 
 describe('getNextFollowUpQuestion', () => {
   const baseResult = {
