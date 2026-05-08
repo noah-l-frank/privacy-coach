@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { detectOS, detectBrowser, detectEnvironment } from '../detection'
+import { detectOS, detectBrowser, detectEnvironment } from '../../detection'
 
 describe('detectOS', () => {
   it('detects windows', () => {

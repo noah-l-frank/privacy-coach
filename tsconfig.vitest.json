@@ -7,7 +7,8 @@
     "src/**/__tests__/*",
     "env.d.ts",
     "src/services/__tests__/integration/recommendations.test.ts",
-    "src/services/__tests__/integration/scoring.test.ts"
+    "src/services/__tests__/integration/scoring.test.ts",
+    "src/services/__tests__/unit/detection.test.ts"
   ],
   "exclude": [],
 
