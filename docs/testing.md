@@ -78,7 +78,7 @@ These tests cover:
 
 They are kept separate from Vitest tests because they are slower and depend on real browser environments.
 
-<!-- TODO: Add more detailed explanation -->
+<!-- TODO: Add more detailed explanation, Start dev server before selenium tests -->
 
 ## Test Scripts
 
