@@ -1,3 +1,20 @@
+type BrowserConfig = {
+  name: string
+  browser: string
+  expected: {
+    browserFamily: string
+    browser: string
+    os: string
+    gpc: boolean
+    cookiesEnabled: boolean
+    https: boolean
+  }
+  settings?: {
+    gpc?: boolean
+    cookiesEnabled?: boolean
+  }
+}
+
 function getExpectedOs() {
   if (process.platform === 'win32') return 'windows'
   if (process.platform === 'darwin') return 'macos'
@@ -11,7 +28,7 @@ function getExpectedOs() {
 // Selenium Grid or BrowserStack instead of relying on the local host OS.
 const expectedOs = getExpectedOs()
 
-export const browserConfigs = [
+export const browserConfigs: BrowserConfig[] = [
   {
     name: 'firefox-default',
     browser: 'firefox',
