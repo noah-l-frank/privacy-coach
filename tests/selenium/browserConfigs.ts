@@ -84,6 +84,19 @@ export const browserConfigs: BrowserConfig[] = [
   firefoxDefault,
   chromeDefault,
   edgeDefault,
+  {
+    ...firefoxDefault,
+    name: 'firefox-gpc-enabled',
+
+    settings: {
+      gpc: true,
+    },
+
+    expected: {
+      ...firefoxDefault.expected,
+      gpc: true,
+    },
+  },
 
   // Safari tests only run on macOS environments with Safari WebDriver support
   ...(process.platform === 'darwin' ? [safariDefault] : []),
