@@ -25,4 +25,14 @@ export function assertScanResult(result: DetectionResult, config: BrowserConfig)
       `${config.name}: expected cookiesEnabled ${config.expected.cookiesEnabled} but got ${result.cookiesEnabled}`,
     )
   }
+
+  if (result.gpc !== config.expected.gpc) {
+    throw new Error(`${config.name}: expected gpc ${config.expected.gpc} but got ${result.gpc}`)
+  }
+
+  if (result.https !== config.expected.https) {
+    throw new Error(
+      `${config.name}: expected https ${config.expected.https} but got ${result.https}`,
+    )
+  }
 }
