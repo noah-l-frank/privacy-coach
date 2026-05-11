@@ -19,7 +19,9 @@ export const browserConfigs = [
       browserFamily: 'firefox',
       browser: 'firefox',
       os: expectedOs,
+      gpc: false,
       cookiesEnabled: true,
+      https: false,
     },
   },
   {
@@ -29,7 +31,9 @@ export const browserConfigs = [
       browserFamily: 'chromium',
       browser: 'chrome',
       os: expectedOs,
+      gpc: false,
       cookiesEnabled: true,
+      https: false,
     },
   },
   {
@@ -39,9 +43,12 @@ export const browserConfigs = [
       browserFamily: 'chromium',
       browser: 'edge',
       os: expectedOs,
+      gpc: false,
       cookiesEnabled: true,
+      https: false,
     },
   },
+
   // Safari tests only run on macOS environments with Safari WebDriver support
   ...(process.platform === 'darwin'
     ? [
@@ -52,7 +59,9 @@ export const browserConfigs = [
             browserFamily: 'webkit',
             browser: 'safari',
             os: expectedOs,
+            gpc: false,
             cookiesEnabled: true,
+            https: false,
           },
         },
       ]
