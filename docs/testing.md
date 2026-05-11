@@ -78,7 +78,7 @@ These tests cover:
 
 They are kept separate from Vitest tests because they are slower and depend on real browser environments.
 
-<!-- TODO: Add more detailed explanation, Start dev server before selenium tests -->
+<!-- TODO: Add more detailed explanation, npm run build, npm run preview -- --host 127.0.0.1 --port 5173 to prevent cookie related problems during tests -->
 
 ## Test Scripts
 

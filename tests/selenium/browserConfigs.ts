@@ -94,6 +94,19 @@ export const browserConfigs: BrowserConfig[] = [
       gpc: true,
     },
   },
+  {
+    ...firefoxDefault,
+    name: 'firefox-cookies-disabled',
+
+    settings: {
+      'network.cookie.cookieBehavior': 2,
+    },
+
+    expected: {
+      ...firefoxDefault.expected,
+      cookiesEnabled: false,
+    },
+  },
 
   // Safari tests only run on macOS environments with Safari WebDriver support
   ...(process.platform === 'darwin' ? [safariDefault] : []),
