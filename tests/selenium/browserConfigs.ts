@@ -42,4 +42,19 @@ export const browserConfigs = [
       cookiesEnabled: true,
     },
   },
+  // Safari tests only run on macOS environments with Safari WebDriver support
+  ...(process.platform === 'darwin'
+    ? [
+        {
+          name: 'safari-default',
+          browser: 'safari',
+          expected: {
+            browserFamily: 'webkit',
+            browser: 'safari',
+            os: expectedOs,
+            cookiesEnabled: true,
+          },
+        },
+      ]
+    : []),
 ]
