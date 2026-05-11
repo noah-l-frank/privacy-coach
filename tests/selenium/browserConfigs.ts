@@ -9,10 +9,7 @@ type BrowserConfig = {
     cookiesEnabled: boolean
     https: boolean
   }
-  settings?: {
-    gpc?: boolean
-    cookiesEnabled?: boolean
-  }
+  settings?: Record<string, string | number | boolean>
 }
 
 function getExpectedOs() {
@@ -89,7 +86,7 @@ export const browserConfigs: BrowserConfig[] = [
     name: 'firefox-gpc-enabled',
 
     settings: {
-      gpc: true,
+      'privacy.globalprivacycontrol.enabled': true,
     },
 
     expected: {

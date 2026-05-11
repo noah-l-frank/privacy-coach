@@ -7,7 +7,7 @@ async function run() {
   const verbose = process.env.VERBOSE === 'true'
 
   for (const config of browserConfigs) {
-    const driver = await createDriver(config.browser)
+    const driver = await createDriver(config)
 
     try {
       const result = await readScanResult(driver)
