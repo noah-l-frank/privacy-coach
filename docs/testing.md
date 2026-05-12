@@ -78,7 +78,25 @@ These tests cover:
 
 They are kept separate from Vitest tests because they are slower and depend on real browser environments.
 
-<!-- TODO: Add more detailed explanation, npm run build, npm run preview -- --host 127.0.0.1 --port 5173 to prevent cookie related problems during tests -->
+Before running the Selenium tests, a production build must first be created:
+
+```bash
+npm run build
+```
+
+The production build can then be started locally using the preview server:
+
+```bash
+npm run preview -- --host 127.0.0.1 --port 5173
+```
+
+The Selenium tests can then be executed in a separate terminal:
+
+```bash
+npm run test:selenium
+```
+
+The tests use the production preview server instead of the Vite development server because the development server can cause problems when cookies are disabled.
 
 ## Test Scripts
 
