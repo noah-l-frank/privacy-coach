@@ -98,6 +98,37 @@ npm run test:selenium
 
 The tests use the production preview server instead of the Vite development server because the development server can cause problems when cookies are disabled.
 
+## Accessibility Tests
+
+Accessibility tests use axe-core to detect common accessibility issues automatically.
+
+Structure:
+
+```text
+tests/
+  accessibility/
+```
+
+Before running the accessibility tests, a production build must first be created:
+
+```bash
+npm run build
+```
+
+The application can then be started locally using the preview server:
+
+```bash
+npm run preview -- --host 127.0.0.1 --port 4173
+```
+
+The accessibility tests can then be executed in a separate terminal:
+
+```bash
+npm run test:accessibility
+```
+
+The tests use the preview server to simulate a production-like environment.
+
 ## Test Scripts
 
 The available test scripts are defined in [`package.json`](../package.json).
@@ -123,6 +154,9 @@ Script overview:
 - `test:selenium`
   Runs cross-browser Selenium scan tests in real browser environments.
 
+- `test:accessibility`
+  Runs automated accessibility checks using Playwright and axe-core.
+
 The CI pipeline uses the `npm test` script to run both unit and integration tests automatically. More information can be found in the [CI/CD documentation](./ci-cd.md).
 
 ## Rationale
@@ -132,5 +166,6 @@ This structure keeps the tests fast, focused, and aligned with the architecture.
 - Unit tests verify isolated rules and data structures.
 - Integration tests verify service-level behavior.
 - Selenium tests verify real browser behavior.
+- Accessibility tests verify basic accessibility compliance.
 
 This improves maintainability while keeping the test setup pragmatic and easy to extend.
