@@ -39,7 +39,7 @@ const positiveFindings = computed(() => {
   const positives: string[] = []
 
   if (scanStore.result.https) positives.push('HTTPS is enabled')
-  if (scanStore.result.gpc) positives.push('Do Not Track is active')
+  if (scanStore.result.gpc) positives.push('Global Privacy Control is enabled')
 
   return positives
 })
