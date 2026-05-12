@@ -56,18 +56,19 @@ const userScore = computed(() =>
   ),
 )
 
-watch(userScore, (newScore, oldScore) => {
-  if (newScore === 100 && oldScore !== 100) {
-    confetti({
-      particleCount: 120,
-      spread: 80,
-      origin: { y: 0.6 },
-    })
+// TODO: Fix or remove confetti animation and sound
+// watch(userScore, (newScore, oldScore) => {
+//   if (newScore === 100 && oldScore !== 100) {
+//     confetti({
+//       particleCount: 120,
+//       spread: 80,
+//       origin: { y: 0.6 },
+//     })
 
-    confettiSound.currentTime = 0
-    confettiSound.play().catch(() => {})
-  }
-})
+//     confettiSound.currentTime = 0
+//     confettiSound.play().catch(() => {})
+//   }
+// })
 
 const scoreBarStyle = computed(() => ({
   width: `${privacyScore.value}%`,
