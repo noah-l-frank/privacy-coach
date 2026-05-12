@@ -1,18 +1,3 @@
-// globalPrivacyControl is not yet included in TypeScript's Navigator type
-
-type NavigatorWithGPC = Navigator & {
-  globalPrivacyControl?: boolean
-}
-
-export type DetectionResult = {
-  browserFamily: string
-  browser: string
-  os: string
-  gpc: boolean
-  cookiesEnabled: boolean
-  https: boolean
-}
-
 export function detectOS(userAgent: string): string {
   if (userAgent.includes('win')) return 'windows'
   if (userAgent.includes('mac')) return 'macos'
