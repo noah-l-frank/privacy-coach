@@ -14,7 +14,7 @@ The system detects the following client-side signals:
 
 - Browser type (Chromium-based or Firefox)
 - Operating system
-- Do Not Track status
+- Global Privacy Control status
 - Cookie availability
 - HTTPS context
 

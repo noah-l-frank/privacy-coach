@@ -25,7 +25,7 @@ The final score is clamped between **0 and 100**.
 | Browser (Chromium-based) | browserFamily === 'chromium' | -15     |
 | Browser (Google Chrome)  | browser === 'Google Chrome'  | -5      |
 | HTTPS                    | https === false              | -25     |
-| Do Not Track             | gpc === false                | -10     |
+| Global Privacy Control   | gpc === false                | -10     |
 | Cookies                  | cookiesEnabled === true      | -10     |
 
 ---
@@ -35,7 +35,7 @@ The final score is clamped between **0 and 100**.
 - HTTPS (-25): critical for secure data transmission
 - Browser (-15 / -5): higher data collection risk
 - Ad blocker (-15): reduces tracking significantly
-- Do Not Track (-10): weak but useful signal
+- Global Privacy Control (-10): weak but useful signal
 - Cookies (-10): enables cross-site tracking
 
 ---

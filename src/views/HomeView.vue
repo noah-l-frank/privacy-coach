@@ -18,7 +18,7 @@
           <article>
             <span>01</span>
             <h2>Scan</h2>
-            <p>Detects browser, HTTPS, cookies, Do Not Track and ad blocker signals.</p>
+            <p>Detects browser, HTTPS, cookies, Global Privacy Control and ad blocker signals.</p>
           </article>
 
           <article>

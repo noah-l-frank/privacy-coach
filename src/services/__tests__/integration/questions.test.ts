@@ -135,7 +135,7 @@ describe('getNextFollowUpQuestion', () => {
     expect(question).toBeNull()
   })
 
-  it('returns the tracking protection preference question when do not track is disabled', () => {
+  it('returns the tracking protection preference question when gpc is disabled', () => {
     const question = getNextFollowUpQuestion(
       { ...baseResult, gpc: false },
       {

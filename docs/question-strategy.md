@@ -127,7 +127,7 @@ Purpose:
 
 Shown when:
 
-- Do Not Track is disabled
+- Global Privacy Control is disabled
 
 Question:
 
