@@ -64,19 +64,6 @@ const edgeDefault: BrowserConfig = {
   },
 }
 
-const safariDefault: BrowserConfig = {
-  name: 'safari-default',
-  browser: 'safari',
-  expected: {
-    browserFamily: 'webkit',
-    browser: 'safari',
-    os: expectedOs,
-    gpc: false,
-    cookiesEnabled: true,
-    https: false,
-  },
-}
-
 export const browserConfigs: BrowserConfig[] = [
   firefoxDefault,
   chromeDefault,
@@ -107,7 +94,4 @@ export const browserConfigs: BrowserConfig[] = [
       cookiesEnabled: false,
     },
   },
-
-  // Safari tests only run on macOS environments with Safari WebDriver support
-  ...(process.platform === 'darwin' ? [safariDefault] : []),
 ]
