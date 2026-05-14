@@ -1,34 +1,47 @@
-export function detectBrowser(userAgent: string): { browserFamily: string; browser: string } {
-  if (userAgent.includes('firefox')) {
-    return {
-      browserFamily: 'firefox',
-      browser: 'firefox',
-    }
-  }
+type BrowserDetection = {
+  browserFamily: string
+  browser: string
+}
 
-  if (userAgent.includes('edg')) {
-    return {
-      browserFamily: 'chromium',
-      browser: 'edge',
-    }
-  }
+const UNKNOWN_BROWSER: BrowserDetection = {
+  browserFamily: 'unknown',
+  browser: 'unknown',
+}
 
-  if (userAgent.includes('opr') || userAgent.includes('opera')) {
-    return {
-      browserFamily: 'chromium',
-      browser: 'opera',
-    }
+// Order matters because Chromium-based browsers often include "chrome" in their user agent string.
+const browserRules = [
+  {
+    tokens: ['firefox'],
+    browserFamily: 'firefox',
+    browser: 'firefox',
+  },
+  {
+    tokens: ['edg'],
+    browserFamily: 'chromium',
+    browser: 'edge',
+  },
+  {
+    tokens: ['opr', 'opera'],
+    browserFamily: 'chromium',
+    browser: 'opera',
+  },
+  {
+    tokens: ['chrome', 'chromium'],
+    browserFamily: 'chromium',
+    browser: 'chrome',
+  },
+] satisfies Array<
+  BrowserDetection & {
+    tokens: string[]
   }
+>
 
-  if (userAgent.includes('chrome') || userAgent.includes('chromium')) {
-    return {
-      browserFamily: 'chromium',
-      browser: 'chrome',
-    }
-  }
+export function detectBrowser(userAgent: string): BrowserDetection {
+  const ua = userAgent.toLowerCase()
 
-  return {
-    browserFamily: 'unknown',
-    browser: 'unknown',
-  }
+  const match = browserRules.find((rule) =>
+    rule.tokens.some((token) => ua.includes(token)),
+  )
+
+  return match ?? UNKNOWN_BROWSER
 }
