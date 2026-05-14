@@ -20,18 +20,6 @@ export function detectBrowser(userAgent: string): { browserFamily: string; brows
     }
   }
 
-  // Chrome and Chromium user agents also contain "safari"
-  if (
-    userAgent.includes('safari') &&
-    !userAgent.includes('chrome') &&
-    !userAgent.includes('chromium')
-  ) {
-    return {
-      browserFamily: 'webkit',
-      browser: 'safari',
-    }
-  }
-
   if (userAgent.includes('chrome') || userAgent.includes('chromium')) {
     return {
       browserFamily: 'chromium',
