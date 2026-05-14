@@ -43,5 +43,10 @@ export function detectBrowser(userAgent: string): BrowserDetection {
     rule.tokens.some((token) => ua.includes(token)),
   )
 
-  return match ?? UNKNOWN_BROWSER
+  if (!match) return UNKNOWN_BROWSER
+
+  return {
+    browserFamily: match.browserFamily,
+    browser: match.browser,
+  }
 }
