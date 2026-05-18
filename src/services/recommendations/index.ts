@@ -11,3 +11,5 @@ export function generateRecommendations(
     .filter((rule) => rule.shouldRecommend({ result, answers }))
     .map((rule) => recommendationContent[rule.recommendation])
 }
+
+export type { Recommendation } from './types'
