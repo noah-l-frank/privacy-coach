@@ -44,15 +44,13 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { detectEnvironment } from '@/services/detection'
 import { useScanStore } from '@/stores/scanStore'
 
 const router = useRouter()
 const scanStore = useScanStore()
 
 function startScan() {
-  const result = detectEnvironment()
-  scanStore.setResult(result)
+  scanStore.runScan()
   router.push('/scan')
 }
 </script>
