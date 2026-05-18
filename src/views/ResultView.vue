@@ -120,7 +120,7 @@ const getEffortStyle = (effort: string) => {
 function restartScan() {
   scanStore.$reset()
   questionsStore.$reset()
-  router.push('/')
+  router.push('/scan')
 }
 </script>
 
