@@ -8,6 +8,7 @@ import { useQuestionsStore } from '@/stores/questionsStore'
 import { calculatePrivacyScore } from '@/services/scoring'
 import { generateRecommendations } from '@/services/recommendations'
 import { useProgressStore } from '@/stores/progressStore'
+import { onMounted } from 'vue'
 
 const router = useRouter()
 const scanStore = useScanStore()
@@ -116,6 +117,13 @@ const getEffortStyle = (effort: string) => {
     boxShadow: '0 0 10px rgba(239, 68, 68, 0.14)',
   }
 }
+
+// Pinia state is reset on page reload, so redirect if no scan result exists
+onMounted(() => {
+  if (!scanStore.result) {
+    router.push('/')
+  }
+})
 
 function restartScan() {
   scanStore.$reset()
