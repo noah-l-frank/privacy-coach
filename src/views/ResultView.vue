@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import confetti from 'canvas-confetti'
+import { computed, ref } from 'vue'
 import tadaSoundFile from '@/assets/sounds/tada_sound.wav'
 import { useRouter } from 'vue-router'
 import { useScanStore } from '@/stores/scanStore'
@@ -56,20 +55,6 @@ const userScore = computed(() =>
     privacyScore.value,
   ),
 )
-
-// TODO: Fix or remove confetti animation and sound
-// watch(userScore, (newScore, oldScore) => {
-//   if (newScore === 100 && oldScore !== 100) {
-//     confetti({
-//       particleCount: 120,
-//       spread: 80,
-//       origin: { y: 0.6 },
-//     })
-
-//     confettiSound.currentTime = 0
-//     confettiSound.play().catch(() => {})
-//   }
-// })
 
 const scoreBarStyle = computed(() => ({
   width: `${privacyScore.value}%`,
