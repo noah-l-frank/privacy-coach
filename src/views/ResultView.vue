@@ -8,12 +8,10 @@ import RecommendationsSection from '@/components/results/RecommendationsSection.
 import PositiveFindingsSection from '@/components/results/PositiveFindingsSection.vue'
 
 import { useScanStore } from '@/stores/scanStore'
-import { useQuestionsStore } from '@/stores/questionsStore'
 
 const router = useRouter()
 
 const scanStore = useScanStore()
-const questionsStore = useQuestionsStore()
 
 // Pinia state is reset on page reload, so redirect if no scan result exists
 onMounted(() => {
@@ -23,9 +21,7 @@ onMounted(() => {
 })
 
 function restartScan() {
-  scanStore.$reset()
-  questionsStore.$reset()
-  scanStore.runScan()
+  scanStore.restartScan()
   router.push('/scan')
 }
 </script>
