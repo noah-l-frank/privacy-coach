@@ -65,37 +65,8 @@ export const recommendationContent = {
     ],
   },
 
-  optimize_firefox: {
-    id: 'optimize-firefox',
-    dynamic: false,
+  // TODO: Add firefox optimization recommendation after scan detects specific optimizations that can be made in firefox and create dynamic content for it
 
-    title: 'Optimize your Firefox privacy settings',
-    description:
-      'Firefox already includes strong privacy features, but some settings can further improve protection.',
-
-    effort: 'easy',
-    impact: 'medium',
-
-    why:
-      'Default settings provide a good balance, but enabling stricter protections can reduce tracking even more.',
-
-    steps: [
-      'Open Firefox settings',
-      'Enable Strict Tracking Protection',
-      'Review cookie and telemetry settings',
-    ],
-
-    links: [
-      {
-        label: 'Firefox privacy settings',
-        url: 'https://support.mozilla.org/kb/enhanced-tracking-protection-firefox-desktop',
-      },
-    ],
-
-    tradeoffs: [
-      'Strict protection may cause some websites to stop working correctly.',
-    ],
-  },
 
   enable_gpc: {
     id: 'enable-gpc',

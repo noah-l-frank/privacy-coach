@@ -30,7 +30,9 @@ function restartScan() {
   <main class="results-view">
     <ScoreCard />
 
-    <PersonalGoalCard />
+    // Feature in development - temporarily hidden until fully implemented
+
+    <!-- <PersonalGoalCard /> -->
 
     <RecommendationsSection />
 

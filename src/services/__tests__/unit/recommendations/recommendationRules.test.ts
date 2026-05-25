@@ -25,20 +25,6 @@ function getRule(recommendation: string) {
 }
 
 describe('recommendationRules', () => {
-  it('matches firefox recommendation for privacy focused firefox users', () => {
-    const rule = getRule('optimize_firefox')
-
-    expect(
-      rule.shouldRecommend({
-        result: createDetectionResult({
-          browser: 'firefox',
-        }),
-        answers: {
-          privacy_preference: 'privacy',
-        },
-      }),
-    ).toBe(true)
-  })
 
   it('matches firefox switch recommendation for chrome users with low similarity preference', () => {
     const rule = getRule('switch_to_firefox')

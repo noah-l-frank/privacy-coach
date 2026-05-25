@@ -61,24 +61,6 @@ describe('generateRecommendations', () => {
     expect(recommendations).toHaveLength(0)
   })
 
-  it('recommends Firefox optimization for Firefox users who prefer privacy', () => {
-    const recommendations = generateRecommendations(
-      { ...baseResult, browserFamily: 'firefox', browser: 'firefox' },
-      {
-        privacy_preference: 'privacy',
-        password_management: 'manager',
-      },
-    )
-
-    expect(recommendations).toContainEqual(
-      expect.objectContaining({
-        id: 'optimize-firefox',
-        title: 'Optimize your Firefox privacy settings',
-        effort: 'easy',
-      }),
-    )
-  })
-
   it('recommends enabling Global Privacy Control when it is disabled and tracking protection is important', () => {
     const recommendations = generateRecommendations(
       {
