@@ -2,6 +2,7 @@ import type { DetectionResult } from '@/services/detection'
 import type { Recommendation } from './types'
 import { recommendationContent } from './recommendationContent'
 import { recommendationRules } from './recommendationRules'
+import { enhanceRecommendation } from './dynamicRecommendationContent'
 
 export function generateRecommendations(
   result: DetectionResult,
@@ -10,6 +11,9 @@ export function generateRecommendations(
   return recommendationRules
     .filter((rule) => rule.shouldRecommend({ result, answers }))
     .map((rule) => recommendationContent[rule.recommendation])
+    .map((recommendation) =>
+      enhanceRecommendation(recommendation, result),
+    )
 }
 
 export type { Recommendation } from './types'
