@@ -37,6 +37,30 @@ const getEffortStyle = (effort: string) => {
     boxShadow: '0 0 10px rgba(239, 68, 68, 0.14)',
   }
 }
+
+const getImpactStyle = (impact: string) => {
+  if (impact === 'high') {
+    return {
+      color: '#2563eb',
+      background: 'rgba(37, 99, 235, 0.12)',
+      border: '1px solid rgba(37, 99, 235, 0.22)',
+    }
+  }
+
+  if (impact === 'medium') {
+    return {
+      color: '#7c3aed',
+      background: 'rgba(124, 58, 237, 0.12)',
+      border: '1px solid rgba(124, 58, 237, 0.22)',
+    }
+  }
+
+  return {
+    color: '#6b7280',
+    background: 'rgba(107, 114, 128, 0.12)',
+    border: '1px solid rgba(107, 114, 128, 0.22)',
+  }
+}
 </script>
 
 <template>
@@ -57,9 +81,15 @@ const getEffortStyle = (effort: string) => {
       <div class="recommendation-header">
         <h3>{{ recommendation.title }}</h3>
 
-        <span class="effort-badge" :style="getEffortStyle(recommendation.effort)">
-          {{ recommendation.effort }}
-        </span>
+        <div class="recommendation-badges">
+          <span class="impact-badge" :style="getImpactStyle(recommendation.impact)">
+            {{ recommendation.impact }} impact
+          </span>
+
+          <span class="effort-badge" :style="getEffortStyle(recommendation.effort)">
+            {{ recommendation.effort }}
+          </span>
+        </div>
       </div>
 
       <p class="recommendation-description">
@@ -72,9 +102,58 @@ const getEffortStyle = (effort: string) => {
 
       <Transition name="details">
         <div v-if="expanded" class="recommendation-details">
-          <p>
-            More detailed explanations, setup steps and helpful links will appear here.
-          </p>
+          <section class="details-section">
+            <h4>Why this matters</h4>
+            <p>{{ recommendation.why }}</p>
+          </section>
+
+          <section class="details-section">
+            <h4>Suggested steps</h4>
+
+            <ol class="steps-list">
+              <li v-for="step in recommendation.steps" :key="step">
+                {{ step }}
+              </li>
+            </ol>
+          </section>
+
+          <section
+            v-if="recommendation.tradeoffs.length"
+            class="details-section"
+          >
+            <h4>Tradeoffs</h4>
+
+            <ul class="tradeoff-list">
+              <li
+                v-for="tradeoff in recommendation.tradeoffs"
+                :key="tradeoff"
+              >
+                {{ tradeoff }}
+              </li>
+            </ul>
+          </section>
+
+          <section
+            v-if="recommendation.links.length"
+            class="details-section"
+          >
+            <h4>Helpful links</h4>
+
+            <ul class="links-list">
+              <li
+                v-for="link in recommendation.links"
+                :key="link.url"
+              >
+                <a
+                  :href="link.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {{ link.label }}
+                </a>
+              </li>
+            </ul>
+          </section>
         </div>
       </Transition>
     </div>
@@ -139,13 +218,21 @@ const getEffortStyle = (effort: string) => {
   line-height: 1.35;
 }
 
+.recommendation-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .recommendation-description {
   margin: 0;
   line-height: 1.65;
   color: #374151;
 }
 
-.effort-badge {
+.effort-badge,
+.impact-badge {
   flex-shrink: 0;
   font-size: 0.78rem;
   padding: 0.28rem 0.65rem;
@@ -174,7 +261,38 @@ const getEffortStyle = (effort: string) => {
   padding-top: 1rem;
   border-top: 1px solid #e5e7eb;
   color: #4b5563;
+}
+
+.details-section + .details-section {
+  margin-top: 1.25rem;
+}
+
+.details-section h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.92rem;
+  color: #111827;
+}
+
+.details-section p {
+  margin: 0;
   line-height: 1.65;
+}
+
+.steps-list,
+.tradeoff-list,
+.links-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  line-height: 1.7;
+}
+
+.links-list a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.links-list a:hover {
+  text-decoration: underline;
 }
 
 .details-enter-active,
