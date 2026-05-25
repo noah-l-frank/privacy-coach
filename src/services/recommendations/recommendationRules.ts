@@ -36,6 +36,8 @@ export const recommendationRules: RecommendationRule[] = [
       result.browser.toLowerCase().includes('firefox') && answers.privacy_preference === 'privacy',
   },
 
+  // TODO: GPC only exists in firefox, only show if browser is firefox and gpc is not enabled
+
   {
     recommendation: 'enable_gpc',
     shouldRecommend: ({ result, answers }) =>
