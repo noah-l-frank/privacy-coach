@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useScanStore } from '@/stores/scanStore'
 import { useQuestionsStore } from '@/stores/questionsStore'
@@ -39,6 +39,15 @@ import { getNextFollowUpQuestion } from '@/services/questions'
 const router = useRouter()
 const scanStore = useScanStore()
 const questionsStore = useQuestionsStore()
+
+// Pinia state is reset on page reload, so redirect if no scan result exists
+
+onMounted(() => {
+  if (!scanStore.result) {
+    questionsStore.$reset()
+    router.replace('/')
+  }
+})
 
 const currentQuestion = computed(() => {
   if (!scanStore.result) return null
