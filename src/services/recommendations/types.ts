@@ -17,4 +17,5 @@ export type Recommendation = {
   tradeoffs: string[]
   impact: RecommendationImpact
   effort: RecommendationEffort
+  dynamic: boolean
 }

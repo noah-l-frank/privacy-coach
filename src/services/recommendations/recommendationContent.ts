@@ -3,6 +3,8 @@ import type { Recommendation } from './types'
 export const recommendationContent = {
   switch_to_firefox: {
     id: 'switch-to-firefox',
+    dynamic: false,
+
     title: 'Switch to a privacy-focused browser',
     description:
       'Firefox offers stronger built-in privacy protections and gives users more control over tracking and data collection.',
@@ -33,6 +35,8 @@ export const recommendationContent = {
 
   switch_to_brave: {
     id: 'switch-to-brave',
+    dynamic: false,
+
     title: 'Consider a more private Chromium-based browser',
     description:
       'Brave provides stronger privacy protections while keeping a familiar Chromium-based browsing experience.',
@@ -63,6 +67,8 @@ export const recommendationContent = {
 
   optimize_firefox: {
     id: 'optimize-firefox',
+    dynamic: false,
+
     title: 'Optimize your Firefox privacy settings',
     description:
       'Firefox already includes strong privacy features, but some settings can further improve protection.',
@@ -93,6 +99,8 @@ export const recommendationContent = {
 
   enable_gpc: {
     id: 'enable-gpc',
+    dynamic: false,
+
     title: 'Enable Global Privacy Control',
     description:
       'Global Privacy Control tells websites that you do not want your data to be sold or shared.',
@@ -104,7 +112,7 @@ export const recommendationContent = {
       'Some websites and regions legally recognize the GPC signal as a privacy preference.',
 
     steps: [
-      'Open your browser privacy settings',
+      'Open Firefox settings',
       'Search for Global Privacy Control',
       'Enable the setting',
     ],
@@ -123,6 +131,8 @@ export const recommendationContent = {
 
   reduce_cookies: {
     id: 'reduce-cookies',
+    dynamic: true,
+
     title: 'Reduce cookie and tracking exposure',
     description:
       'Limiting third-party cookies can reduce cross-site tracking and advertising profiles.',
@@ -134,15 +144,13 @@ export const recommendationContent = {
       'Advertising networks often use cookies to track browsing behavior across multiple websites.',
 
     steps: [
-      'Open browser privacy settings',
-      'Block third-party cookies',
-      'Clear existing tracking cookies regularly',
+      '[Dynamic browser specific cookie settings steps will appear here]',
     ],
 
     links: [
       {
-        label: 'Cookie settings overview',
-        url: 'https://support.mozilla.org/kb/third-party-cookies-firefox-tracking-protection',
+        label: '[Dynamic browser specific cookie settings link]',
+        url: 'https://example.com',
       },
     ],
 
@@ -153,6 +161,8 @@ export const recommendationContent = {
 
   use_adblock: {
     id: 'use-adblock',
+    dynamic: false,
+
     title: 'Use an ad blocker',
     description:
       'Ad blockers can reduce tracking, improve page loading times and make websites less distracting.',
@@ -183,6 +193,8 @@ export const recommendationContent = {
 
   use_password_manager: {
     id: 'use-password-manager',
+    dynamic: false,
+
     title: 'Use a password manager',
     description:
       'Password managers help create and store strong unique passwords for every account.',
@@ -217,6 +229,8 @@ export const recommendationContent = {
 
   use_vpn: {
     id: 'use-vpn',
+    dynamic: false,
+
     title: 'Use a VPN for better privacy',
     description:
       'A VPN can hide your IP address from websites and protect traffic on public networks.',
