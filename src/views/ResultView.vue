@@ -3,7 +3,6 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 import ScoreCard from '@/components/results/ScoreCard.vue'
-import PersonalGoalCard from '@/components/results/PersonalGoalCard.vue'
 import RecommendationsSection from '@/components/results/RecommendationsSection.vue'
 import PositiveFindingsSection from '@/components/results/PositiveFindingsSection.vue'
 
@@ -30,9 +29,7 @@ function restartScan() {
   <main class="results-view">
     <ScoreCard />
 
-    // Feature in development - temporarily hidden until fully implemented
-
-    <!-- <PersonalGoalCard /> -->
+    <!-- <PersonalGoalCard      (Feature in development - temporarily hidden until fully implemented) /> -->
 
     <RecommendationsSection />
 
