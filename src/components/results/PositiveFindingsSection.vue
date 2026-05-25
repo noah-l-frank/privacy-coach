@@ -2,8 +2,10 @@
 import { computed } from 'vue'
 
 import { useScanStore } from '@/stores/scanStore'
+import { useQuestionsStore } from '@/stores/questionsStore'
 
 const scanStore = useScanStore()
+const questionsStore = useQuestionsStore()
 
 const positiveFindings = computed(() => {
   if (!scanStore.result) return []
@@ -18,6 +20,33 @@ const positiveFindings = computed(() => {
     positives.push('Global Privacy Control is enabled')
   }
 
+  if (
+    questionsStore.answers.search_engine === 'duckduckgo' ||
+    questionsStore.answers.search_engine === 'startpage'
+  ) {
+    positives.push('You use a privacy-focused search engine')
+  }
+
+  if (questionsStore.answers.search_engine === 'ecosia') {
+    positives.push('You use a more privacy-friendly search engine')
+  }
+
+  if (questionsStore.answers.password_management === 'manager') {
+    positives.push('You use a password manager to protect your accounts')
+  }
+
+  if (questionsStore.answers.vpn_usage === 'yes') {
+    positives.push('You regularly use a VPN while browsing')
+  }
+
+  if (questionsStore.answers.vpn_usage === 'sometimes') {
+    positives.push('You sometimes use a VPN while browsing')
+  }
+
+  if (questionsStore.answers.adblock_usage === 'yes') {
+    positives.push('You use an ad blocker to reduce tracking')
+  }
+
   return positives
 })
 </script>
@@ -28,11 +57,11 @@ const positiveFindings = computed(() => {
 
     <div class="positives-header">
       <h2 class="positives-title">
-        What is already working well
+        What you are already doing well
       </h2>
 
       <p class="positives-subtitle">
-        These settings already support a more privacy-friendly setup.
+        These settings and habits already support a more privacy-friendly browsing setup.
       </p>
     </div>
 
