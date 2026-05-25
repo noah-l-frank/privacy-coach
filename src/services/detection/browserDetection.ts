@@ -26,6 +26,11 @@ const browserRules = [
     browser: 'opera',
   },
   {
+    tokens: ['brave'],
+    browserFamily: 'chromium',
+    browser: 'brave',
+  },
+  {
     tokens: ['chrome', 'chromium'],
     browserFamily: 'chromium',
     browser: 'chrome',
