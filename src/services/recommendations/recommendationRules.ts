@@ -34,12 +34,15 @@ export const recommendationRules: RecommendationRule[] = [
       answers.browser_switch_similarity === 'high',
   },
 
-  {
-    recommendation: 'optimize_firefox',
-    shouldRecommend: ({ result, answers }) =>
-      result.browser.includes('firefox') &&
-      answers.privacy_preference === 'privacy',
-  },
+
+  // TODO: Update or remove this recommendation
+
+  //  {
+  //    recommendation: 'optimize_firefox',
+  //    shouldRecommend: ({ result, answers }) =>
+  //      result.browser.includes('firefox') &&
+  //      answers.privacy_preference === 'privacy',
+  //  },
 
   // Firefox and Brave currently support GPC natively.
   // Other major browsers like Chrome, Edge and Opera
