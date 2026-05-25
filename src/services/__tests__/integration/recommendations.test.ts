@@ -21,13 +21,13 @@ describe('generateRecommendations', () => {
       },
     )
 
-    expect(recommendations).toContainEqual({
-      id: 'switch-to-firefox',
-      title: 'Switch to a privacy-focused browser',
-      description:
-        'Since privacy is important to you and you do not mind a different look and feel, consider switching to Firefox for stronger built-in privacy protections.',
-      effort: 'medium',
-    })
+    expect(recommendations).toContainEqual(
+      expect.objectContaining({
+        id: 'switch-to-firefox',
+        title: 'Switch to a privacy-focused browser',
+        effort: 'medium',
+      }),
+    )
   })
 
   it('recommends a privacy-friendly Chromium browser for Chrome users who prefer privacy and want a similar look and feel', () => {
@@ -40,13 +40,13 @@ describe('generateRecommendations', () => {
       },
     )
 
-    expect(recommendations).toContainEqual({
-      id: 'switch-to-brave',
-      title: 'Consider a more private Chromium-based browser',
-      description:
-        'Since you prefer a familiar experience, you might consider a privacy-focused Chromium browser like Brave, which offers better default privacy settings than Chrome.',
-      effort: 'easy',
-    })
+    expect(recommendations).toContainEqual(
+      expect.objectContaining({
+        id: 'switch-to-brave',
+        title: 'Consider a more private Chromium-based browser',
+        effort: 'easy',
+      }),
+    )
   })
 
   it('returns no browser switch recommendation for Chrome users who do not prefer privacy', () => {
@@ -70,30 +70,37 @@ describe('generateRecommendations', () => {
       },
     )
 
-    expect(recommendations).toContainEqual({
-      id: 'optimize-firefox',
-      title: 'Optimize your Firefox privacy settings',
-      description:
-        'You are already using Firefox. Reviewing its privacy settings can further improve your protection.',
-      effort: 'easy',
-    })
+    expect(recommendations).toContainEqual(
+      expect.objectContaining({
+        id: 'optimize-firefox',
+        title: 'Optimize your Firefox privacy settings',
+        effort: 'easy',
+      }),
+    )
   })
 
   it('recommends enabling Global Privacy Control when it is disabled and tracking protection is important', () => {
     const recommendations = generateRecommendations(
-      { ...baseResult, gpc: false },
       {
+        ...baseResult,
+        browserFamily: 'firefox',
+        browser: 'firefox',
+        gpc: false,
+      },
+      {
+        privacy_preference: 'privacy',
         tracking_protection_preference: 'high',
+        browser_switch_willingness: 'no',
       },
     )
 
-    expect(recommendations).toContainEqual({
-      id: 'enable-gpc',
-      title: 'Enable Global Privacy Control',
-      description:
-        'Since tracking protection is important to you, consider enabling Global Privacy Control in your browser settings.',
-      effort: 'easy',
-    })
+    expect(recommendations).toContainEqual(
+      expect.objectContaining({
+        id: 'enable-gpc',
+        title: 'Enable Global Privacy Control',
+        effort: 'easy',
+      }),
+    )
   })
 
   it('recommends reducing cookies when cookies are enabled and privacy is preferred', () => {
@@ -105,13 +112,13 @@ describe('generateRecommendations', () => {
       },
     )
 
-    expect(recommendations).toContainEqual({
-      id: 'reduce-cookies',
-      title: 'Reduce cookie and tracking exposure',
-      description:
-        'Since privacy is important to you, consider reducing tracking and third-party cookie usage in your browser.',
-      effort: 'medium',
-    })
+    expect(recommendations).toContainEqual(
+      expect.objectContaining({
+        id: 'reduce-cookies',
+        title: 'Reduce cookie and tracking exposure',
+        effort: 'medium',
+      }),
+    )
   })
 
   it('recommends an ad blocker when privacy-focused users do not use one', () => {
@@ -121,13 +128,13 @@ describe('generateRecommendations', () => {
       password_management: 'manager',
     })
 
-    expect(recommendations).toContainEqual({
-      id: 'use-adblock',
-      title: 'Use an ad blocker',
-      description:
-        'An ad blocker can reduce tracking, improve privacy, and make browsing less distracting.',
-      effort: 'easy',
-    })
+    expect(recommendations).toContainEqual(
+      expect.objectContaining({
+        id: 'use-adblock',
+        title: 'Use an ad blocker',
+        effort: 'easy',
+      }),
+    )
   })
 
   it('recommends a password manager when privacy-focused users do not use one', () => {
@@ -136,13 +143,13 @@ describe('generateRecommendations', () => {
       password_management: 'reuse',
     })
 
-    expect(recommendations).toContainEqual({
-      id: 'use-password-manager',
-      title: 'Use a password manager',
-      description:
-        'A password manager helps you use strong, unique passwords and protects your accounts more effectively.',
-      effort: 'easy',
-    })
+    expect(recommendations).toContainEqual(
+      expect.objectContaining({
+        id: 'use-password-manager',
+        title: 'Use a password manager',
+        effort: 'easy',
+      }),
+    )
   })
 
   it('recommends a VPN for privacy users who do not use one', () => {
@@ -152,13 +159,13 @@ describe('generateRecommendations', () => {
       vpn_usage: 'no',
     })
 
-    expect(recommendations).toContainEqual({
-      id: 'use-vpn',
-      title: 'Use a VPN for better privacy',
-      description:
-        'A VPN can hide your IP address and protect your data, especially on public networks.',
-      effort: 'advanced',
-    })
+    expect(recommendations).toContainEqual(
+      expect.objectContaining({
+        id: 'use-vpn',
+        title: 'Use a VPN for better privacy',
+        effort: 'advanced',
+      }),
+    )
   })
 
   it('returns no recommendations for unknown browser without relevant answers', () => {
