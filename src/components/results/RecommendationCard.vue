@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import type { Recommendation } from '@/services/recommendations'
 import { useProgressStore } from '@/stores/progressStore'
 
@@ -7,6 +8,8 @@ defineProps<{
 }>()
 
 const progressStore = useProgressStore()
+
+const expanded = ref(false)
 
 const getEffortStyle = (effort: string) => {
   if (effort === 'easy') {
@@ -62,6 +65,18 @@ const getEffortStyle = (effort: string) => {
       <p class="recommendation-description">
         {{ recommendation.description }}
       </p>
+
+      <button class="details-toggle" type="button" @click="expanded = !expanded">
+        {{ expanded ? 'Hide details' : 'Show details' }}
+      </button>
+
+      <Transition name="details">
+        <div v-if="expanded" class="recommendation-details">
+          <p>
+            More detailed explanations, setup steps and helpful links will appear here.
+          </p>
+        </div>
+      </Transition>
     </div>
   </article>
 </template>
@@ -137,6 +152,42 @@ const getEffortStyle = (effort: string) => {
   border-radius: 999px;
   font-weight: 600;
   text-transform: capitalize;
+}
+
+.details-toggle {
+  margin-top: 1rem;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #2563eb;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.details-toggle:hover {
+  color: #1d4ed8;
+}
+
+.recommendation-details {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+  color: #4b5563;
+  line-height: 1.65;
+}
+
+.details-enter-active,
+.details-leave-active {
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.details-enter-from,
+.details-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
 }
 
 .recommendation-card.completed {
