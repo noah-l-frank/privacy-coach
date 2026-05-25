@@ -94,10 +94,13 @@ describe('recommendationRules', () => {
     expect(
       rule.shouldRecommend({
         result: createDetectionResult({
+          browserFamily: 'firefox',
+          browser: 'firefox',
           gpc: false,
         }),
         answers: {
           tracking_protection_preference: 'high',
+          browser_switch_willingness: 'no',
         },
       }),
     ).toBe(true)
