@@ -87,7 +87,7 @@ npm run build
 The production build can then be started locally using the preview server:
 
 ```bash
-npm run preview -- --host 127.0.0.1 --port 5173
+npm run preview
 ```
 
 The Selenium tests can then be executed in a separate terminal:
@@ -118,7 +118,7 @@ npm run build
 The application can then be started locally using the preview server:
 
 ```bash
-npm run preview -- --host 127.0.0.1 --port 4173
+npm run preview
 ```
 
 The accessibility tests can then be executed in a separate terminal:
@@ -128,6 +128,10 @@ npm run test:accessibility
 ```
 
 The tests use the preview server to simulate a production-like environment.
+
+
+// TODO: Add playwright e2e test section
+
 
 ## Test Scripts
 

@@ -1,7 +1,7 @@
 import { By, until, type WebDriver } from 'selenium-webdriver'
 import type { DetectionResult } from '../../../src/services/detection'
 
-const appUrl = 'http://localhost:5173/debug/scan'
+const appUrl = 'http://localhost:4173/debug/scan'
 
 export async function readScanResult(driver: WebDriver): Promise<DetectionResult> {
   await driver.get(appUrl)
