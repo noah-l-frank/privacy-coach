@@ -10,9 +10,30 @@ function createDetectionResult(overrides: Partial<DetectionResult> = {}): Detect
     gpc: true,
     cookiesEnabled: false,
     https: true,
+    fingerprintingExposure: {
+      deviceMemory: false,
+      hardwareConcurrency: false,
+      webGl: false,
+      canvas: false,
+      audioContext: false,
+      screen: false,
+      timezone: false,
+      languages: false,
+      platform: false,
+      touchSupport: false,
+      ...overrides.fingerprintingExposure,
+    },
+    cookieSettings: {
+      cookiesEnabled: false,
+      firstPartyCookieWritable: false,
+      sessionCookieWritable: false,
+      persistentCookieWritable: false,
+      ...overrides.cookieSettings,
+    },
     ...overrides,
   }
 }
+
 
 function getRule(id: string) {
   const rule = questionFlow.find((rule) => rule.id === id)
