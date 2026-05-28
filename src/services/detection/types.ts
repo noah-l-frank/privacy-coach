@@ -10,7 +10,8 @@ export type DetectionResult = {
   gpc: boolean
   cookiesEnabled: boolean
   https: boolean,
-  fingerprintingExposure: FingerprintingExposure
+  fingerprintingExposure: FingerprintingExposure,
+  cookieSettings: CookieSettings
 }
 
 export type FingerprintingExposure = {
@@ -24,4 +25,11 @@ export type FingerprintingExposure = {
   languages: boolean
   platform: boolean
   touchSupport: boolean
+}
+
+export type CookieSettings = {
+  cookiesEnabled: boolean
+  firstPartyCookieWritable: boolean
+  persistentCookieWritable: boolean
+  sessionCookieWritable: boolean
 }
