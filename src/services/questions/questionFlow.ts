@@ -25,7 +25,7 @@ function isChromiumLike(browser: string): boolean {
 export const questionFlow: QuestionFlowRule[] = [
   {
     id: 'privacy_preference',
-    shouldAsk: ({ result, answers }) => result.cookiesEnabled && !answers.privacy_preference,
+    shouldAsk: ({ answers }) => !answers.privacy_preference,
   },
 
   {
