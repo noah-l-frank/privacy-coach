@@ -18,7 +18,7 @@
           <article>
             <span>01</span>
             <h2>Scan</h2>
-            <p>Detects browser, HTTPS, cookies, Global Privacy Control and ad blocker signals.</p>
+            <p>Checks browser privacy signals locally and asks about habits like ad blocker usage.</p>
           </article>
 
           <article>
