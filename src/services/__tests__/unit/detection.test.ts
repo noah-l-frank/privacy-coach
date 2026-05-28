@@ -1,7 +1,23 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { detectOS, detectBrowser, detectEnvironment } from '../../detection'
 
+vi.mock('@/services/detection/fingerprintingDetection', () => ({
+  detectFingerprintingExposure: () => ({
+    deviceMemory: false,
+    hardwareConcurrency: false,
+    webGl: false,
+    canvas: false,
+    audioContext: false,
+    screen: false,
+    timezone: false,
+    languages: false,
+    platform: false,
+    touchSupport: false,
+  }),
+}))
+
 describe('detectOS', () => {
+
   it('detects windows', () => {
     expect(detectOS('windows nt 10.0')).toBe('windows')
   })
