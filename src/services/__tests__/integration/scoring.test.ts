@@ -10,7 +10,23 @@ function createDetectionResult(overrides: Partial<DetectionResult> = {}): Detect
     gpc: true,
     cookiesEnabled: false,
     https: true,
+
     ...overrides,
+
+    fingerprintingExposure: {
+      deviceMemory: false,
+      hardwareConcurrency: false,
+      webGl: false,
+      canvas: false,
+      audioContext: false,
+      screen: false,
+      timezone: false,
+      languages: false,
+      platform: false,
+      touchSupport: false,
+
+      ...overrides.fingerprintingExposure,
+    },
   }
 }
 

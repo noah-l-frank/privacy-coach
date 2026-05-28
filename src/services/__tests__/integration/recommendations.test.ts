@@ -1,14 +1,27 @@
 import { describe, expect, it } from 'vitest'
 import { generateRecommendations } from '../../recommendations'
+import type { DetectionResult } from '@/services/detection/types'
 
 describe('generateRecommendations', () => {
-  const baseResult = {
-    browserFamily: 'unknown',
-    browser: 'unknown',
+  const baseResult: DetectionResult = {
+    browserFamily: 'firefox',
+    browser: 'firefox',
     os: 'linux',
     gpc: true,
     cookiesEnabled: false,
     https: true,
+    fingerprintingExposure: {
+      deviceMemory: false,
+      hardwareConcurrency: false,
+      webGl: false,
+      canvas: false,
+      audioContext: false,
+      screen: false,
+      timezone: false,
+      languages: false,
+      platform: false,
+      touchSupport: false,
+    },
   }
 
   it('recommends Firefox for Chrome users who prefer privacy and do not need a similar look and feel', () => {
