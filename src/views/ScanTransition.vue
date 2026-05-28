@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useScanStore } from '@/stores/scanStore'
 
 const router = useRouter()
+const scanStore = useScanStore()
 
 onMounted(() => {
+  if (!scanStore.result) {
+    scanStore.runScan()
+  }
+
   setTimeout(() => {
     router.push('/questions')
   }, 4500)
