@@ -54,8 +54,7 @@ export const recommendationRules: RecommendationRule[] = [
     shouldRecommend: ({ result, answers }) =>
       supportsGPC(result.browser) &&
       !result.gpc &&
-      answers.tracking_protection_preference === 'high' &&
-      answers.browser_switch_willingness === 'no',
+      answers.tracking_protection_preference === 'high'
   },
 
   {
