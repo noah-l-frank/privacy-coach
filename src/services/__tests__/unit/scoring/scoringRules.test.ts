@@ -35,7 +35,7 @@ describe('scoringRules', () => {
   it('applies google chrome penalty', () => {
     const rule = getRule('google-chrome')
 
-    expect(rule.applies(createDetectionResult({ browser: 'Google Chrome' }))).toBe(true)
+    expect(rule.applies(createDetectionResult({ browser: 'chrome' }))).toBe(true)
     expect(rule.applies(createDetectionResult({ browser: 'Firefox' }))).toBe(false)
   })
 
