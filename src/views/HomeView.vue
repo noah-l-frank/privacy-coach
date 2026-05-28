@@ -49,8 +49,8 @@ import { useScanStore } from '@/stores/scanStore'
 const router = useRouter()
 const scanStore = useScanStore()
 
-function startScan() {
-  scanStore.runScan()
+async function startScan() {
+  await scanStore.runScan()
   router.push('/scan')
 }
 </script>

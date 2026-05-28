@@ -16,13 +16,13 @@ export const useScanStore = defineStore('scan', {
       this.result = result
     },
 
-    runScan() {
+    async runScan() {
       const result = detectEnvironment()
 
       this.setResult(result)
     },
 
-    restartScan() {
+    async restartScan() {
       const questionsStore = useQuestionsStore()
 
       this.$reset()

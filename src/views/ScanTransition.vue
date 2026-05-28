@@ -6,9 +6,9 @@ import { useScanStore } from '@/stores/scanStore'
 const router = useRouter()
 const scanStore = useScanStore()
 
-onMounted(() => {
+onMounted(async () => {
   if (!scanStore.result) {
-    scanStore.runScan()
+    await scanStore.runScan()
   }
 
   setTimeout(() => {

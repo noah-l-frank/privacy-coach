@@ -1,5 +1,6 @@
-import { describe, it, expect, vi } from 'vitest'
+import { afterEach, describe, it, expect, vi } from 'vitest'
 import { detectOS, detectBrowser, detectEnvironment } from '../../detection'
+import { detectBrowserEnvironment } from '@/services/detection/browserDetection'
 
 vi.mock('@/services/detection/fingerprintingDetection', () => ({
   detectFingerprintingExposure: () => ({
@@ -16,8 +17,14 @@ vi.mock('@/services/detection/fingerprintingDetection', () => ({
   }),
 }))
 
-describe('detectOS', () => {
+afterEach(() => {
+  Object.defineProperty(navigator, 'brave', {
+    configurable: true,
+    value: undefined,
+  })
+})
 
+describe('detectOS', () => {
   it('detects windows', () => {
     expect(detectOS('windows nt 10.0')).toBe('windows')
   })
@@ -36,8 +43,8 @@ describe('detectOS', () => {
 })
 
 describe('detectEnvironment', () => {
-  it('returns all required fields', () => {
-    const result = detectEnvironment()
+  it('returns all required fields', async () => {
+    const result = await detectEnvironment()
 
     expect(result).toHaveProperty('browserFamily')
     expect(result).toHaveProperty('browser')
@@ -47,8 +54,8 @@ describe('detectEnvironment', () => {
     expect(result).toHaveProperty('https')
   })
 
-  it('returns values with the expected types', () => {
-    const result = detectEnvironment()
+  it('returns values with the expected types', async () => {
+    const result = await detectEnvironment()
 
     expect(typeof result.browserFamily).toBe('string')
     expect(typeof result.browser).toBe('string')
@@ -120,6 +127,24 @@ describe('detectBrowser', () => {
     expect(result.browser).toBe('opera')
   })
 
+  it('detects Brave via navigator.brave API', async () => {
+    Object.defineProperty(navigator, 'brave', {
+      configurable: true,
+      value: {
+        isBrave: async () => true,
+      },
+    })
+
+    const result = await detectBrowserEnvironment(
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'.toLowerCase(),
+    )
+
+    expect(result).toEqual({
+      browserFamily: 'chromium',
+      browser: 'brave',
+    })
+  })
+
   it('returns unknown for unsupported browsers', () => {
     const result = detectBrowser('some-random-browser')
 
@@ -128,4 +153,7 @@ describe('detectBrowser', () => {
       browser: 'unknown',
     })
   })
+
+
 })
+

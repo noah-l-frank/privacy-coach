@@ -3,6 +3,12 @@ type BrowserDetection = {
   browser: string
 }
 
+type BraveNavigator = Navigator & {
+  brave?: {
+    isBrave?: () => Promise<boolean>
+  }
+}
+
 const UNKNOWN_BROWSER: BrowserDetection = {
   browserFamily: 'unknown',
   browser: 'unknown',
@@ -40,6 +46,32 @@ const browserRules = [
     tokens: string[]
   }
 >
+
+async function detectBrave(): Promise<boolean> {
+  const brave = (navigator as BraveNavigator).brave
+
+  if (typeof brave?.isBrave !== 'function') {
+    return false
+  }
+
+  try {
+    return await brave.isBrave()
+  } catch {
+    return false
+  }
+}
+
+export async function detectBrowserEnvironment(userAgent: string): Promise<BrowserDetection> {
+  if (await detectBrave()) {
+    return {
+      browserFamily: 'chromium',
+      browser: 'brave',
+    }
+  }
+
+  return detectBrowser(userAgent)
+}
+
 
 export function detectBrowser(userAgent: string): BrowserDetection {
   const ua = userAgent.toLowerCase()

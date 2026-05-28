@@ -4,11 +4,13 @@ import { detectOS } from './osDetection'
 import type { DetectionResult, NavigatorWithGPC } from './types'
 import { detectFingerprintingExposure } from './fingerprintingDetection'
 import { detectCookieSettings } from './cookieDetection'
+import { detectBrowserEnvironment } from './browserDetection'
 
-export function detectEnvironment(): DetectionResult {
+export async function detectEnvironment(): Promise<DetectionResult> {
   const userAgent = navigator.userAgent.toLowerCase()
 
-  const { browserFamily, browser } = detectBrowser(userAgent)
+  const { browserFamily, browser } = await detectBrowserEnvironment(userAgent)
+
   const os = detectOS(userAgent)
 
   const gpc = (navigator as NavigatorWithGPC).globalPrivacyControl === true

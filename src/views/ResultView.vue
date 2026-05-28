@@ -19,8 +19,8 @@ onMounted(() => {
   }
 })
 
-function restartScan() {
-  scanStore.restartScan()
+async function restartScan() {
+  await scanStore.restartScan()
   router.push('/scan')
 }
 </script>
