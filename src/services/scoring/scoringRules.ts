@@ -16,7 +16,7 @@ export const scoringRules: ScoringRule[] = [
   {
     id: 'google-chrome',
     penalty: 5,
-    applies: (result) => result.browser === 'Google Chrome',
+    applies: (result) => result.browser === 'chrome',
   },
 
   {
