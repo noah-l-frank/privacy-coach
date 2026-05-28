@@ -60,6 +60,8 @@ These tests validate how the different parts of a service work together.
 
 ## Selenium Tests
 
+// TODO: Add instruction to build preview with debug route before running selenium tests
+
 Selenium tests validate scan behavior in real browsers.
 
 Structure:
