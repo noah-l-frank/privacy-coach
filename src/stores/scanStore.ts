@@ -17,7 +17,7 @@ export const useScanStore = defineStore('scan', {
     },
 
     async runScan() {
-      const result = detectEnvironment()
+      const result = await detectEnvironment()
 
       this.setResult(result)
     },
@@ -28,7 +28,7 @@ export const useScanStore = defineStore('scan', {
       this.$reset()
       questionsStore.$reset()
 
-      this.runScan()
+      await this.runScan()
     },
   },
 })
