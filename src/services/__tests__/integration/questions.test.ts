@@ -11,8 +11,8 @@ describe('getNextFollowUpQuestion', () => {
     https: true,
   }
 
-  it('returns the privacy preference question first when cookies are enabled', () => {
-    const question = getNextFollowUpQuestion({ ...baseResult, cookiesEnabled: true }, {})
+  it('returns the privacy preference question first', () => {
+    const question = getNextFollowUpQuestion(baseResult, {})
 
     expect(question?.id).toBe('privacy_preference')
   })

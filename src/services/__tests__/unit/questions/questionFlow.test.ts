@@ -25,23 +25,24 @@ function getRule(id: string) {
 }
 
 describe('questionFlow', () => {
-  it('asks privacy preference when cookies are enabled', () => {
+  it('asks privacy preference when it has not been answered yet', () => {
     const rule = getRule('privacy_preference')
 
     expect(
       rule.shouldAsk({
-        result: createDetectionResult({ cookiesEnabled: true }),
+        result: createDetectionResult(),
         answers: {},
       }),
     ).toBe(true)
   })
+
 
   it('does not ask privacy preference when it is already answered', () => {
     const rule = getRule('privacy_preference')
 
     expect(
       rule.shouldAsk({
-        result: createDetectionResult({ cookiesEnabled: true }),
+        result: createDetectionResult(),
         answers: {
           privacy_preference: 'privacy',
         },
