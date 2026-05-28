@@ -35,4 +35,14 @@ export function assertScanResult(result: DetectionResult, config: BrowserConfig)
       `${config.name}: expected https ${config.expected.https} but got ${result.https}`,
     )
   }
+
+  if (
+    config.expected.fingerprintingExposure?.deviceMemory !== undefined &&
+    result.fingerprintingExposure.deviceMemory !==
+    config.expected.fingerprintingExposure.deviceMemory
+  ) {
+    throw new Error(
+      `${config.name}: expected fingerprintingExposure.deviceMemory ${config.expected.fingerprintingExposure.deviceMemory} but got ${result.fingerprintingExposure.deviceMemory}`,
+    )
+  }
 }

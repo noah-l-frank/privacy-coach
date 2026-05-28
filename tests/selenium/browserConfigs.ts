@@ -1,3 +1,5 @@
+import { FingerprintingExposure } from "../../src/services/detection/types"
+
 type BrowserConfig = {
   name: string
   browser: string
@@ -7,7 +9,8 @@ type BrowserConfig = {
     os: string
     gpc: boolean
     cookiesEnabled: boolean
-    https: boolean
+    https: boolean,
+    fingerprintingExposure?: Partial<FingerprintingExposure>
   }
   settings?: Record<string, string | number | boolean>
 }
@@ -35,6 +38,9 @@ const firefoxDefault: BrowserConfig = {
     gpc: false,
     cookiesEnabled: true,
     https: false,
+    fingerprintingExposure: {
+      deviceMemory: false,
+    },
   },
 }
 
@@ -48,6 +54,9 @@ const chromeDefault: BrowserConfig = {
     gpc: false,
     cookiesEnabled: true,
     https: false,
+    fingerprintingExposure: {
+      deviceMemory: true,
+    },
   },
 }
 
@@ -61,6 +70,9 @@ const edgeDefault: BrowserConfig = {
     gpc: false,
     cookiesEnabled: true,
     https: false,
+    fingerprintingExposure: {
+      deviceMemory: true,
+    }
   },
 }
 
