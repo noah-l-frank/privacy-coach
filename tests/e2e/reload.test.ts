@@ -41,14 +41,20 @@ test('home page survives reload', async ({ page }) => {
   await expect(page.getByRole('button', { name: /start scan/i })).toBeVisible()
 })
 
-test('scan transition redirects safely after reload', async ({ page }) => {
+test('scan transition recreates scan state after reload and continues to questions', async ({ page }) => {
   await page.goto(`${baseUrl}/scan`)
 
   await page.reload()
 
   await expect(page.getByText(/analyzing your setup/i)).toBeVisible()
-  await expect(page).toHaveURL(`${baseUrl}/`)
+  await expect(page).toHaveURL(`${baseUrl}/questions`)
+  await expect(
+    page.getByRole('heading', {
+      name: /what matters more to you while browsing/i,
+    }),
+  ).toBeVisible()
 })
+
 
 test('questions page redirects after reload because scan state is lost', async ({ page }) => {
   await page.goto(baseUrl)
