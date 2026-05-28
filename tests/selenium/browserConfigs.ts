@@ -1,4 +1,4 @@
-import { FingerprintingExposure } from "../../src/services/detection/types"
+import type { CookieSettings, FingerprintingExposure } from '../../src/services/detection/types'
 
 type BrowserConfig = {
   name: string
@@ -10,7 +10,8 @@ type BrowserConfig = {
     gpc: boolean
     cookiesEnabled: boolean
     https: boolean,
-    fingerprintingExposure?: Partial<FingerprintingExposure>
+    fingerprintingExposure?: Partial<FingerprintingExposure>,
+    cookieSettings?: Partial<CookieSettings>
   }
   settings?: Record<string, string | number | boolean>
 }
@@ -41,6 +42,12 @@ const firefoxDefault: BrowserConfig = {
     fingerprintingExposure: {
       deviceMemory: false,
     },
+    cookieSettings: {
+      cookiesEnabled: true,
+      firstPartyCookieWritable: true,
+      sessionCookieWritable: true,
+      persistentCookieWritable: true,
+    },
   },
 }
 
@@ -57,6 +64,12 @@ const chromeDefault: BrowserConfig = {
     fingerprintingExposure: {
       deviceMemory: true,
     },
+    cookieSettings: {
+      cookiesEnabled: true,
+      firstPartyCookieWritable: true,
+      sessionCookieWritable: true,
+      persistentCookieWritable: true,
+    },
   },
 }
 
@@ -72,7 +85,13 @@ const edgeDefault: BrowserConfig = {
     https: false,
     fingerprintingExposure: {
       deviceMemory: true,
-    }
+    },
+    cookieSettings: {
+      cookiesEnabled: true,
+      firstPartyCookieWritable: true,
+      sessionCookieWritable: true,
+      persistentCookieWritable: true,
+    },
   },
 }
 
@@ -104,6 +123,12 @@ export const browserConfigs: BrowserConfig[] = [
     expected: {
       ...firefoxDefault.expected,
       cookiesEnabled: false,
+      cookieSettings: {
+        cookiesEnabled: false,
+        firstPartyCookieWritable: false,
+        sessionCookieWritable: false,
+        persistentCookieWritable: false,
+      }
     },
   },
 ]

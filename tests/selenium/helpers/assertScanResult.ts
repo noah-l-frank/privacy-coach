@@ -45,4 +45,44 @@ export function assertScanResult(result: DetectionResult, config: BrowserConfig)
       `${config.name}: expected fingerprintingExposure.deviceMemory ${config.expected.fingerprintingExposure.deviceMemory} but got ${result.fingerprintingExposure.deviceMemory}`,
     )
   }
+
+  if (
+    config.expected.cookieSettings?.cookiesEnabled !== undefined &&
+    result.cookieSettings.cookiesEnabled !==
+    config.expected.cookieSettings.cookiesEnabled
+  ) {
+    throw new Error(
+      `${config.name}: expected cookieSettings.cookiesEnabled ${config.expected.cookieSettings.cookiesEnabled} but got ${result.cookieSettings.cookiesEnabled}`,
+    )
+  }
+
+  if (
+    config.expected.cookieSettings?.firstPartyCookieWritable !== undefined &&
+    result.cookieSettings.firstPartyCookieWritable !==
+    config.expected.cookieSettings.firstPartyCookieWritable
+  ) {
+    throw new Error(
+      `${config.name}: expected cookieSettings.firstPartyCookieWritable ${config.expected.cookieSettings.firstPartyCookieWritable} but got ${result.cookieSettings.firstPartyCookieWritable}`,
+    )
+  }
+
+  if (
+    config.expected.cookieSettings?.sessionCookieWritable !== undefined &&
+    result.cookieSettings.sessionCookieWritable !==
+    config.expected.cookieSettings.sessionCookieWritable
+  ) {
+    throw new Error(
+      `${config.name}: expected cookieSettings.sessionCookieWritable ${config.expected.cookieSettings.sessionCookieWritable} but got ${result.cookieSettings.sessionCookieWritable}`,
+    )
+  }
+
+  if (
+    config.expected.cookieSettings?.persistentCookieWritable !== undefined &&
+    result.cookieSettings.persistentCookieWritable !==
+    config.expected.cookieSettings.persistentCookieWritable
+  ) {
+    throw new Error(
+      `${config.name}: expected cookieSettings.persistentCookieWritable ${config.expected.cookieSettings.persistentCookieWritable} but got ${result.cookieSettings.persistentCookieWritable}`,
+    )
+  }
 }

@@ -22,6 +22,12 @@ describe('generateRecommendations', () => {
       platform: false,
       touchSupport: false,
     },
+    cookieSettings: {
+      cookiesEnabled: false,
+      firstPartyCookieWritable: false,
+      sessionCookieWritable: false,
+      persistentCookieWritable: false,
+    },
   }
 
   it('recommends Firefox for Chrome users who prefer privacy and do not need a similar look and feel', () => {

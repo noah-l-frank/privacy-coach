@@ -27,6 +27,14 @@ function createDetectionResult(overrides: Partial<DetectionResult> = {}): Detect
 
       ...overrides.fingerprintingExposure,
     },
+    cookieSettings: {
+      cookiesEnabled: false,
+      firstPartyCookieWritable: false,
+      sessionCookieWritable: false,
+      persistentCookieWritable: false,
+
+      ...overrides.cookieSettings,
+    },
   }
 }
 
