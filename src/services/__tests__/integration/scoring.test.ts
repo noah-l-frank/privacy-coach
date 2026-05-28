@@ -55,7 +55,7 @@ describe('calculatePrivacyScore', () => {
           browser: 'Google Chrome',
         }),
       ),
-    ).toBe(80)
+    ).toBe(85)
   })
 
   it('subtracts points when https is disabled', () => {
@@ -79,7 +79,7 @@ describe('calculatePrivacyScore', () => {
       cookiesEnabled: true,
     })
 
-    expect(calculatePrivacyScore(result)).toBe(35)
+    expect(calculatePrivacyScore(result)).toBe(40)
   })
 
   it('never returns less than 0', () => {

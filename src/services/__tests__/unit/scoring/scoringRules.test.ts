@@ -5,11 +5,31 @@ import type { DetectionResult } from '../../../detection'
 function createDetectionResult(overrides: Partial<DetectionResult> = {}): DetectionResult {
   return {
     browserFamily: 'firefox',
-    browser: 'Firefox',
-    os: 'Linux',
+    browser: 'firefox',
+    os: 'linux',
     gpc: true,
     cookiesEnabled: false,
     https: true,
+    fingerprintingExposure: {
+      deviceMemory: false,
+      hardwareConcurrency: false,
+      webGl: false,
+      canvas: false,
+      audioContext: false,
+      screen: false,
+      timezone: false,
+      languages: false,
+      platform: false,
+      touchSupport: false,
+      ...overrides.fingerprintingExposure,
+    },
+    cookieSettings: {
+      cookiesEnabled: false,
+      firstPartyCookieWritable: false,
+      sessionCookieWritable: false,
+      persistentCookieWritable: false,
+      ...overrides.cookieSettings,
+    },
     ...overrides,
   }
 }
@@ -36,7 +56,7 @@ describe('scoringRules', () => {
     const rule = getRule('google-chrome')
 
     expect(rule.applies(createDetectionResult({ browser: 'chrome' }))).toBe(true)
-    expect(rule.applies(createDetectionResult({ browser: 'Firefox' }))).toBe(false)
+    expect(rule.applies(createDetectionResult({ browser: 'firefox' }))).toBe(false)
   })
 
   it('applies no https penalty', () => {
