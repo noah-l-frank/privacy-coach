@@ -4,8 +4,6 @@ import { detectOS } from './osDetection'
 import type { DetectionResult, NavigatorWithGPC } from './types'
 import { detectFingerprintingExposure } from './fingerprintingDetection'
 
-// TODO: Add more detailed firefox scan (normal/strict settings)
-
 export function detectEnvironment(): DetectionResult {
   const userAgent = navigator.userAgent.toLowerCase()
 
