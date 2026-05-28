@@ -9,5 +9,19 @@ export type DetectionResult = {
   os: string
   gpc: boolean
   cookiesEnabled: boolean
-  https: boolean
+  https: boolean,
+  fingerprintingExposure: FingerprintingExposure
+}
+
+export type FingerprintingExposure = {
+  deviceMemory: boolean
+  hardwareConcurrency: boolean
+  webGl: boolean
+  canvas: boolean
+  audioContext: boolean
+  screen: boolean
+  timezone: boolean
+  languages: boolean
+  platform: boolean
+  touchSupport: boolean
 }
