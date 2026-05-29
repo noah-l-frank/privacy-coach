@@ -114,6 +114,40 @@ describe('recommendationRules', () => {
     ).toBe(true)
   })
 
+  it('matches brave recommendation for Edge users with high similarity preference', () => {
+    const rule = getRule('switch_to_brave')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          browserFamily: 'chromium',
+          browser: 'edge',
+        }),
+        answers: {
+          privacy_preference: 'privacy',
+          browser_switch_similarity: 'high',
+        },
+      }),
+    ).toBe(true)
+  })
+
+  it('matches brave recommendation for chromium users with medium similarity preference', () => {
+    const rule = getRule('switch_to_brave')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          browserFamily: 'chromium',
+          browser: 'chrome',
+        }),
+        answers: {
+          privacy_preference: 'privacy',
+          browser_switch_similarity: 'medium',
+        },
+      }),
+    ).toBe(true)
+  })
+
   it('matches brave recommendation for chrome users with medium similarity preference', () => {
     const rule = getRule('switch_to_brave')
 
@@ -148,7 +182,6 @@ describe('recommendationRules', () => {
     ).toBe(false)
   })
 
-
   it('matches gpc recommendation when gpc is disabled', () => {
     const rule = getRule('enable_gpc')
 
@@ -165,6 +198,23 @@ describe('recommendationRules', () => {
         },
       }),
     ).toBe(true)
+  })
+
+  it('does not match gpc recommendation for Chrome because it is not natively supported', () => {
+    const rule = getRule('enable_gpc')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          browserFamily: 'chromium',
+          browser: 'chrome',
+          gpc: false,
+        }),
+        answers: {
+          tracking_protection_preference: 'high',
+        },
+      }),
+    ).toBe(false)
   })
 
   it('matches cookie recommendation for privacy focused users with cookies enabled', () => {
