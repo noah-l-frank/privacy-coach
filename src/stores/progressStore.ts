@@ -20,17 +20,5 @@ export const useProgressStore = defineStore('progress', {
     isRecommendationCompleted(id: string) {
       return this.completedRecommendationIds.includes(id)
     },
-
-    calculateUserScore(recommendationIds: string[], privacyScore: number) {
-      if (!recommendationIds.length) return 100
-
-      const completedCount = recommendationIds.filter((id) =>
-        this.completedRecommendationIds.includes(id),
-      ).length
-
-      const completionRatio = completedCount / recommendationIds.length
-
-      return Math.round(privacyScore + completionRatio * (100 - privacyScore))
-    },
   },
 })
