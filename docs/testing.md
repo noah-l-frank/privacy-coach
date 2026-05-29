@@ -60,9 +60,11 @@ These tests validate how the different parts of a service work together.
 
 ## Selenium Tests
 
-// TODO: Add instruction to build preview with debug route before running selenium tests
-
 Selenium tests validate scan behavior in real browsers.
+
+They use the `/debug/scan` route to read raw browser detection results. This route
+is disabled in normal production builds and must be explicitly enabled for Selenium
+test builds.
 
 Structure:
 
@@ -78,12 +80,14 @@ These tests cover:
 - privacy signal detection
 - behavior differences across browser configurations
 
-They are kept separate from Vitest tests because they are slower and depend on real browser environments.
+They are kept separate from Vitest tests because they are slower and depend on real
+browser environments.
 
-Before running the Selenium tests, a production build must first be created:
+Before running the Selenium tests, create a production build with debug routes
+enabled:
 
 ```bash
-npm run build
+VITE_ENABLE_DEBUG_ROUTES=true npm run build
 ```
 
 The production build can then be started locally using the preview server:
@@ -98,38 +102,11 @@ The Selenium tests can then be executed in a separate terminal:
 npm run test:selenium
 ```
 
-The tests use the production preview server instead of the Vite development server because the development server can cause problems when cookies are disabled.
+Normal production builds should still be created without `VITE_ENABLE_DEBUG_ROUTES`
+so the `/debug/scan` route is not included in deployed builds.
 
-## Accessibility Tests
-
-Accessibility tests use axe-core to detect common accessibility issues automatically.
-
-Structure:
-
-```text
-tests/
-  accessibility/
-```
-
-Before running the accessibility tests, a production build must first be created:
-
-```bash
-npm run build
-```
-
-The application can then be started locally using the preview server:
-
-```bash
-npm run preview
-```
-
-The accessibility tests can then be executed in a separate terminal:
-
-```bash
-npm run test:accessibility
-```
-
-The tests use the preview server to simulate a production-like environment.
+The tests use the production preview server instead of the Vite development server
+because the development server can cause problems when cookies are disabled.
 
 
 // TODO: Add playwright e2e test section
