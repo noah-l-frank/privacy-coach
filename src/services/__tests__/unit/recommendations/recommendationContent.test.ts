@@ -26,4 +26,17 @@ describe('recommendationContent', () => {
       expect(validEffortLevels).toContain(recommendation.effort)
     })
   })
+
+  it('does not expose placeholder content in static recommendation copy', () => {
+    Object.values(recommendationContent).forEach((recommendation) => {
+      expect(recommendation.title).not.toContain('[Dynamic')
+      expect(recommendation.description).not.toContain('[Dynamic')
+      expect(recommendation.why).not.toContain('[Dynamic')
+
+      recommendation.tradeoffs.forEach((tradeoff) => {
+        expect(tradeoff).not.toContain('[Dynamic')
+      })
+    })
+  })
+
 })
