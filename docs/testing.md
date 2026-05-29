@@ -109,7 +109,33 @@ The tests use the production preview server instead of the Vite development serv
 because the development server can cause problems when cookies are disabled.
 
 
-// TODO: Add playwright e2e test section
+## Playwright E2E Tests
+
+// TODO: Add playwright browser install instruction or link to guide
+
+Playwright E2E tests validate the main user flows in a production-like browser environment.
+
+Structure:
+
+```text
+tests/
+  e2e/
+```
+
+These tests cover:
+
+- completing the privacy coach flow
+- reload behavior on key routes
+- production availability of the debug scan route
+
+The Playwright configuration starts the production build and preview server automatically:
+
+```bash
+npm run test:e2e
+```
+
+In CI, Playwright runs Chromium only to keep the pipeline fast and stable. Local runs can cover Chromium, Firefox, and Edge depending on the installed browsers.
+
 
 
 ## Test Scripts
@@ -117,13 +143,19 @@ because the development server can cause problems when cookies are disabled.
 The available test scripts are defined in [`package.json`](../package.json).
 
 ```json
+"build": "run-p type-check \"build-only {@}\" --",
 "test:unit": "vitest src/**/__tests__/unit",
 "test:integration": "vitest src/**/__tests__/integration",
 "test": "vitest src/**/__tests__",
 "test:selenium": "tsx tests/selenium/scan.test.ts"
+"test:accessibility": "playwright test tests/accessibility"
+"test:e2e": "playwright test:e2e"
 ```
 
 Script overview:
+
+- `build`
+  Runs TypeScript type checking and validates the production build.
 
 - `test:unit`
   Runs isolated unit tests for rules, detection logic, content consistency, and stores.
@@ -140,7 +172,8 @@ Script overview:
 - `test:accessibility`
   Runs automated accessibility checks using Playwright and axe-core.
 
-The CI pipeline uses the `npm test` script to run both unit and integration tests automatically. More information can be found in the [CI/CD documentation](./ci-cd.md).
+- `test:e2e`
+  Runs Playwright end-to-end tests for the full user flow
 
 ## Rationale
 
