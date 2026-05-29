@@ -17,11 +17,20 @@ function supportsGPC(browser: string): boolean {
   return ['firefox', 'brave'].includes(browser)
 }
 
+function isChromiumBrowser(result: DetectionResult): boolean {
+  return result.browserFamily === 'chromium'
+}
+
+function isChromeLikeButNotBrave(result: DetectionResult): boolean {
+  return isChromiumBrowser(result) && result.browser !== 'brave'
+}
+
+
 export const recommendationRules: RecommendationRule[] = [
   {
     recommendation: 'switch_to_firefox',
     shouldRecommend: ({ result, answers }) =>
-      result.browser.includes('chrome') &&
+      isChromeLikeButNotBrave(result) &&
       answers.privacy_preference === 'privacy' &&
       answers.browser_switch_similarity === 'low',
   },
@@ -29,25 +38,11 @@ export const recommendationRules: RecommendationRule[] = [
   {
     recommendation: 'switch_to_brave',
     shouldRecommend: ({ result, answers }) =>
-      result.browser.includes('chrome') &&
+      isChromeLikeButNotBrave(result) &&
       answers.privacy_preference === 'privacy' &&
-      answers.browser_switch_similarity === 'high',
+      (answers.browser_switch_similarity === 'medium' ||
+        answers.browser_switch_similarity === 'high'),
   },
-
-
-  // TODO: Update or remove this recommendation
-
-  //  {
-  //    recommendation: 'optimize_firefox',
-  //    shouldRecommend: ({ result, answers }) =>
-  //      result.browser.includes('firefox') &&
-  //      answers.privacy_preference === 'privacy',
-  //  },
-
-  // Firefox and Brave currently support GPC natively.
-  // Other major browsers like Chrome, Edge and Opera
-  // require extensions or experimental features for GPC support.
-  // TODO: Add recommendation to enable GPC via extension for non-supporting browsers
 
   {
     recommendation: 'enable_gpc',

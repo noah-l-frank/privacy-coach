@@ -10,9 +10,30 @@ function createDetectionResult(overrides: Partial<DetectionResult> = {}): Detect
     gpc: true,
     cookiesEnabled: false,
     https: true,
+    fingerprintingExposure: {
+      deviceMemory: false,
+      hardwareConcurrency: false,
+      webGl: false,
+      canvas: false,
+      audioContext: false,
+      screen: false,
+      timezone: false,
+      languages: false,
+      platform: false,
+      touchSupport: false,
+      ...overrides.fingerprintingExposure,
+    },
+    cookieSettings: {
+      cookiesEnabled: false,
+      firstPartyCookieWritable: false,
+      sessionCookieWritable: false,
+      persistentCookieWritable: false,
+      ...overrides.cookieSettings,
+    },
     ...overrides,
   }
 }
+
 
 function getRule(recommendation: string) {
   const rule = recommendationRules.find((rule) => rule.recommendation === recommendation)
@@ -32,6 +53,7 @@ describe('recommendationRules', () => {
     expect(
       rule.shouldRecommend({
         result: createDetectionResult({
+          browserFamily: 'chromium',
           browser: 'chrome',
         }),
         answers: {
@@ -64,6 +86,7 @@ describe('recommendationRules', () => {
     expect(
       rule.shouldRecommend({
         result: createDetectionResult({
+          browserFamily: 'chromium',
           browser: 'chrome',
         }),
         answers: {
@@ -73,6 +96,58 @@ describe('recommendationRules', () => {
       }),
     ).toBe(true)
   })
+
+  it('matches firefox switch recommendation for edge users with low similarity preference', () => {
+    const rule = getRule('switch_to_firefox')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          browserFamily: 'chromium',
+          browser: 'edge',
+        }),
+        answers: {
+          privacy_preference: 'privacy',
+          browser_switch_similarity: 'low',
+        },
+      }),
+    ).toBe(true)
+  })
+
+  it('matches brave recommendation for chrome users with medium similarity preference', () => {
+    const rule = getRule('switch_to_brave')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          browserFamily: 'chromium',
+          browser: 'chrome',
+        }),
+        answers: {
+          privacy_preference: 'privacy',
+          browser_switch_similarity: 'medium',
+        },
+      }),
+    ).toBe(true)
+  })
+
+  it('does not recommend switching to brave when browser is already brave', () => {
+    const rule = getRule('switch_to_brave')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          browserFamily: 'chromium',
+          browser: 'brave',
+        }),
+        answers: {
+          privacy_preference: 'privacy',
+          browser_switch_similarity: 'high',
+        },
+      }),
+    ).toBe(false)
+  })
+
 
   it('matches gpc recommendation when gpc is disabled', () => {
     const rule = getRule('enable_gpc')
