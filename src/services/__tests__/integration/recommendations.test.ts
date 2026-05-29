@@ -174,4 +174,29 @@ describe('generateRecommendations', () => {
 
     expect(recommendations).toHaveLength(0)
   })
+
+  it('uses Brave-specific steps for the Global Privacy Control recommendation', () => {
+    const recommendations = generateRecommendations(
+      {
+        ...baseResult,
+        browserFamily: 'chromium',
+        browser: 'brave',
+        gpc: false,
+      },
+      {
+        privacy_preference: 'privacy',
+        tracking_protection_preference: 'high',
+      },
+    )
+
+    expect(recommendations).toContainEqual(
+      expect.objectContaining({
+        id: 'enable-gpc',
+        steps: expect.arrayContaining([
+          expect.stringContaining('Brave'),
+        ]),
+      }),
+    )
+  })
+
 })

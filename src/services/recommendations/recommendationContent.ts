@@ -65,12 +65,9 @@ export const recommendationContent = {
     ],
   },
 
-  // TODO: Add firefox optimization recommendation after scan detects specific optimizations that can be made in firefox and create dynamic content for it
-
-
   enable_gpc: {
     id: 'enable-gpc',
-    dynamic: false,
+    dynamic: true,
 
     title: 'Enable Global Privacy Control',
     description:
@@ -83,9 +80,7 @@ export const recommendationContent = {
       'Some websites and regions legally recognize the GPC signal as a privacy preference.',
 
     steps: [
-      'Open Firefox settings',
-      'Search for Global Privacy Control',
-      'Enable the setting',
+      '[Dynamic browser specific GPC steps will appear here]',
     ],
 
     links: [

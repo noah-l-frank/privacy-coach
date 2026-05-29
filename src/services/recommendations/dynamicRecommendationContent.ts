@@ -19,6 +19,14 @@ export function enhanceRecommendation(
     }
   }
 
+  if (recommendation.id === 'enable-gpc') {
+    return {
+      ...recommendation,
+      steps: getGpcSteps(result.browser),
+    }
+  }
+
+
   return recommendation
 }
 
@@ -83,3 +91,30 @@ function getCookieLink(browser: string) {
     url: 'https://www.allaboutcookies.org/',
   }
 }
+
+
+function getGpcSteps(browser: string): string[] {
+  if (browser === 'firefox') {
+    return [
+      'Open Firefox settings',
+      'Go to Privacy & Security',
+      'Enable Global Privacy Control',
+    ]
+  }
+
+  if (browser === 'brave') {
+    return [
+      'Open Brave settings',
+      'Go to Privacy and security',
+      'Open Security or Shields settings',
+      'Enable Global Privacy Control',
+    ]
+  }
+
+  return [
+    'Open your browser privacy settings',
+    'Search for Global Privacy Control',
+    'Enable the setting if your browser supports it',
+  ]
+}
+
