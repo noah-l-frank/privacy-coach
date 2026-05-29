@@ -1,10 +1,8 @@
-// TODO: Review
-
 # Requirements
 
 ## Goal
 
-Build a browser-based privacy coaching application that detects client-side signals and provides adaptive, context-aware privacy recommendations.
+Build a browser-based privacy coaching application that detects client-side privacy signals and provides adaptive, context-aware privacy recommendations.
 
 ---
 
@@ -14,11 +12,12 @@ Build a browser-based privacy coaching application that detects client-side sign
 
 The system detects the following client-side signals:
 
-- Browser type (Chromium-based or Firefox)
-- Operating system
+- browser type and browser family
+- operating system
 - Global Privacy Control status
-- Cookie availability
+- cookie availability and writable cookie behavior
 - HTTPS context
+- selected fingerprinting exposure signals
 
 All detection is performed locally in the browser.
 
@@ -27,17 +26,30 @@ All detection is performed locally in the browser.
 ### Decision Engine
 
 - Map detected signals to privacy-related categories
-- Evaluate combinations of signals
-- Trigger follow-up questions when needed
-- Generate structured recommendations
+- Evaluate combinations of signals and user answers
+- Trigger follow-up questions when additional context is useful
+- Generate structured recommendations with impact, effort, steps, links, and tradeoffs
 
 ---
 
 ### Adaptive Flow
 
-- Flow: Scan → Questions → Recommendations
-- Questions are dynamically generated based on detected signals
+- Flow: Scan -> Questions -> Results
+- Questions are dynamically selected based on detected signals and previous answers
 - No static questionnaire
+- The flow stops when no further relevant question is available
+
+---
+
+### Recommendations
+
+Recommendations should be:
+
+- based on scan results and user answers
+- specific enough to be actionable
+- transparent about effort and tradeoffs
+- safe for non-expert users
+- sorted or presented in a way that prioritizes practical next steps
 
 ---
 
@@ -45,25 +57,28 @@ All detection is performed locally in the browser.
 
 - Simple, minimal interface
 - Start screen with "Start Scan"
-- Step-based flow (Scan → Questions → Results)
+- Step-based flow from scan to questions to results
+- Results view with privacy score, recommendations, positive findings, and action progress
 
 ---
 
 ## Technical Constraints
 
-- Client-side only (no backend required)
-- Built with Vue 3 + TypeScript
-- Modular architecture (Detection, Decision Engine, UI separated)
+- Client-side only
+- No backend required
+- Built with Vue 3 and TypeScript
+- Modular architecture with detection, questions, recommendations, scoring, stores, and UI separated
 - Runs in modern desktop browsers
+- Debug-only routes must not be enabled in normal production builds
 
 ---
 
 ## Supported Environments
 
-- Chromium-based browsers (Chrome, Edge, Brave)
+- Chromium-based browsers: Chrome, Edge, Brave, Opera
 - Mozilla Firefox
-- Latest stable versions only
-- Standard configurations assumed
+- Latest stable desktop versions only
+- Standard browser configurations assumed
 
 ---
 
@@ -72,9 +87,22 @@ All detection is performed locally in the browser.
 - Mobile browsers
 - Private browsing mode
 - Logged-in account states
-- Browser extensions
+- Building or managing browser extensions
 - Backend services
 - Persistent user accounts
+- Server-side storage of scan results or answers
+
+---
+
+## Testing Requirements
+
+The project should include coverage for the main layers of the application:
+
+- unit tests for isolated rules, detection logic, stores, and content consistency
+- integration tests for question selection, recommendation generation, and scoring
+- Playwright E2E tests for main user flows
+- accessibility tests for basic accessibility issues
+- Selenium tests for real-browser detection behavior
 
 ---
 
@@ -82,6 +110,6 @@ All detection is performed locally in the browser.
 
 - Working web application
 - Modular and maintainable codebase
-- Basic testing setup
-- Deployment-ready build
-- Documentation
+- Unit, integration, E2E, accessibility, and Selenium test coverage
+- Deployment-ready production build
+- Documentation for architecture, testing, deployment, decision logic, scoring, and question strategy
