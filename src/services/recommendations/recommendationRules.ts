@@ -44,6 +44,8 @@ export const recommendationRules: RecommendationRule[] = [
         answers.browser_switch_similarity === 'high'),
   },
 
+  // Firefox and Brave support GPC natively. Other Chromium-based browsers are handled
+  // through browser switch recommendations instead of extension-specific guidance.
   {
     recommendation: 'enable_gpc',
     shouldRecommend: ({ result, answers }) =>
