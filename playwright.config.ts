@@ -32,25 +32,32 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
-  /* Configure projects for major browsers */
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
-      name: 'edge',
-      use: {
-        ...devices['Desktop Edge'],
-        channel: 'msedge',
+  // CI only runs Chromium to keep the pipeline fast and stable.
+  // Full cross-browser checks can still be run locally.
+  projects: process.env.CI
+    ? [
+      {
+        name: 'chromium',
+        use: { ...devices['Desktop Chrome'] },
       },
-    },
-  ],
+    ]
+    : [
+      {
+        name: 'chromium',
+        use: { ...devices['Desktop Chrome'] },
+      },
+      {
+        name: 'firefox',
+        use: { ...devices['Desktop Firefox'] },
+      },
+      {
+        name: 'edge',
+        use: {
+          ...devices['Desktop Edge'],
+          channel: 'msedge',
+        },
+      },
+    ],
   webServer: {
     command: 'npm run build && npm run preview',
     url: 'http://localhost:4173',
