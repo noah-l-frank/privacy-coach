@@ -1,22 +1,30 @@
 # Privacy Coach
 
-# Privacy Coach
+Privacy Coach is a browser privacy assessment tool that helps users understand and improve their privacy while browsing the web.
 
-Privacy Coach is a capstone project developed by Noah Frank at CODE University.
+The application analyzes privacy-related browser signals locally, asks adaptive follow-up questions, calculates a privacy score, and provides personalized recommendations.
 
-The project focuses on building a modern privacy-focused web application while demonstrating skills in frontend development, software architecture, testing, CI/CD, and user-centered design.
+This project was developed as a capstone project at CODE University.
 
-It helps users better understand and improve their browser privacy through local privacy analysis and personalized recommendations.
+## Screenshot
+
+![Privacy Coach Results](docs/screenshots/results.png)
 
 ## Features
 
-- Local browser privacy scan
-- Personalized privacy recommendations
+- Browser and operating system detection
+- Cookie and Global Privacy Control detection
+- Fingerprinting exposure analysis
 - Adaptive follow-up questions
 - Privacy scoring system
+- Personalized privacy recommendations
 - Fully client-side analysis
-- Modern responsive UI
-- Automated testing and deployment pipeline
+
+## How It Works
+
+1. Analyze privacy-related browser signals locally.
+2. Answer adaptive follow-up questions.
+3. Review your privacy score and personalized recommendations.
 
 ## Installation
 
@@ -31,14 +39,23 @@ After completing the installation steps, open the application in your browser an
 
 ## Tech Stack
 
-- Frontend Framework: Vue 3
-- Programming Language: TypeScript
-- Automated Testing: Vitest and Selenium
-- CI/CD: Docker and GitHub Actions
+### Frontend
+- Vue 3
+- TypeScript
+- Pinia
+
+### Testing
+- Vitest
+- Playwright
+- Selenium
+
+### DevOps
+- Docker
+- GitHub Actions
 
 ## Documentation
 
-More detailed project documentation can be found in the [docs](docs/README.md) directory.
+Detailed project documentation can be found in the [docs](docs/README.md) directory, including architecture, testing, CI/CD, and deployment documentation.
 
 ## License
 
