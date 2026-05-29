@@ -199,4 +199,27 @@ describe('generateRecommendations', () => {
     )
   })
 
+  it('recommends a gpc extension for chrome users when gpc is disabled and tracking protection is important', () => {
+    const recommendations = generateRecommendations(
+      {
+        ...baseResult,
+        browserFamily: 'chromium',
+        browser: 'chrome',
+        gpc: false,
+      },
+      {
+        privacy_preference: 'privacy',
+        tracking_protection_preference: 'high',
+      },
+    )
+
+    expect(recommendations).toContainEqual(
+      expect.objectContaining({
+        id: 'use-gpc-extension',
+        title: 'Send a Global Privacy Control signal',
+        effort: 'easy',
+      }),
+    )
+  })
+
 })

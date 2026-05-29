@@ -95,6 +95,38 @@ export const recommendationContent = {
     ],
   },
 
+  use_gpc_extension: {
+    id: 'use-gpc-extension',
+    dynamic: false,
+
+    title: 'Send a Global Privacy Control signal',
+    description:
+      'Your browser does not appear to support Global Privacy Control natively, but a privacy extension can send the signal for you.',
+
+    effort: 'easy',
+    impact: 'medium',
+
+    why:
+      'GPC communicates that you do not want your data sold or shared, and some websites are legally required to respect it.',
+
+    steps: [
+      'Install a trusted privacy extension that supports Global Privacy Control',
+      'Open the extension settings',
+      'Confirm that Global Privacy Control is enabled',
+    ],
+
+    links: [
+      {
+        label: 'Learn more about GPC',
+        url: 'https://globalprivacycontrol.org/',
+      },
+    ],
+
+    tradeoffs: [
+      'Browser extensions can access sensitive browsing data, so choose one carefully.',
+    ],
+  },
+
   reduce_cookies: {
     id: 'reduce-cookies',
     dynamic: true,

@@ -265,4 +265,56 @@ describe('recommendationRules', () => {
       }),
     ).toBe(true)
   })
+
+  it('matches gpc extension recommendation for chrome when gpc is disabled', () => {
+    const rule = getRule('use_gpc_extension')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          browserFamily: 'chromium',
+          browser: 'chrome',
+          gpc: false,
+        }),
+        answers: {
+          tracking_protection_preference: 'high',
+        },
+      }),
+    ).toBe(true)
+  })
+
+  it('does not match gpc extension recommendation for firefox with native gpc support', () => {
+    const rule = getRule('use_gpc_extension')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          browserFamily: 'firefox',
+          browser: 'firefox',
+          gpc: false,
+        }),
+        answers: {
+          tracking_protection_preference: 'high',
+        },
+      }),
+    ).toBe(false)
+  })
+
+  it('does not match gpc extension recommendation when gpc is already enabled', () => {
+    const rule = getRule('use_gpc_extension')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          browserFamily: 'chromium',
+          browser: 'chrome',
+          gpc: true,
+        }),
+        answers: {
+          tracking_protection_preference: 'high',
+        },
+      }),
+    ).toBe(false)
+  })
+
 })

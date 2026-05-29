@@ -17,6 +17,10 @@ function supportsGPC(browser: string): boolean {
   return ['firefox', 'brave'].includes(browser)
 }
 
+function lacksNativeGPCSupport(browser: string): boolean {
+  return !supportsGPC(browser)
+}
+
 function isChromiumBrowser(result: DetectionResult): boolean {
   return result.browserFamily === 'chromium'
 }
@@ -52,6 +56,14 @@ export const recommendationRules: RecommendationRule[] = [
       supportsGPC(result.browser) &&
       !result.gpc &&
       answers.tracking_protection_preference === 'high'
+  },
+
+  {
+    recommendation: 'use_gpc_extension',
+    shouldRecommend: ({ result, answers }) =>
+      lacksNativeGPCSupport(result.browser) &&
+      !result.gpc &&
+      answers.tracking_protection_preference === 'high',
   },
 
   {
