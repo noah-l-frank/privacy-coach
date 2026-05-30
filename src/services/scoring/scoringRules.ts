@@ -8,15 +8,27 @@ type ScoringRule = {
 
 export const scoringRules: ScoringRule[] = [
   {
-    id: 'chromium-browser-family',
+    id: 'google-chrome',
     penalty: 15,
-    applies: (result) => result.browserFamily === 'chromium',
+    applies: (result) => result.browser === 'chrome',
   },
 
   {
-    id: 'google-chrome',
+    id: 'opera',
+    penalty: 12,
+    applies: (result) => result.browser === 'opera',
+  },
+
+  {
+    id: 'microsoft-edge',
+    penalty: 10,
+    applies: (result) => result.browser === 'edge',
+  },
+
+  {
+    id: 'brave',
     penalty: 5,
-    applies: (result) => result.browser === 'chrome',
+    applies: (result) => result.browser === 'brave',
   },
 
   {

@@ -5,8 +5,8 @@ import type { DetectionResult } from '../../detection'
 function createDetectionResult(overrides: Partial<DetectionResult> = {}): DetectionResult {
   return {
     browserFamily: 'firefox',
-    browser: 'Firefox',
-    os: 'Linux',
+    browser: 'firefox',
+    os: 'linux',
     gpc: true,
     cookiesEnabled: false,
     https: true,
@@ -39,23 +39,24 @@ function createDetectionResult(overrides: Partial<DetectionResult> = {}): Detect
 }
 
 describe('calculatePrivacyScore', () => {
-  it('returns 100 for a privacy-friendly baseline result', () => {
+  it('returns 100 for a privacy-friendly firefox baseline', () => {
     expect(calculatePrivacyScore(createDetectionResult())).toBe(100)
   })
 
-  it('subtracts points for a chromium browser family', () => {
-    expect(calculatePrivacyScore(createDetectionResult({ browserFamily: 'chromium' }))).toBe(85)
+  it('subtracts 15 points for Google Chrome', () => {
+    expect(calculatePrivacyScore(createDetectionResult({ browser: 'chrome', browserFamily: 'chromium' }))).toBe(85)
   })
 
-  it('subtracts extra points for Google Chrome', () => {
-    expect(
-      calculatePrivacyScore(
-        createDetectionResult({
-          browserFamily: 'chromium',
-          browser: 'Google Chrome',
-        }),
-      ),
-    ).toBe(85)
+  it('subtracts 12 points for Opera', () => {
+    expect(calculatePrivacyScore(createDetectionResult({ browser: 'opera', browserFamily: 'chromium' }))).toBe(88)
+  })
+
+  it('subtracts 10 points for Microsoft Edge', () => {
+    expect(calculatePrivacyScore(createDetectionResult({ browser: 'edge', browserFamily: 'chromium' }))).toBe(90)
+  })
+
+  it('subtracts 5 points for Brave', () => {
+    expect(calculatePrivacyScore(createDetectionResult({ browser: 'brave', browserFamily: 'chromium' }))).toBe(95)
   })
 
   it('subtracts points when https is disabled', () => {
@@ -70,10 +71,10 @@ describe('calculatePrivacyScore', () => {
     expect(calculatePrivacyScore(createDetectionResult({ cookiesEnabled: true }))).toBe(90)
   })
 
-  it('combines all deductions correctly', () => {
+  it('combines deductions correctly for chrome + https off + gpc off + cookies enabled', () => {
     const result = createDetectionResult({
+      browser: 'chrome',
       browserFamily: 'chromium',
-      browser: 'Google Chrome',
       https: false,
       gpc: false,
       cookiesEnabled: true,
@@ -84,8 +85,8 @@ describe('calculatePrivacyScore', () => {
 
   it('never returns less than 0', () => {
     const result = createDetectionResult({
+      browser: 'chrome',
       browserFamily: 'chromium',
-      browser: 'Google Chrome',
       https: false,
       gpc: false,
       cookiesEnabled: true,

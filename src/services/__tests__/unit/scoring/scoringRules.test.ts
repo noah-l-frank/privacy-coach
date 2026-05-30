@@ -45,11 +45,35 @@ function getRule(id: string) {
 }
 
 describe('scoringRules', () => {
-  it('applies chromium browser family penalty', () => {
-    const rule = getRule('chromium-browser-family')
+  it('applies brave penalty', () => {
+    const rule = getRule('brave')
 
-    expect(rule.applies(createDetectionResult({ browserFamily: 'chromium' }))).toBe(true)
-    expect(rule.applies(createDetectionResult({ browserFamily: 'firefox' }))).toBe(false)
+    expect(rule.applies(createDetectionResult({ browser: 'brave' }))).toBe(true)
+    expect(rule.applies(createDetectionResult({ browser: 'firefox' }))).toBe(false)
+  })
+
+  it('applies microsoft edge penalty', () => {
+    const rule = getRule('microsoft-edge')
+
+    expect(rule.applies(createDetectionResult({ browser: 'edge' }))).toBe(true)
+    expect(rule.applies(createDetectionResult({ browser: 'firefox' }))).toBe(false)
+  })
+
+  it('applies opera penalty', () => {
+    const rule = getRule('opera')
+
+    expect(rule.applies(createDetectionResult({ browser: 'opera' }))).toBe(true)
+    expect(rule.applies(createDetectionResult({ browser: 'firefox' }))).toBe(false)
+  })
+
+  it('does not apply any browser penalty for firefox', () => {
+    const firefoxResult = createDetectionResult({ browser: 'firefox', browserFamily: 'firefox' })
+
+    const browserRules = ['google-chrome', 'opera', 'microsoft-edge', 'brave']
+
+    browserRules.forEach((id) => {
+      expect(getRule(id).applies(firefoxResult)).toBe(false)
+    })
   })
 
   it('applies google chrome penalty', () => {
