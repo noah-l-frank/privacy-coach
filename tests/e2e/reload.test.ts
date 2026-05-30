@@ -82,3 +82,17 @@ test('results page redirects after reload because scan state is lost', async ({
 
   await expect(page).toHaveURL(`${baseUrl}/`)
 })
+
+test('scan transition does not redirect after leaving the page quickly', async ({ page }) => {
+  await page.goto(`${baseUrl}/scan`)
+
+  await expect(page.getByText(/analyzing your setup/i)).toBeVisible()
+
+  await page.goto(baseUrl)
+  await expect(page.getByRole('button', { name: /start scan/i })).toBeVisible()
+
+  await page.waitForTimeout(5000)
+
+  await expect(page).toHaveURL(`${baseUrl}/`)
+  await expect(page.getByRole('button', { name: /start scan/i })).toBeVisible()
+})

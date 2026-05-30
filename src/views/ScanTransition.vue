@@ -1,19 +1,28 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useScanStore } from '@/stores/scanStore'
 
 const router = useRouter()
 const scanStore = useScanStore()
 
+const transitionTimer = ref<number | null>(null)
+
 onMounted(async () => {
   if (!scanStore.result) {
     await scanStore.runScan()
   }
 
-  setTimeout(() => {
+  transitionTimer.value = window.setTimeout(() => {
     router.push('/questions')
   }, 4500)
+})
+
+onUnmounted(() => {
+  if (transitionTimer.value !== null) {
+    clearTimeout(transitionTimer.value)
+    transitionTimer.value = null
+  }
 })
 </script>
 
