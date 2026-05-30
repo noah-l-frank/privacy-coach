@@ -6,6 +6,8 @@ The application analyzes privacy-related browser signals locally, asks adaptive 
 
 This project was developed as a capstone project at CODE University.
 
+Live demo: https://pc.noah-frank.de
+
 ## Screenshot
 
 ![Privacy Coach Results](docs/screenshots/results.png)
