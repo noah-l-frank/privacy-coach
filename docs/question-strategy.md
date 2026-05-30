@@ -1,20 +1,14 @@
-// TODO: Review
-
 # Question Strategy
 
 The follow-up question system is designed to personalize recommendations in a simple and user-friendly way.
 
 ## Goal
 
-The goal of the question system is to collect just enough additional context to improve recommendation quality, without overwhelming the user.
+The goal of the question system is to collect the additional information needed after the local scan to generate meaningful privacy recommendations.
 
-The system focuses on understanding:
+The scan provides technical browser signals, while the follow-up questions provide missing context that cannot be determined from the scan alone.
 
-- user preferences (privacy vs convenience)
-- willingness to change behavior
-- tolerance for complexity
-
-These inputs are combined with detected signals to generate more relevant and actionable recommendations.
+The final recommendations are derived from both the scan results and the user's answers.
 
 ---
 
@@ -34,138 +28,22 @@ This approach reduces cognitive load and creates a more natural interaction.
 
 ## General Principles
 
-- Ask only relevant questions based on detected signals
-- Keep the total number of questions low (typically 2–4)
+- Ask only relevant questions based on detected signals and previous anwsers
+- Keep the number of questions limited and dependent on the scan result and previous answers
 - Avoid technical terminology
 - Focus on user preferences rather than technical details
 - Prioritize clarity and ease of understanding
-- Adapt dynamically based on previous answers
 
 ---
 
 ## Question Flow Strategy
 
-The question flow follows a **progressive refinement model**:
+The question flow is implemented in the question engine rather than described as a fixed questionnaire in this document.
 
-1. Start with high-impact, easy-to-understand questions
-2. Branch into more specific questions only if needed
-3. Stop as soon as enough information is collected
+The engine selects the next question dynamically based on the scan result and the answers already given by the user.
 
-Example:
+The exact question order and conditions are defined in `src/services/questions/questionFlow.ts`.
 
-- Ask if the user is open to switching browsers
-- Only ask about similarity if the user is open to switching
-- Skip all related questions if the user is not willing to switch
-
----
-
-## Current Question Types
-
-### 1. Privacy vs. convenience preference
-
-Shown when:
-
-- Cookies are enabled
-
-Question:
-
-- What matters more to you while browsing?
-
-Purpose:
-
-- Determines how strongly privacy-focused the recommendations should be
-
----
-
-### 2. Ad and tracking reduction interest
-
-Shown when:
-
-- No ad blocker is detected
-
-Question:
-
-- Would you like fewer ads and less tracking while browsing?
-
-Purpose:
-
-- Identifies interest in simple, high-impact improvements
-
----
-
-### 3. Browser switch willingness
-
-Shown when:
-
-- A less privacy-friendly browser is detected (e.g. Chromium-based)
-
-Question:
-
-- Would you be open to trying a different browser for better privacy?
-
-Purpose:
-
-- Determines whether browser change recommendations are appropriate
-
----
-
-### 4. Browser similarity preference
-
-Shown when:
-
-- User is open to switching browsers
-
-Question:
-
-- How important is it that a new browser feels familiar?
-
-Purpose:
-
-- Helps choose between different types of browser recommendations
-
----
-
-### 5. Tracking protection preference
-
-Shown when:
-
-- Global Privacy Control is disabled
-
-Question:
-
-- Would you like your browser to reduce tracking as much as possible?
-
-Purpose:
-
-- Determines how strongly tracking protection features should be recommended
-
----
-
-## Conditional Logic
-
-Questions are generated dynamically based on:
-
-- scan results
-- previously given answers
-
-This ensures that:
-
-- users only see relevant questions
-- unnecessary steps are skipped
-- the flow adapts in real time
-
----
-
-## Stopping Condition
-
-The question flow stops when:
-
-- no further relevant questions can be generated
-- enough context is collected to produce meaningful recommendations
-
-At this point, the system transitions to the results view.
-
----
 
 ## Design Rationale
 
@@ -181,10 +59,8 @@ By minimizing complexity while maintaining relevance, the system balances usabil
 
 ## Current Scope
 
-The current implementation focuses on a small number of high-impact questions.
+The current implementation focuses on a limited set of high-impact scan signals and follow-up questions due to the time constraints of the project.
 
-Future improvements may include:
+The question system was designed as a modular rule-based structure, so the flow can be adapted, extended, or refined without changing the overall architecture.
 
-- more granular branching logic
-- prioritization based on expected impact
-- adaptive question ordering
+Additional questions and branching conditions can be added by extending the question engine and the related question content files.
