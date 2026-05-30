@@ -111,8 +111,6 @@ because the development server can cause problems when cookies are disabled.
 
 ## Playwright E2E Tests
 
-// TODO: Add playwright browser install instruction or link to guide
-
 Playwright E2E tests validate the main user flows in a production-like browser environment.
 
 Structure:
@@ -128,6 +126,8 @@ These tests cover:
 - reload behavior on key routes
 - production availability of the debug scan route
 
+Before running Playwright tests locally for the first time, install the required browser binaries with `npx playwright install`.
+
 The Playwright configuration starts the production build and preview server automatically:
 
 ```bash
@@ -136,6 +136,7 @@ npm run test:e2e
 
 In CI, Playwright runs Chromium only to keep the pipeline fast and stable. Local runs can cover Chromium, Firefox, and Edge depending on the installed browsers.
 
+Selenium and accessibility tests are currently not integrated into the CI pipeline and are intended to be run locally. Integrating them into CI would be a possible future improvement.
 
 
 ## Test Scripts
@@ -147,9 +148,9 @@ The available test scripts are defined in [`package.json`](../package.json).
 "test:unit": "vitest src/**/__tests__/unit",
 "test:integration": "vitest src/**/__tests__/integration",
 "test": "vitest src/**/__tests__",
-"test:selenium": "tsx tests/selenium/scan.test.ts"
-"test:accessibility": "playwright test tests/accessibility"
-"test:e2e": "playwright test:e2e"
+"test:selenium": "tsx tests/selenium/scan.test.ts",
+"test:accessibility": "playwright test tests/accessibility",
+"test:e2e": "playwright test"
 ```
 
 Script overview:
