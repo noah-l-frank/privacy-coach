@@ -16,7 +16,7 @@ Live demo: https://pc.noah-frank.de
 
 - Browser and operating system detection
 - Cookie and Global Privacy Control detection
-- Fingerprinting exposure analysis
+- Fingerprinting exposure detection (currently only collected but not yet part of active scoring/recommendation rules)
 - Adaptive follow-up questions
 - Privacy scoring system
 - Personalized privacy recommendations
