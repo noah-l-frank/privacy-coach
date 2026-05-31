@@ -28,7 +28,7 @@ This approach reduces cognitive load and creates a more natural interaction.
 
 ## General Principles
 
-- Ask only relevant questions based on detected signals and previous anwsers
+- Ask only relevant questions based on detected signals and previous answers
 - Keep the number of questions limited and dependent on the scan result and previous answers
 - Avoid technical terminology
 - Focus on user preferences rather than technical details
