@@ -2,7 +2,7 @@
 
 ## Overview
 
-Privacy Coach is split into three engines:
+Privacy Coach is split into four engines:
 
 ## 1) Detection Engine
 
@@ -31,9 +31,19 @@ How it works:
 - Builds the final recommendation list from matching recommendation templates.
 - Outputs actionable results shown in the final view.
 
+## 4) Scoring Engine
+
+Purpose: Calculate a transparent privacy score that summarizes key privacy-relevant signals.
+
+How it works:
+- Starts from a baseline score of 100.
+- Applies rule-based penalties for detected risk factors.
+- Clamps the final value to a range of 0 to 100.
+- Provides an interpretable score shown in the results view.
+
 ## Flow
 
-Start Scan -> Detection Engine -> Questions Engine -> Recommendations Engine -> Results
+Start Scan -> Detection -> Questions -> Recommendations + Scoring -> Results
 
 ## State Management
 
