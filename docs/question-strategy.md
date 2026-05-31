@@ -44,6 +44,16 @@ The engine selects the next question dynamically based on the scan result and th
 
 The exact question order and conditions are defined in `src/services/questions/questionFlow.ts`.
 
+### Question Roles
+
+Not every follow-up question directly affects recommendation rules.
+
+The current question flow includes two roles:
+
+- recommendation-driving questions: used by recommendation rules to generate actionable suggestions
+- context-only questions: used to improve contextual feedback in the results view
+
+For example, `search_engine` is currently a context-only question. It contributes to positive findings feedback but does not directly trigger recommendation rules.
 
 ## Design Rationale
 
