@@ -1,6 +1,6 @@
 # Decision Logic
 
-The system combines detected browser environment data with user answers to generate context-aware recommendations.
+The system combines detected browser environment data with user answers to generate context-aware recommendations and a transparent privacy score.
 
 ## Available Detection Data
 
@@ -12,14 +12,34 @@ The current detection layer provides the following data:
 - gpc
 - cookiesEnabled
 - https
+- fingerprintingExposure
+- cookieSettings
 
 ## Currently Used Inputs
 
-For the initial version of the decision logic, only a subset of the available detection data is actively used:
+### Recommendation Inputs
+
+The recommendation engine currently uses:
 
 - browser
 - browserFamily
 - gpc
 - cookiesEnabled
+- user answers from the follow-up question flow
 
-Additional detected values such as os, and https are already collected and may be incorporated into future recommendation rules as the system evolves.
+### Scoring Inputs
+
+The scoring logic currently uses:
+
+- browser
+- gpc
+- cookiesEnabled
+- https
+
+Additional detected values such as `os`, `fingerprintingExposure`, and detailed `cookieSettings` are already collected but are not yet part of the active recommendation/scoring rules.
+
+## Design Notes
+
+- The decision system is rule-based for transparency and maintainability.
+- Detection, question flow, scoring, and recommendation rules are separated so each part can evolve independently.
+- New inputs can be integrated incrementally by extending the corresponding rules without changing the overall architecture.
