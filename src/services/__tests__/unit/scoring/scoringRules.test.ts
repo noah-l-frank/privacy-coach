@@ -69,7 +69,7 @@ describe('scoringRules', () => {
   it('does not apply any browser penalty for firefox', () => {
     const firefoxResult = createDetectionResult({ browser: 'firefox', browserFamily: 'firefox' })
 
-    const browserRules = ['google-chrome', 'opera', 'microsoft-edge', 'brave']
+    const browserRules = ['google-chrome', 'opera', 'microsoft-edge', 'brave', 'unknown-browser']
 
     browserRules.forEach((id) => {
       expect(getRule(id).applies(firefoxResult)).toBe(false)
@@ -80,6 +80,13 @@ describe('scoringRules', () => {
     const rule = getRule('google-chrome')
 
     expect(rule.applies(createDetectionResult({ browser: 'chrome' }))).toBe(true)
+    expect(rule.applies(createDetectionResult({ browser: 'firefox' }))).toBe(false)
+  })
+
+  it('applies unknown browser penalty', () => {
+    const rule = getRule('unknown-browser')
+
+    expect(rule.applies(createDetectionResult({ browser: 'unknown' }))).toBe(true)
     expect(rule.applies(createDetectionResult({ browser: 'firefox' }))).toBe(false)
   })
 
@@ -102,6 +109,87 @@ describe('scoringRules', () => {
 
     expect(rule.applies(createDetectionResult({ cookiesEnabled: true }))).toBe(true)
     expect(rule.applies(createDetectionResult({ cookiesEnabled: false }))).toBe(false)
+  })
+
+  it('applies persistent cookie writable penalty', () => {
+    const rule = getRule('persistent-cookies-writable')
+
+    expect(
+      rule.applies(createDetectionResult({
+        cookieSettings: {
+          cookiesEnabled: true,
+          firstPartyCookieWritable: true,
+          sessionCookieWritable: true,
+          persistentCookieWritable: true,
+        },
+      })),
+    ).toBe(true)
+    expect(rule.applies(createDetectionResult())).toBe(false)
+  })
+
+  it('applies medium fingerprinting exposure penalty', () => {
+    const rule = getRule('medium-fingerprinting-exposure')
+
+    expect(
+      rule.applies(createDetectionResult({
+        fingerprintingExposure: {
+          deviceMemory: true,
+          hardwareConcurrency: true,
+          webGl: true,
+          canvas: true,
+          audioContext: false,
+          screen: false,
+          timezone: false,
+          languages: false,
+          platform: false,
+          touchSupport: false,
+        },
+      })),
+    ).toBe(true)
+    expect(rule.applies(createDetectionResult())).toBe(false)
+  })
+
+  it('does not apply medium fingerprinting exposure penalty for high exposure', () => {
+    const rule = getRule('medium-fingerprinting-exposure')
+
+    expect(
+      rule.applies(createDetectionResult({
+        fingerprintingExposure: {
+          deviceMemory: true,
+          hardwareConcurrency: true,
+          webGl: true,
+          canvas: true,
+          audioContext: true,
+          screen: true,
+          timezone: true,
+          languages: false,
+          platform: false,
+          touchSupport: false,
+        },
+      })),
+    ).toBe(false)
+  })
+
+  it('applies high fingerprinting exposure penalty', () => {
+    const rule = getRule('high-fingerprinting-exposure')
+
+    expect(
+      rule.applies(createDetectionResult({
+        fingerprintingExposure: {
+          deviceMemory: true,
+          hardwareConcurrency: true,
+          webGl: true,
+          canvas: true,
+          audioContext: true,
+          screen: true,
+          timezone: true,
+          languages: false,
+          platform: false,
+          touchSupport: false,
+        },
+      })),
+    ).toBe(true)
+    expect(rule.applies(createDetectionResult())).toBe(false)
   })
 
   it('uses positive penalty values', () => {

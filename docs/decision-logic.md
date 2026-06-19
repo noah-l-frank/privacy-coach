@@ -35,8 +35,10 @@ The scoring logic currently uses:
 - gpc
 - cookiesEnabled
 - https
+- persistentCookieWritable
+- fingerprintingExposure
 
-Additional detected values such as `os`, `fingerprintingExposure`, and detailed `cookieSettings` are already collected but are not yet part of the active recommendation/scoring rules.
+Additional detected values such as `os` and non-persistent cookie details are already collected but are not yet part of the active recommendation/scoring rules.
 
 ## Design Notes
 

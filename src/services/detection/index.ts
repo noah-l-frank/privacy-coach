@@ -40,3 +40,8 @@ export type { DetectionResult, NavigatorWithGPC, CookieSettings } from './types'
 
 export { detectFingerprintingExposure } from './fingerprintingDetection'
 export { detectCookieSettings } from './cookieDetection'
+export {
+  countFingerprintingExposure,
+  hasHighFingerprintingExposure,
+  hasMediumFingerprintingExposure,
+} from './fingerprintingRisk'

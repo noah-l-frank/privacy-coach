@@ -71,6 +71,51 @@ describe('calculatePrivacyScore', () => {
     expect(calculatePrivacyScore(createDetectionResult({ cookiesEnabled: true }))).toBe(90)
   })
 
+  it('subtracts points when persistent cookies are writable', () => {
+    expect(calculatePrivacyScore(createDetectionResult({
+      cookieSettings: {
+        cookiesEnabled: true,
+        firstPartyCookieWritable: true,
+        sessionCookieWritable: true,
+        persistentCookieWritable: true,
+      },
+    }))).toBe(95)
+  })
+
+  it('subtracts points for medium fingerprinting exposure', () => {
+    expect(calculatePrivacyScore(createDetectionResult({
+      fingerprintingExposure: {
+        deviceMemory: true,
+        hardwareConcurrency: true,
+        webGl: true,
+        canvas: true,
+        audioContext: false,
+        screen: false,
+        timezone: false,
+        languages: false,
+        platform: false,
+        touchSupport: false,
+      },
+    }))).toBe(94)
+  })
+
+  it('subtracts points for high fingerprinting exposure', () => {
+    expect(calculatePrivacyScore(createDetectionResult({
+      fingerprintingExposure: {
+        deviceMemory: true,
+        hardwareConcurrency: true,
+        webGl: true,
+        canvas: true,
+        audioContext: true,
+        screen: true,
+        timezone: true,
+        languages: false,
+        platform: false,
+        touchSupport: false,
+      },
+    }))).toBe(88)
+  })
+
   it('combines deductions correctly for chrome + https off + gpc off + cookies enabled', () => {
     const result = createDetectionResult({
       browser: 'chrome',
@@ -78,9 +123,27 @@ describe('calculatePrivacyScore', () => {
       https: false,
       gpc: false,
       cookiesEnabled: true,
+      cookieSettings: {
+        cookiesEnabled: true,
+        firstPartyCookieWritable: true,
+        sessionCookieWritable: true,
+        persistentCookieWritable: true,
+      },
+      fingerprintingExposure: {
+        deviceMemory: true,
+        hardwareConcurrency: true,
+        webGl: true,
+        canvas: true,
+        audioContext: true,
+        screen: true,
+        timezone: true,
+        languages: false,
+        platform: false,
+        touchSupport: false,
+      },
     })
 
-    expect(calculatePrivacyScore(result)).toBe(40)
+    expect(calculatePrivacyScore(result)).toBe(23)
   })
 
   it('never returns less than 0', () => {

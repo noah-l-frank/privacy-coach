@@ -1,4 +1,8 @@
 import type { DetectionResult } from '@/services/detection'
+import {
+  hasHighFingerprintingExposure,
+  hasMediumFingerprintingExposure,
+} from '@/services/detection'
 
 type ScoringRule = {
   id: string
@@ -32,6 +36,12 @@ export const scoringRules: ScoringRule[] = [
   },
 
   {
+    id: 'unknown-browser',
+    penalty: 8,
+    applies: (result) => result.browser === 'unknown',
+  },
+
+  {
     id: 'no-https',
     penalty: 25,
     applies: (result) => !result.https,
@@ -47,5 +57,23 @@ export const scoringRules: ScoringRule[] = [
     id: 'cookies-enabled',
     penalty: 10,
     applies: (result) => result.cookiesEnabled,
+  },
+
+  {
+    id: 'persistent-cookies-writable',
+    penalty: 5,
+    applies: (result) => result.cookieSettings.persistentCookieWritable,
+  },
+
+  {
+    id: 'medium-fingerprinting-exposure',
+    penalty: 6,
+    applies: (result) => hasMediumFingerprintingExposure(result.fingerprintingExposure),
+  },
+
+  {
+    id: 'high-fingerprinting-exposure',
+    penalty: 12,
+    applies: (result) => hasHighFingerprintingExposure(result.fingerprintingExposure),
   },
 ]
