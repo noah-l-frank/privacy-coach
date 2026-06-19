@@ -22,6 +22,14 @@ function isChromiumLike(browser: string): boolean {
   )
 }
 
+function wantsPrivacyGuidance(answers: Record<string, string>): boolean {
+  return ['privacy', 'maximum_privacy'].includes(answers.privacy_preference ?? '')
+}
+
+function wantsNonConvenienceGuidance(answers: Record<string, string>): boolean {
+  return answers.privacy_preference !== 'convenience'
+}
+
 export const questionFlow: QuestionFlowRule[] = [
   {
     id: 'privacy_preference',
@@ -31,25 +39,25 @@ export const questionFlow: QuestionFlowRule[] = [
   {
     id: 'search_engine',
     shouldAsk: ({ answers }) =>
-      (answers.privacy_preference === 'privacy' || answers.privacy_preference === 'balanced') &&
+      (wantsPrivacyGuidance(answers) || answers.privacy_preference === 'balanced') &&
       !answers.search_engine,
   },
 
   {
     id: 'password_management',
     shouldAsk: ({ answers }) =>
-      answers.privacy_preference !== 'convenience' && !answers.password_management,
+      wantsNonConvenienceGuidance(answers) && !answers.password_management,
   },
 
   {
     id: 'vpn_usage',
-    shouldAsk: ({ answers }) => answers.privacy_preference === 'privacy' && !answers.vpn_usage,
+    shouldAsk: ({ answers }) => wantsPrivacyGuidance(answers) && !answers.vpn_usage,
   },
 
   {
     id: 'adblock_usage',
     shouldAsk: ({ answers }) =>
-      answers.privacy_preference !== 'convenience' && !answers.adblock_usage,
+      wantsNonConvenienceGuidance(answers) && !answers.adblock_usage,
   },
 
   {

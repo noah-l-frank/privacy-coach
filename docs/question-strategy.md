@@ -44,6 +44,8 @@ The engine selects the next question dynamically based on the scan result and th
 
 The exact question order and conditions are defined in `src/services/questions/questionFlow.ts`.
 
+The privacy preference question includes a separate `maximum_privacy` option. Cookie guidance is reserved for that strongest preference because stricter cookie blocking can create more compatibility tradeoffs than other recommendations.
+
 ### Question Roles
 
 Not every follow-up question directly affects recommendation rules.

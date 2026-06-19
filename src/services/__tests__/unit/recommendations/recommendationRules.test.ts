@@ -217,7 +217,7 @@ describe('recommendationRules', () => {
     ).toBe(false)
   })
 
-  it('matches cookie recommendation for privacy focused users with cookies enabled', () => {
+  it('matches cookie recommendation only for maximum privacy users with cookies enabled', () => {
     const rule = getRule('reduce_cookies')
 
     expect(
@@ -226,13 +226,13 @@ describe('recommendationRules', () => {
           cookiesEnabled: true,
         }),
         answers: {
-          privacy_preference: 'privacy',
+          privacy_preference: 'maximum_privacy',
         },
       }),
     ).toBe(true)
   })
 
-  it('matches cookie recommendation for balanced users with writable cookies', () => {
+  it('does not match cookie recommendation for privacy users with writable cookies', () => {
     const rule = getRule('reduce_cookies')
 
     expect(
@@ -246,13 +246,13 @@ describe('recommendationRules', () => {
           },
         }),
         answers: {
-          privacy_preference: 'balanced',
+          privacy_preference: 'privacy',
         },
       }),
-    ).toBe(true)
+    ).toBe(false)
   })
 
-  it('does not match cookie recommendation for convenience focused users', () => {
+  it('does not match cookie recommendation for balanced or convenience focused users', () => {
     const rule = getRule('reduce_cookies')
 
     expect(
@@ -262,6 +262,17 @@ describe('recommendationRules', () => {
         }),
         answers: {
           privacy_preference: 'convenience',
+        },
+      }),
+    ).toBe(false)
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          cookiesEnabled: true,
+        }),
+        answers: {
+          privacy_preference: 'balanced',
         },
       }),
     ).toBe(false)

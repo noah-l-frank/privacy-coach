@@ -33,6 +33,14 @@ function isChromeLikeButNotBrave(result: DetectionResult): boolean {
   return isChromiumBrowser(result) && result.browser !== 'brave'
 }
 
+function wantsPrivacyGuidance(answers: Record<string, string>): boolean {
+  return ['privacy', 'maximum_privacy'].includes(answers.privacy_preference ?? '')
+}
+
+function wantsMaximumPrivacy(answers: Record<string, string>): boolean {
+  return answers.privacy_preference === 'maximum_privacy'
+}
+
 function wantsPrivacyOrBalancedGuidance(answers: Record<string, string>): boolean {
   return answers.privacy_preference !== 'convenience'
 }
@@ -71,7 +79,7 @@ export const recommendationRules: RecommendationRule[] = [
     recommendation: 'switch_to_firefox',
     shouldRecommend: ({ result, answers }) =>
       isChromeLikeButNotBrave(result) &&
-      answers.privacy_preference === 'privacy' &&
+      wantsPrivacyGuidance(answers) &&
       answers.browser_switch_similarity === 'low',
   },
 
@@ -79,7 +87,7 @@ export const recommendationRules: RecommendationRule[] = [
     recommendation: 'switch_to_brave',
     shouldRecommend: ({ result, answers }) =>
       isChromeLikeButNotBrave(result) &&
-      answers.privacy_preference === 'privacy' &&
+      wantsPrivacyGuidance(answers) &&
       (answers.browser_switch_similarity === 'medium' ||
         answers.browser_switch_similarity === 'high'),
   },
@@ -106,7 +114,7 @@ export const recommendationRules: RecommendationRule[] = [
     recommendation: 'reduce_cookies',
     shouldRecommend: ({ result, answers }) =>
       hasCookieExposure(result) &&
-      wantsPrivacyOrBalancedGuidance(answers),
+      wantsMaximumPrivacy(answers),
   },
 
   {
@@ -119,7 +127,7 @@ export const recommendationRules: RecommendationRule[] = [
   {
     recommendation: 'use_adblock',
     shouldRecommend: ({ answers }) =>
-      (answers.privacy_preference === 'privacy' ||
+      (wantsPrivacyGuidance(answers) ||
         answers.privacy_preference === 'balanced') &&
       answers.adblock_usage === 'no',
   },
@@ -128,7 +136,7 @@ export const recommendationRules: RecommendationRule[] = [
     recommendation: 'use_password_manager',
     shouldRecommend: ({ answers }) =>
       Boolean(
-        (answers.privacy_preference === 'privacy' ||
+        (wantsPrivacyGuidance(answers) ||
           answers.privacy_preference === 'balanced') &&
         answers.password_management &&
         answers.password_management !== 'manager',
@@ -138,7 +146,7 @@ export const recommendationRules: RecommendationRule[] = [
   {
     recommendation: 'use_vpn',
     shouldRecommend: ({ answers }) =>
-      answers.privacy_preference === 'privacy' &&
+      wantsPrivacyGuidance(answers) &&
       answers.vpn_usage === 'no',
   },
 ]

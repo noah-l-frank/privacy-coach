@@ -104,11 +104,11 @@ describe('generateRecommendations', () => {
     )
   })
 
-  it('recommends reducing cookies when cookies are enabled and privacy is preferred', () => {
+  it('recommends reducing cookies when cookies are enabled and maximum privacy is preferred', () => {
     const recommendations = generateRecommendations(
       { ...baseResult, browserFamily: 'chromium', browser: 'edge', cookiesEnabled: true },
       {
-        privacy_preference: 'privacy',
+        privacy_preference: 'maximum_privacy',
         password_management: 'manager',
       },
     )
@@ -122,7 +122,7 @@ describe('generateRecommendations', () => {
     )
   })
 
-  it('recommends reducing cookies for balanced users when persistent cookies are writable', () => {
+  it('does not recommend reducing cookies for balanced users when persistent cookies are writable', () => {
     const recommendations = generateRecommendations(
       {
         ...baseResult,
@@ -139,11 +139,9 @@ describe('generateRecommendations', () => {
       },
     )
 
-    expect(recommendations).toContainEqual(
+    expect(recommendations).not.toContainEqual(
       expect.objectContaining({
         id: 'reduce-cookies',
-        title: 'Reduce cookie and tracking exposure',
-        effort: 'medium',
       }),
     )
   })

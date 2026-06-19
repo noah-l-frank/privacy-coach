@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { questionContent } from '../../../questions/questionContent'
 import { questionFlow } from '../../../questions/questionFlow'
 import type { DetectionResult } from '../../../detection'
 
@@ -46,6 +47,13 @@ function getRule(id: string) {
 }
 
 describe('questionFlow', () => {
+  it('offers a maximum privacy option', () => {
+    expect(questionContent.privacy_preference.options).toContainEqual({
+      value: 'maximum_privacy',
+      label: 'I want maximum privacy',
+    })
+  })
+
   it('asks privacy preference when it has not been answered yet', () => {
     const rule = getRule('privacy_preference')
 
@@ -84,6 +92,19 @@ describe('questionFlow', () => {
     ).toBe(true)
   })
 
+  it('asks search engine for maximum privacy users', () => {
+    const rule = getRule('search_engine')
+
+    expect(
+      rule.shouldAsk({
+        result: createDetectionResult(),
+        answers: {
+          privacy_preference: 'maximum_privacy',
+        },
+      }),
+    ).toBe(true)
+  })
+
   it('asks search engine for balanced users', () => {
     const rule = getRule('search_engine')
 
@@ -110,7 +131,7 @@ describe('questionFlow', () => {
     ).toBe(false)
   })
 
-  it('asks vpn usage only for privacy users', () => {
+  it('asks vpn usage only for privacy focused users', () => {
     const rule = getRule('vpn_usage')
 
     expect(
@@ -118,6 +139,15 @@ describe('questionFlow', () => {
         result: createDetectionResult(),
         answers: {
           privacy_preference: 'privacy',
+        },
+      }),
+    ).toBe(true)
+
+    expect(
+      rule.shouldAsk({
+        result: createDetectionResult(),
+        answers: {
+          privacy_preference: 'maximum_privacy',
         },
       }),
     ).toBe(true)

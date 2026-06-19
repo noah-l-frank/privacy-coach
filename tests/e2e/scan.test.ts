@@ -13,7 +13,7 @@ test('completes the full privacy coach flow', async ({ page, browserName }) => {
 
   await page
     .getByRole('button', {
-      name: /i prefer more privacy/i,
+      name: /i want maximum privacy/i,
     })
     .click()
 

@@ -41,7 +41,7 @@ describe('privacy profile regressions', () => {
     expect(getRecommendationIds(baseResult, {})).toEqual([])
   })
 
-  it('keeps a risky balanced Chrome profile actionable without requiring maximum privacy preference', () => {
+  it('keeps a risky balanced Chrome profile actionable without cookie guidance', () => {
     const result: DetectionResult = {
       ...baseResult,
       browserFamily: 'chromium',
@@ -78,14 +78,13 @@ describe('privacy profile regressions', () => {
       }),
     ).toEqual([
       'use-gpc-extension',
-      'reduce-cookies',
       'reduce-fingerprinting',
       'use-adblock',
       'use-password-manager',
     ])
   })
 
-  it('respects low tracking-protection preference while keeping other technical recommendations', () => {
+  it('respects low tracking-protection preference without cookie guidance for balanced users', () => {
     const result: DetectionResult = {
       ...baseResult,
       browserFamily: 'chromium',
@@ -105,6 +104,6 @@ describe('privacy profile regressions', () => {
       tracking_protection_preference: 'low',
       adblock_usage: 'yes',
       password_management: 'manager',
-    })).toEqual(['reduce-cookies'])
+    })).toEqual([])
   })
 })

@@ -9,6 +9,7 @@ export const questionContent = {
       { value: 'privacy', label: 'I prefer more privacy' },
       { value: 'balanced', label: 'I want a balance' },
       { value: 'convenience', label: 'I prefer convenience' },
+      { value: 'maximum_privacy', label: 'I want maximum privacy' },
     ],
   },
 
