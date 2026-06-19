@@ -97,6 +97,16 @@ describe('scoringRules', () => {
     expect(rule.applies(createDetectionResult({ https: true }))).toBe(false)
   })
 
+  it('does not apply no https penalty on the development server', () => {
+    const rule = getRule('no-https')
+
+    expect(
+      rule.applies(createDetectionResult({ https: false }), {
+        isDevelopmentServer: true,
+      }),
+    ).toBe(false)
+  })
+
   it('applies disabled gpc penalty', () => {
     const rule = getRule('gpc-disabled')
 
@@ -107,22 +117,39 @@ describe('scoringRules', () => {
   it('applies enabled cookies penalty', () => {
     const rule = getRule('cookies-enabled')
 
-    expect(rule.applies(createDetectionResult({ cookiesEnabled: true }))).toBe(true)
+    expect(
+      rule.applies(createDetectionResult({ cookiesEnabled: true }), {
+        answers: { privacy_preference: 'maximum_privacy' },
+      }),
+    ).toBe(true)
     expect(rule.applies(createDetectionResult({ cookiesEnabled: false }))).toBe(false)
+  })
+
+  it('does not apply enabled cookies penalty below maximum privacy', () => {
+    const rule = getRule('cookies-enabled')
+
+    expect(
+      rule.applies(createDetectionResult({ cookiesEnabled: true }), {
+        answers: { privacy_preference: 'privacy' },
+      }),
+    ).toBe(false)
   })
 
   it('applies persistent cookie writable penalty', () => {
     const rule = getRule('persistent-cookies-writable')
 
     expect(
-      rule.applies(createDetectionResult({
-        cookieSettings: {
-          cookiesEnabled: true,
-          firstPartyCookieWritable: true,
-          sessionCookieWritable: true,
-          persistentCookieWritable: true,
-        },
-      })),
+      rule.applies(
+        createDetectionResult({
+          cookieSettings: {
+            cookiesEnabled: true,
+            firstPartyCookieWritable: true,
+            sessionCookieWritable: true,
+            persistentCookieWritable: true,
+          },
+        }),
+        { answers: { privacy_preference: 'maximum_privacy' } },
+      ),
     ).toBe(true)
     expect(rule.applies(createDetectionResult())).toBe(false)
   })
@@ -131,20 +158,23 @@ describe('scoringRules', () => {
     const rule = getRule('medium-fingerprinting-exposure')
 
     expect(
-      rule.applies(createDetectionResult({
-        fingerprintingExposure: {
-          deviceMemory: true,
-          hardwareConcurrency: true,
-          webGl: true,
-          canvas: true,
-          audioContext: false,
-          screen: false,
-          timezone: false,
-          languages: false,
-          platform: false,
-          touchSupport: false,
-        },
-      })),
+      rule.applies(
+        createDetectionResult({
+          fingerprintingExposure: {
+            deviceMemory: true,
+            hardwareConcurrency: true,
+            webGl: true,
+            canvas: true,
+            audioContext: false,
+            screen: false,
+            timezone: false,
+            languages: false,
+            platform: false,
+            touchSupport: false,
+          },
+        }),
+        { answers: { privacy_preference: 'maximum_privacy' } },
+      ),
     ).toBe(true)
     expect(rule.applies(createDetectionResult())).toBe(false)
   })
@@ -174,20 +204,23 @@ describe('scoringRules', () => {
     const rule = getRule('high-fingerprinting-exposure')
 
     expect(
-      rule.applies(createDetectionResult({
-        fingerprintingExposure: {
-          deviceMemory: true,
-          hardwareConcurrency: true,
-          webGl: true,
-          canvas: true,
-          audioContext: true,
-          screen: true,
-          timezone: true,
-          languages: false,
-          platform: false,
-          touchSupport: false,
-        },
-      })),
+      rule.applies(
+        createDetectionResult({
+          fingerprintingExposure: {
+            deviceMemory: true,
+            hardwareConcurrency: true,
+            webGl: true,
+            canvas: true,
+            audioContext: true,
+            screen: true,
+            timezone: true,
+            languages: false,
+            platform: false,
+            touchSupport: false,
+          },
+        }),
+        { answers: { privacy_preference: 'maximum_privacy' } },
+      ),
     ).toBe(true)
     expect(rule.applies(createDetectionResult())).toBe(false)
   })

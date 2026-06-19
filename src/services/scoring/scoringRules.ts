@@ -9,7 +9,20 @@ type ScoringRule = {
   title: string
   description: string
   penalty: number
-  applies: (result: DetectionResult) => boolean
+  applies: (result: DetectionResult, context?: ScoringContext) => boolean
+}
+
+export type ScoringContext = {
+  answers?: Record<string, string>
+  isDevelopmentServer?: boolean
+}
+
+function wantsMaximumPrivacy(context?: ScoringContext): boolean {
+  return context?.answers?.privacy_preference === 'maximum_privacy'
+}
+
+function isDevelopmentServer(context?: ScoringContext): boolean {
+  return context?.isDevelopmentServer === true
 }
 
 export const scoringRules: ScoringRule[] = [
@@ -64,7 +77,7 @@ export const scoringRules: ScoringRule[] = [
     description:
       'Without HTTPS, pages can be easier to inspect or manipulate on the network path.',
     penalty: 25,
-    applies: (result) => !result.https,
+    applies: (result, context) => !result.https && !isDevelopmentServer(context),
   },
 
   {
@@ -82,7 +95,7 @@ export const scoringRules: ScoringRule[] = [
     description:
       'Cookies are useful for logins, but they can also support cross-site tracking and long-lived identifiers.',
     penalty: 10,
-    applies: (result) => result.cookiesEnabled,
+    applies: (result, context) => result.cookiesEnabled && wantsMaximumPrivacy(context),
   },
 
   {
@@ -91,7 +104,9 @@ export const scoringRules: ScoringRule[] = [
     description:
       'Persistent cookies can survive browser restarts and make tracking identifiers last longer.',
     penalty: 5,
-    applies: (result) => result.cookieSettings.persistentCookieWritable,
+    applies: (result, context) =>
+      result.cookieSettings.persistentCookieWritable &&
+      wantsMaximumPrivacy(context),
   },
 
   {
@@ -100,7 +115,9 @@ export const scoringRules: ScoringRule[] = [
     description:
       'Several browser and device signals are available, which can make repeat recognition easier.',
     penalty: 6,
-    applies: (result) => hasMediumFingerprintingExposure(result.fingerprintingExposure),
+    applies: (result, context) =>
+      hasMediumFingerprintingExposure(result.fingerprintingExposure) &&
+      wantsMaximumPrivacy(context),
   },
 
   {
@@ -109,6 +126,8 @@ export const scoringRules: ScoringRule[] = [
     description:
       'Many browser and device signals are available, increasing the chance that websites can recognize this setup without cookies.',
     penalty: 12,
-    applies: (result) => hasHighFingerprintingExposure(result.fingerprintingExposure),
+    applies: (result, context) =>
+      hasHighFingerprintingExposure(result.fingerprintingExposure) &&
+      wantsMaximumPrivacy(context),
   },
 ]

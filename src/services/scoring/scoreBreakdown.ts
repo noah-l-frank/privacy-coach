@@ -1,5 +1,5 @@
 import type { DetectionResult } from '@/services/detection'
-import { scoringRules } from './scoringRules'
+import { scoringRules, type ScoringContext } from './scoringRules'
 
 export type ScoreDeduction = {
   id: string
@@ -8,9 +8,12 @@ export type ScoreDeduction = {
   penalty: number
 }
 
-export function getScoreDeductions(result: DetectionResult): ScoreDeduction[] {
+export function getScoreDeductions(
+  result: DetectionResult,
+  context?: ScoringContext,
+): ScoreDeduction[] {
   return scoringRules
-    .filter((rule) => rule.applies(result))
+    .filter((rule) => rule.applies(result, context))
     .map((rule) => ({
       id: rule.id,
       title: rule.title,

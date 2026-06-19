@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+import { useQuestionsStore } from '@/stores/questionsStore'
 import { useScanStore } from '@/stores/scanStore'
 
 import {
@@ -9,11 +10,17 @@ import {
 } from '@/services/scoring'
 
 const scanStore = useScanStore()
+const questionsStore = useQuestionsStore()
+
+const scoringContext = computed(() => ({
+  answers: questionsStore.answers,
+  isDevelopmentServer: import.meta.env.DEV,
+}))
 
 const privacyScore = computed(() => {
   if (!scanStore.result) return 0
 
-  return calculatePrivacyScore(scanStore.result)
+  return calculatePrivacyScore(scanStore.result, scoringContext.value)
 })
 
 const scoreBarStyle = computed(() => ({
@@ -41,7 +48,7 @@ const scoreColor = computed(() => {
 const scoreDeductions = computed(() => {
   if (!scanStore.result) return []
 
-  return getScoreDeductions(scanStore.result)
+  return getScoreDeductions(scanStore.result, scoringContext.value)
 })
 
 const scoreDeductionSummary = computed(() => {

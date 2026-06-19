@@ -68,52 +68,103 @@ describe('calculatePrivacyScore', () => {
   })
 
   it('subtracts points when cookies are enabled', () => {
-    expect(calculatePrivacyScore(createDetectionResult({ cookiesEnabled: true }))).toBe(90)
+    expect(
+      calculatePrivacyScore(
+        createDetectionResult({ cookiesEnabled: true }),
+        { answers: { privacy_preference: 'maximum_privacy' } },
+      ),
+    ).toBe(90)
+  })
+
+  it('does not subtract cookie points below maximum privacy', () => {
+    expect(
+      calculatePrivacyScore(
+        createDetectionResult({ cookiesEnabled: true }),
+        { answers: { privacy_preference: 'privacy' } },
+      ),
+    ).toBe(100)
   })
 
   it('subtracts points when persistent cookies are writable', () => {
-    expect(calculatePrivacyScore(createDetectionResult({
-      cookieSettings: {
-        cookiesEnabled: true,
-        firstPartyCookieWritable: true,
-        sessionCookieWritable: true,
-        persistentCookieWritable: true,
-      },
-    }))).toBe(95)
+    expect(
+      calculatePrivacyScore(
+        createDetectionResult({
+          cookieSettings: {
+            cookiesEnabled: true,
+            firstPartyCookieWritable: true,
+            sessionCookieWritable: true,
+            persistentCookieWritable: true,
+          },
+        }),
+        { answers: { privacy_preference: 'maximum_privacy' } },
+      ),
+    ).toBe(95)
   })
 
   it('subtracts points for medium fingerprinting exposure', () => {
-    expect(calculatePrivacyScore(createDetectionResult({
-      fingerprintingExposure: {
-        deviceMemory: true,
-        hardwareConcurrency: true,
-        webGl: true,
-        canvas: true,
-        audioContext: false,
-        screen: false,
-        timezone: false,
-        languages: false,
-        platform: false,
-        touchSupport: false,
-      },
-    }))).toBe(94)
+    expect(
+      calculatePrivacyScore(
+        createDetectionResult({
+          fingerprintingExposure: {
+            deviceMemory: true,
+            hardwareConcurrency: true,
+            webGl: true,
+            canvas: true,
+            audioContext: false,
+            screen: false,
+            timezone: false,
+            languages: false,
+            platform: false,
+            touchSupport: false,
+          },
+        }),
+        { answers: { privacy_preference: 'maximum_privacy' } },
+      ),
+    ).toBe(94)
   })
 
   it('subtracts points for high fingerprinting exposure', () => {
-    expect(calculatePrivacyScore(createDetectionResult({
-      fingerprintingExposure: {
-        deviceMemory: true,
-        hardwareConcurrency: true,
-        webGl: true,
-        canvas: true,
-        audioContext: true,
-        screen: true,
-        timezone: true,
-        languages: false,
-        platform: false,
-        touchSupport: false,
-      },
-    }))).toBe(88)
+    expect(
+      calculatePrivacyScore(
+        createDetectionResult({
+          fingerprintingExposure: {
+            deviceMemory: true,
+            hardwareConcurrency: true,
+            webGl: true,
+            canvas: true,
+            audioContext: true,
+            screen: true,
+            timezone: true,
+            languages: false,
+            platform: false,
+            touchSupport: false,
+          },
+        }),
+        { answers: { privacy_preference: 'maximum_privacy' } },
+      ),
+    ).toBe(88)
+  })
+
+  it('does not subtract fingerprinting points below maximum privacy', () => {
+    expect(
+      calculatePrivacyScore(
+        createDetectionResult({
+          fingerprintingExposure: {
+            deviceMemory: true,
+            hardwareConcurrency: true,
+            webGl: true,
+            canvas: true,
+            audioContext: true,
+            screen: true,
+            timezone: true,
+            languages: false,
+            platform: false,
+            touchSupport: false,
+          },
+        }),
+        { answers: { privacy_preference: 'balanced' } },
+      ),
+    ).toBe(100)
   })
 
   it('combines deductions correctly for chrome + https off + gpc off + cookies enabled', () => {
@@ -143,7 +194,11 @@ describe('calculatePrivacyScore', () => {
       },
     })
 
-    expect(calculatePrivacyScore(result)).toBe(23)
+    expect(
+      calculatePrivacyScore(result, {
+        answers: { privacy_preference: 'maximum_privacy' },
+      }),
+    ).toBe(23)
   })
 
   it('never returns less than 0', () => {
