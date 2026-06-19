@@ -107,6 +107,14 @@ test('completes the full privacy coach flow', async ({ page, browserName }) => {
 
   await expect(page.getByRole('heading', { name: /score deductions/i })).toBeVisible()
 
+  const scoreDeductionsPanel = page.locator('.score-deductions-panel')
+
+  await expect(scoreDeductionsPanel).not.toHaveAttribute('open', '')
+
+  await page.locator('summary').filter({ hasText: /score deductions/i }).click()
+
+  await expect(scoreDeductionsPanel).toHaveAttribute('open', '')
+
   await expect(
     page.getByRole('heading', {
       name: /privacy recommendations/i,

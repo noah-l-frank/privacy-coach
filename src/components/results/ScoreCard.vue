@@ -43,6 +43,15 @@ const scoreDeductions = computed(() => {
 
   return getScoreDeductions(scanStore.result)
 })
+
+const scoreDeductionSummary = computed(() => {
+  const count = scoreDeductions.value.length
+
+  if (count === 0) return 'No deductions'
+  if (count === 1) return '1 deduction'
+
+  return `${count} deductions`
+})
 </script>
 
 <template>
@@ -83,8 +92,12 @@ const scoreDeductions = computed(() => {
     </div>
 
     <div class="score-breakdown">
-      <section class="factor-section">
-        <h3>Score deductions</h3>
+      <details class="factor-section score-deductions-panel">
+        <summary>
+          <h3>Score deductions</h3>
+
+          <span>{{ scoreDeductionSummary }}</span>
+        </summary>
 
         <div v-if="scoreDeductions.length" class="factor-list">
           <article
@@ -104,7 +117,7 @@ const scoreDeductions = computed(() => {
         <p v-else class="factor-empty">
           No score deductions were applied.
         </p>
-      </section>
+      </details>
     </div>
   </section>
 </template>
@@ -209,8 +222,59 @@ const scoreDeductions = computed(() => {
   min-width: 0;
 }
 
+.factor-section summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  list-style: none;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.factor-section summary::-webkit-details-marker {
+  display: none;
+}
+
+.factor-section summary::after {
+  content: '+';
+  display: inline-grid;
+  place-items: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  flex: 0 0 1.4rem;
+  border-radius: 999px;
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.78);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.factor-section[open] summary {
+  margin-bottom: 0.8rem;
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.factor-section[open] summary::after {
+  content: '-';
+}
+
+.factor-section summary span {
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
 .factor-section h3 {
-  margin: 0 0 0.8rem;
+  margin: 0;
   font-size: 1rem;
 }
 
