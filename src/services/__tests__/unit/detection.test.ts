@@ -21,6 +21,15 @@ vi.mock('@/services/detection/fingerprintingDetection', () => ({
     platform: false,
     touchSupport: false,
   }),
+  detectFingerprintingProtection: () => ({
+    status: 'not-detected',
+    signals: {
+      canvasNoise: false,
+      hardwareConcurrencyBucketed: false,
+      touchPointsBucketed: false,
+      screenDimensionsStandardized: false,
+    },
+  }),
 }))
 
 afterEach(() => {
@@ -91,6 +100,7 @@ describe('detectEnvironment', () => {
     expect(result).toHaveProperty('gpc')
     expect(result).toHaveProperty('cookiesEnabled')
     expect(result).toHaveProperty('https')
+    expect(result).toHaveProperty('fingerprintingProtection')
   })
 
   it('returns values with the expected types', async () => {
@@ -103,6 +113,7 @@ describe('detectEnvironment', () => {
     expect(typeof result.gpc).toBe('boolean')
     expect(typeof result.cookiesEnabled).toBe('boolean')
     expect(typeof result.https).toBe('boolean')
+    expect(typeof result.fingerprintingProtection?.status).toBe('string')
   })
 })
 

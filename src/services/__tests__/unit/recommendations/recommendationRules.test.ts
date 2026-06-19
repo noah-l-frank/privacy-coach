@@ -428,6 +428,80 @@ describe('recommendationRules', () => {
     ).toBe(true)
   })
 
+  it('does not match fingerprinting recommendation for Firefox when protection signals are likely active', () => {
+    const rule = getRule('reduce_fingerprinting')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          browser: 'firefox',
+          browserFamily: 'firefox',
+          fingerprintingExposure: {
+            deviceMemory: true,
+            hardwareConcurrency: true,
+            webGl: true,
+            canvas: true,
+            audioContext: true,
+            screen: true,
+            timezone: true,
+            languages: false,
+            platform: false,
+            touchSupport: false,
+          },
+          fingerprintingProtection: {
+            status: 'likely-active',
+            signals: {
+              canvasNoise: true,
+              hardwareConcurrencyBucketed: true,
+              touchPointsBucketed: true,
+              screenDimensionsStandardized: false,
+            },
+          },
+        }),
+        answers: {
+          privacy_preference: 'balanced',
+        },
+      }),
+    ).toBe(false)
+  })
+
+  it('matches fingerprinting recommendation for Firefox when protection signals are not detected', () => {
+    const rule = getRule('reduce_fingerprinting')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          browser: 'firefox',
+          browserFamily: 'firefox',
+          fingerprintingExposure: {
+            deviceMemory: true,
+            hardwareConcurrency: true,
+            webGl: true,
+            canvas: true,
+            audioContext: false,
+            screen: false,
+            timezone: false,
+            languages: false,
+            platform: false,
+            touchSupport: false,
+          },
+          fingerprintingProtection: {
+            status: 'not-detected',
+            signals: {
+              canvasNoise: false,
+              hardwareConcurrencyBucketed: false,
+              touchPointsBucketed: false,
+              screenDimensionsStandardized: false,
+            },
+          },
+        }),
+        answers: {
+          privacy_preference: 'balanced',
+        },
+      }),
+    ).toBe(true)
+  })
+
   it('does not match fingerprinting recommendation for convenience focused users', () => {
     const rule = getRule('reduce_fingerprinting')
 

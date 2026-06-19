@@ -2,7 +2,10 @@ import { detectBrowser } from './browserDetection'
 import { detectDeviceType, detectOS } from './osDetection'
 
 import type { DetectionResult, NavigatorWithGPC } from './types'
-import { detectFingerprintingExposure } from './fingerprintingDetection'
+import {
+  detectFingerprintingExposure,
+  detectFingerprintingProtection,
+} from './fingerprintingDetection'
 import { detectCookieSettings } from './cookieDetection'
 import { detectBrowserEnvironment } from './browserDetection'
 
@@ -21,6 +24,8 @@ export async function detectEnvironment(): Promise<DetectionResult> {
 
   const fingerprintingExposure = detectFingerprintingExposure()
 
+  const fingerprintingProtection = detectFingerprintingProtection()
+
   const cookieSettings = detectCookieSettings()
 
   return {
@@ -32,6 +37,7 @@ export async function detectEnvironment(): Promise<DetectionResult> {
     cookiesEnabled: cookieSettings.cookiesEnabled,
     https,
     fingerprintingExposure,
+    fingerprintingProtection,
     cookieSettings
   }
 }
@@ -42,12 +48,19 @@ export { detectDeviceType, detectOS } from './osDetection'
 export type {
   DetectionResult,
   DeviceType,
+  FingerprintingProtection,
+  FingerprintingProtectionSignals,
+  FingerprintingProtectionStatus,
   FingerprintingRiskLevel,
   NavigatorWithGPC,
   CookieSettings,
 } from './types'
 
-export { detectFingerprintingExposure } from './fingerprintingDetection'
+export {
+  classifyFingerprintingProtectionSignals,
+  detectFingerprintingExposure,
+  detectFingerprintingProtection,
+} from './fingerprintingDetection'
 export { detectCookieSettings } from './cookieDetection'
 export {
   countFingerprintingExposure,

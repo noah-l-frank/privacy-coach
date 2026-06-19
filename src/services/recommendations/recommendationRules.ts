@@ -51,6 +51,13 @@ function hasCookieExposure(result: DetectionResult): boolean {
 }
 
 function hasMeaningfulFingerprintingExposure(result: DetectionResult): boolean {
+  if (
+    result.browser === 'firefox' &&
+    result.fingerprintingProtection?.status === 'likely-active'
+  ) {
+    return false
+  }
+
   return (
     hasMediumFingerprintingExposure(result.fingerprintingExposure) ||
     hasHighFingerprintingExposure(result.fingerprintingExposure)

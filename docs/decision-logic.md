@@ -14,6 +14,7 @@ The current detection layer provides the following data:
 - cookiesEnabled
 - https
 - fingerprintingExposure
+- fingerprintingProtection
 - cookieSettings
 
 ## Currently Used Inputs
@@ -28,6 +29,7 @@ The recommendation engine currently uses:
 - cookiesEnabled
 - cookieSettings
 - fingerprintingExposure
+- fingerprintingProtection
 - user answers from the follow-up question flow
 
 ### Scoring Inputs
@@ -48,3 +50,4 @@ Additional detected values such as `os` and non-persistent cookie details are al
 - The decision system is rule-based for transparency and maintainability.
 - Detection, question flow, scoring, and recommendation rules are separated so each part can evolve independently.
 - New inputs can be integrated incrementally by extending the corresponding rules without changing the overall architecture.
+- Firefox fingerprinting protection cannot be read directly from browser settings. The scan uses heuristic signals such as canvas readback noise and standardized hardware/screen values to avoid recommending extra fingerprinting steps when Firefox protections are likely already active.
