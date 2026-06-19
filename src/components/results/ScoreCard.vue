@@ -5,7 +5,6 @@ import { useScanStore } from '@/stores/scanStore'
 
 import {
   calculatePrivacyScore,
-  getPositiveScoreFactors,
   getScoreDeductions,
 } from '@/services/scoring'
 
@@ -43,12 +42,6 @@ const scoreDeductions = computed(() => {
   if (!scanStore.result) return []
 
   return getScoreDeductions(scanStore.result)
-})
-
-const positiveScoreFactors = computed(() => {
-  if (!scanStore.result) return []
-
-  return getPositiveScoreFactors(scanStore.result)
 })
 </script>
 
@@ -110,27 +103,6 @@ const positiveScoreFactors = computed(() => {
 
         <p v-else class="factor-empty">
           No score deductions were applied.
-        </p>
-      </section>
-
-      <section class="factor-section">
-        <h3>Positive factors</h3>
-
-        <div v-if="positiveScoreFactors.length" class="factor-list">
-          <article
-            v-for="factor in positiveScoreFactors"
-            :key="factor.id"
-            class="factor-item positive"
-          >
-            <div>
-              <h4>{{ factor.title }}</h4>
-              <p>{{ factor.description }}</p>
-            </div>
-          </article>
-        </div>
-
-        <p v-else class="factor-empty">
-          No positive score factors were detected yet.
         </p>
       </section>
     </div>
@@ -230,9 +202,6 @@ const positiveScoreFactors = computed(() => {
 }
 
 .score-breakdown {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
   margin-top: 1.5rem;
 }
 
@@ -278,20 +247,5 @@ const positiveScoreFactors = computed(() => {
   color: #fca5a5;
   font-size: 0.95rem;
   white-space: nowrap;
-}
-
-.factor-item.positive {
-  border-color: rgba(34, 197, 94, 0.22);
-  background: rgba(34, 197, 94, 0.1);
-}
-
-.factor-item.positive h4 {
-  color: #bbf7d0;
-}
-
-@media (max-width: 720px) {
-  .score-breakdown {
-    grid-template-columns: 1fr;
-  }
 }
 </style>

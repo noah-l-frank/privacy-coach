@@ -10,8 +10,6 @@ export function calculatePrivacyScore(result: DetectionResult): number {
 }
 
 export {
-  getPositiveScoreFactors,
   getScoreDeductions,
-  type PositiveScoreFactor,
   type ScoreDeduction,
 } from './scoreBreakdown'

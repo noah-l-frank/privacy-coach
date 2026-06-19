@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import {
-  getPositiveScoreFactors,
   getScoreDeductions,
 } from '../../../scoring'
 import type { DetectionResult } from '../../../detection'
@@ -65,80 +64,5 @@ describe('score breakdown', () => {
         }),
       ]),
     )
-  })
-
-  it('returns positive score factors for privacy-friendly signals', () => {
-    const factors = getPositiveScoreFactors(createDetectionResult())
-
-    expect(factors).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          id: 'https-enabled',
-          title: 'HTTPS is enabled',
-        }),
-        expect.objectContaining({
-          id: 'gpc-enabled',
-          title: 'Global Privacy Control is enabled',
-        }),
-        expect.objectContaining({
-          id: 'persistent-cookies-limited',
-          title: 'Persistent cookies are limited',
-        }),
-        expect.objectContaining({
-          id: 'fingerprinting-exposure-limited',
-          title: 'Fingerprinting exposure is limited',
-        }),
-      ]),
-    )
-  })
-
-  it('does not return positive fingerprinting factor for high exposure', () => {
-    const factors = getPositiveScoreFactors(createDetectionResult({
-      fingerprintingExposure: {
-        deviceMemory: true,
-        hardwareConcurrency: true,
-        webGl: true,
-        canvas: true,
-        audioContext: true,
-        screen: true,
-        timezone: true,
-        languages: false,
-        platform: false,
-        touchSupport: false,
-      },
-    }))
-
-    expect(factors).not.toContainEqual(
-      expect.objectContaining({
-        id: 'fingerprinting-exposure-limited',
-      }),
-    )
-  })
-
-  it('does not return positive factors for risky signals', () => {
-    const factors = getPositiveScoreFactors(createDetectionResult({
-      https: false,
-      gpc: false,
-      cookieSettings: {
-        cookiesEnabled: true,
-        firstPartyCookieWritable: true,
-        sessionCookieWritable: true,
-        persistentCookieWritable: true,
-      },
-      fingerprintingExposure: {
-        deviceMemory: true,
-        hardwareConcurrency: true,
-        webGl: true,
-        canvas: true,
-        audioContext: true,
-        screen: true,
-        timezone: true,
-        languages: false,
-        platform: false,
-        touchSupport: false,
-      },
-    }))
-
-    expect(factors).toEqual([])
   })
 })
