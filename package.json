@@ -11,6 +11,7 @@
     "test:integration": "vitest src/**/__tests__/integration",
     "test:accessibility": "playwright test --config=playwright.accessibility.config.ts",
     "test": "vitest src/**/__tests__",
+    "test:coverage": "vitest run src/**/__tests__ --coverage",
     "test:selenium": "tsx tests/selenium/scan.test.ts",
     "test:e2e": "playwright test",
     "build-only": "vite build",

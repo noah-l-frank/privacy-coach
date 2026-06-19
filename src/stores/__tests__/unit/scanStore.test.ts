@@ -94,6 +94,20 @@ describe('scan store', () => {
     expect(scanStore.result).toEqual(result)
   })
 
+  it('can reset answers before running a new scan', async () => {
+    const scanStore = useScanStore()
+    const questionsStore = useQuestionsStore()
+    const result = createDetectionResult()
+
+    questionsStore.setAnswer('privacy_preference', 'privacy')
+    vi.mocked(detectEnvironment).mockResolvedValue(result)
+
+    await scanStore.runScan({ resetAnswers: true })
+
+    expect(questionsStore.answers).toEqual({})
+    expect(scanStore.result).toEqual(result)
+  })
+
   it('restarts the scan and resets question answers', async () => {
     const scanStore = useScanStore()
     const questionsStore = useQuestionsStore()

@@ -7,7 +7,9 @@ The pipeline automatically runs on every push to the `main` and `dev` branches t
 Currently, the pipeline includes:
 
 - TypeScript type checking
+- Lint checks
 - Unit tests with Vitest
+- Coverage reporting and thresholds for services/stores
 - Playwright end-to-end tests
 - Playwright/axe accessibility checks
 - Production build validation

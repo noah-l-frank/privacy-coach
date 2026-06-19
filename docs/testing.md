@@ -31,6 +31,7 @@ Unit tests cover:
 - recommendation content consistency
 - scoring rules
 - store state behavior
+- score/recommendation regression profiles
 
 The rule-based parts of the application are tested in isolation. This keeps the decision logic easier to verify and reduces the need for large, fragile engine tests.
 
@@ -168,6 +169,10 @@ Script overview:
 
 - `test`
   Runs all Vitest-based tests together.
+
+- `test:coverage`
+  Runs all Vitest-based tests with coverage reporting and enforces the configured
+  service/store coverage thresholds.
 
 - `test:selenium`
   Runs cross-browser Selenium scan tests in real browser environments.

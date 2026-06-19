@@ -114,4 +114,31 @@ describe('score breakdown', () => {
       }),
     )
   })
+
+  it('does not return positive factors for risky signals', () => {
+    const factors = getPositiveScoreFactors(createDetectionResult({
+      https: false,
+      gpc: false,
+      cookieSettings: {
+        cookiesEnabled: true,
+        firstPartyCookieWritable: true,
+        sessionCookieWritable: true,
+        persistentCookieWritable: true,
+      },
+      fingerprintingExposure: {
+        deviceMemory: true,
+        hardwareConcurrency: true,
+        webGl: true,
+        canvas: true,
+        audioContext: true,
+        screen: true,
+        timezone: true,
+        languages: false,
+        platform: false,
+        touchSupport: false,
+      },
+    }))
+
+    expect(factors).toEqual([])
+  })
 })
