@@ -8,3 +8,10 @@ export function calculatePrivacyScore(result: DetectionResult): number {
 
   return Math.max(0, Math.min(100, 100 - totalPenalty))
 }
+
+export {
+  getPositiveScoreFactors,
+  getScoreDeductions,
+  type PositiveScoreFactor,
+  type ScoreDeduction,
+} from './scoreBreakdown'

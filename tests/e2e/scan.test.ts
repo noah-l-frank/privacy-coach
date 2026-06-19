@@ -105,6 +105,8 @@ test('completes the full privacy coach flow', async ({ page, browserName }) => {
 
   await expect(page.getByText(/reduce cookie and tracking exposure/i)).toBeVisible()
 
+  await expect(page.getByRole('heading', { name: /score deductions/i })).toBeVisible()
+
   await expect(
     page.getByRole('heading', {
       name: /privacy recommendations/i,

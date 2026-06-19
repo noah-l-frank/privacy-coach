@@ -3,7 +3,11 @@ import { computed } from 'vue'
 
 import { useScanStore } from '@/stores/scanStore'
 
-import { calculatePrivacyScore } from '@/services/scoring'
+import {
+  calculatePrivacyScore,
+  getPositiveScoreFactors,
+  getScoreDeductions,
+} from '@/services/scoring'
 
 const scanStore = useScanStore()
 
@@ -33,6 +37,18 @@ const scoreColor = computed(() => {
   if (privacyScore.value < 70) return '#facc15'
 
   return '#22c55e'
+})
+
+const scoreDeductions = computed(() => {
+  if (!scanStore.result) return []
+
+  return getScoreDeductions(scanStore.result)
+})
+
+const positiveScoreFactors = computed(() => {
+  if (!scanStore.result) return []
+
+  return getPositiveScoreFactors(scanStore.result)
 })
 </script>
 
@@ -71,6 +87,52 @@ const scoreColor = computed(() => {
         <span>Okay</span>
         <span>Strong</span>
       </div>
+    </div>
+
+    <div class="score-breakdown">
+      <section class="factor-section">
+        <h3>Score deductions</h3>
+
+        <div v-if="scoreDeductions.length" class="factor-list">
+          <article
+            v-for="deduction in scoreDeductions"
+            :key="deduction.id"
+            class="factor-item deduction"
+          >
+            <div>
+              <h4>{{ deduction.title }}</h4>
+              <p>{{ deduction.description }}</p>
+            </div>
+
+            <strong>-{{ deduction.penalty }}</strong>
+          </article>
+        </div>
+
+        <p v-else class="factor-empty">
+          No score deductions were applied.
+        </p>
+      </section>
+
+      <section class="factor-section">
+        <h3>Positive factors</h3>
+
+        <div v-if="positiveScoreFactors.length" class="factor-list">
+          <article
+            v-for="factor in positiveScoreFactors"
+            :key="factor.id"
+            class="factor-item positive"
+          >
+            <div>
+              <h4>{{ factor.title }}</h4>
+              <p>{{ factor.description }}</p>
+            </div>
+          </article>
+        </div>
+
+        <p v-else class="factor-empty">
+          No positive score factors were detected yet.
+        </p>
+      </section>
     </div>
   </section>
 </template>
@@ -165,5 +227,71 @@ const scoreColor = computed(() => {
   margin-top: 0.7rem;
   font-size: 0.84rem;
   opacity: 0.8;
+}
+
+.score-breakdown {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.factor-section {
+  min-width: 0;
+}
+
+.factor-section h3 {
+  margin: 0 0 0.8rem;
+  font-size: 1rem;
+}
+
+.factor-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.factor-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.factor-item h4 {
+  margin: 0 0 0.25rem;
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.factor-item p,
+.factor-empty {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.factor-item strong {
+  color: #fca5a5;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.factor-item.positive {
+  border-color: rgba(34, 197, 94, 0.22);
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.factor-item.positive h4 {
+  color: #bbf7d0;
+}
+
+@media (max-width: 720px) {
+  .score-breakdown {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
