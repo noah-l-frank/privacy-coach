@@ -44,7 +44,7 @@ const questionsStore = useQuestionsStore()
 
 onMounted(() => {
   if (!scanStore.result) {
-    questionsStore.$reset()
+    questionsStore.resetAnswers()
     router.replace('/')
   }
 })

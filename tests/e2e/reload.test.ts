@@ -56,7 +56,7 @@ test('scan transition recreates scan state after reload and continues to questio
 })
 
 
-test('questions page redirects after reload because scan state is lost', async ({ page }) => {
+test('questions page restores scan state after reload', async ({ page }) => {
   await page.goto(baseUrl)
 
   await page.getByRole('button', { name: /start scan/i }).click()
@@ -69,10 +69,15 @@ test('questions page redirects after reload because scan state is lost', async (
 
   await page.reload()
 
-  await expect(page).toHaveURL(`${baseUrl}/`)
+  await expect(page).toHaveURL(`${baseUrl}/questions`)
+  await expect(
+    page.getByRole('heading', {
+      name: /what matters more to you while browsing/i,
+    }),
+  ).toBeVisible()
 })
 
-test('results page redirects after reload because scan state is lost', async ({
+test('results page restores scan state after reload', async ({
   page,
   browserName,
 }) => {
@@ -80,7 +85,12 @@ test('results page redirects after reload because scan state is lost', async ({
 
   await page.reload()
 
-  await expect(page).toHaveURL(`${baseUrl}/`)
+  await expect(page).toHaveURL(`${baseUrl}/results`)
+  await expect(
+    page.getByRole('heading', {
+      name: /privacy recommendations/i,
+    }),
+  ).toBeVisible()
 })
 
 test('scan transition does not redirect after leaving the page quickly', async ({ page }) => {

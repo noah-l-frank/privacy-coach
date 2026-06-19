@@ -36,7 +36,9 @@
 
         <button type="button" @click="startScan">Start scan</button>
 
-        <p class="note">No account needed. No upload. Everything runs in your browser.</p>
+        <p class="note">
+          No account needed. No upload. Progress stays only in this browser tab.
+        </p>
       </div>
     </section>
   </main>
@@ -50,7 +52,7 @@ const router = useRouter()
 const scanStore = useScanStore()
 
 async function startScan() {
-  await scanStore.runScan()
+  await scanStore.runScan({ resetAnswers: true })
   router.push('/scan')
 }
 </script>

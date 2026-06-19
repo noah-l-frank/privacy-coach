@@ -43,6 +43,7 @@ function createDetectionResult(overrides: Partial<DetectionResult> = {}): Detect
 
 describe('scan store', () => {
   beforeEach(() => {
+    sessionStorage.clear()
     setActivePinia(createPinia())
     vi.clearAllMocks()
   })
@@ -62,6 +63,21 @@ describe('scan store', () => {
     })
 
     scanStore.setResult(result)
+
+    expect(scanStore.result).toEqual(result)
+    expect(JSON.parse(sessionStorage.getItem('privacy-coach.scan-result') ?? 'null')).toEqual(result)
+  })
+
+  it('initializes with a stored detection result', () => {
+    const result = createDetectionResult({
+      browser: 'chrome',
+      browserFamily: 'chromium',
+    })
+
+    sessionStorage.setItem('privacy-coach.scan-result', JSON.stringify(result))
+    setActivePinia(createPinia())
+
+    const scanStore = useScanStore()
 
     expect(scanStore.result).toEqual(result)
   })
@@ -92,5 +108,7 @@ describe('scan store', () => {
 
     expect(questionsStore.answers).toEqual({})
     expect(scanStore.result).toEqual(result)
+    expect(sessionStorage.getItem('privacy-coach.answers')).toBeNull()
+    expect(JSON.parse(sessionStorage.getItem('privacy-coach.scan-result') ?? 'null')).toEqual(result)
   })
 })
