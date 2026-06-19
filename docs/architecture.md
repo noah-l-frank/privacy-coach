@@ -91,5 +91,5 @@ Implementation:
 
 ## Constraints
 
-- Must run in modern desktop browsers
+- Must run in modern desktop, tablet, and mobile browsers
 - Detection is limited to browser-exposed signals

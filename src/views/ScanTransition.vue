@@ -282,4 +282,44 @@ h1 {
     transform: translateY(-5px);
   }
 }
+
+@media (max-width: 720px) {
+  .scan-page {
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .scan-card {
+    min-height: calc(100vh - 32px);
+    border-radius: 24px;
+    padding: 36px 20px;
+  }
+
+  .glow {
+    width: 220px;
+    height: 220px;
+  }
+
+  .eyebrow {
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: 38px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+  }
+
+  .progress-shell {
+    margin-top: 36px;
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .steps {
+    font-size: 16px;
+  }
+}
 </style>

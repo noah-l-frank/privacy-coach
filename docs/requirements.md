@@ -68,7 +68,7 @@ Recommendations should be:
 - No backend required
 - Built with Vue 3 and TypeScript
 - Modular architecture with detection, questions, recommendations, scoring, stores, and UI separated
-- Runs in modern desktop browsers
+- Runs in modern desktop, tablet, and mobile browsers
 - Debug-only routes must not be enabled in normal production builds
 
 ---
@@ -77,14 +77,13 @@ Recommendations should be:
 
 - Chromium-based browsers: Chrome, Edge, Brave, Opera
 - Mozilla Firefox
-- Latest stable desktop versions only
+- Latest stable desktop and mobile browser versions
 - Standard browser configurations assumed
 
 ---
 
 ## Out of Scope
 
-- Mobile browsers
 - Private browsing mode
 - Logged-in account states
 - Building or managing browser extensions

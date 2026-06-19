@@ -191,4 +191,55 @@ button:hover {
   font-size: 15px;
   color: rgba(255, 255, 255, 0.55);
 }
+
+@media (max-width: 720px) {
+  .home-page {
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .hero-card {
+    min-height: calc(100vh - 32px);
+    border-radius: 24px;
+    padding: 36px 20px;
+  }
+
+  .glow {
+    width: 220px;
+    height: 220px;
+  }
+
+  .eyebrow {
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: 40px;
+    line-height: 1.08;
+  }
+
+  .subtitle {
+    font-size: 18px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 36px;
+  }
+
+  article {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  article:hover {
+    transform: none;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 36px;
+  }
+}
 </style>
