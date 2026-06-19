@@ -1,4 +1,8 @@
 import type { DetectionResult } from '@/services/detection'
+import {
+  hasHighFingerprintingExposure,
+  hasMediumFingerprintingExposure,
+} from '@/services/detection'
 import { recommendationContent } from './recommendationContent'
 
 type RecommendationContext = {
@@ -29,6 +33,30 @@ function isChromeLikeButNotBrave(result: DetectionResult): boolean {
   return isChromiumBrowser(result) && result.browser !== 'brave'
 }
 
+function wantsPrivacyOrBalancedGuidance(answers: Record<string, string>): boolean {
+  return answers.privacy_preference !== 'convenience'
+}
+
+function wantsTrackingProtection(answers: Record<string, string>): boolean {
+  return answers.tracking_protection_preference !== 'low'
+}
+
+function hasCookieExposure(result: DetectionResult): boolean {
+  return (
+    result.cookiesEnabled ||
+    result.cookieSettings.firstPartyCookieWritable ||
+    result.cookieSettings.sessionCookieWritable ||
+    result.cookieSettings.persistentCookieWritable
+  )
+}
+
+function hasMeaningfulFingerprintingExposure(result: DetectionResult): boolean {
+  return (
+    hasMediumFingerprintingExposure(result.fingerprintingExposure) ||
+    hasHighFingerprintingExposure(result.fingerprintingExposure)
+  )
+}
+
 
 export const recommendationRules: RecommendationRule[] = [
   {
@@ -55,7 +83,7 @@ export const recommendationRules: RecommendationRule[] = [
     shouldRecommend: ({ result, answers }) =>
       supportsGPC(result.browser) &&
       !result.gpc &&
-      answers.tracking_protection_preference === 'high'
+      wantsTrackingProtection(answers),
   },
 
   {
@@ -63,14 +91,21 @@ export const recommendationRules: RecommendationRule[] = [
     shouldRecommend: ({ result, answers }) =>
       lacksNativeGPCSupport(result.browser) &&
       !result.gpc &&
-      answers.tracking_protection_preference === 'high',
+      wantsTrackingProtection(answers),
   },
 
   {
     recommendation: 'reduce_cookies',
     shouldRecommend: ({ result, answers }) =>
-      result.cookiesEnabled &&
-      answers.privacy_preference === 'privacy',
+      hasCookieExposure(result) &&
+      wantsPrivacyOrBalancedGuidance(answers),
+  },
+
+  {
+    recommendation: 'reduce_fingerprinting',
+    shouldRecommend: ({ result, answers }) =>
+      hasMeaningfulFingerprintingExposure(result) &&
+      wantsPrivacyOrBalancedGuidance(answers),
   },
 
   {

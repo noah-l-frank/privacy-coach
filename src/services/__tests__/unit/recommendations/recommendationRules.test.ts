@@ -232,6 +232,41 @@ describe('recommendationRules', () => {
     ).toBe(true)
   })
 
+  it('matches cookie recommendation for balanced users with writable cookies', () => {
+    const rule = getRule('reduce_cookies')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          cookieSettings: {
+            cookiesEnabled: true,
+            firstPartyCookieWritable: true,
+            sessionCookieWritable: true,
+            persistentCookieWritable: true,
+          },
+        }),
+        answers: {
+          privacy_preference: 'balanced',
+        },
+      }),
+    ).toBe(true)
+  })
+
+  it('does not match cookie recommendation for convenience focused users', () => {
+    const rule = getRule('reduce_cookies')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          cookiesEnabled: true,
+        }),
+        answers: {
+          privacy_preference: 'convenience',
+        },
+      }),
+    ).toBe(false)
+  })
+
   it('matches adblock recommendation when user does not use one', () => {
     const rule = getRule('use_adblock')
 
@@ -331,6 +366,92 @@ describe('recommendationRules', () => {
         },
       }),
     ).toBe(true)
+  })
+
+  it('matches gpc extension recommendation when tracking preference is medium', () => {
+    const rule = getRule('use_gpc_extension')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          browserFamily: 'chromium',
+          browser: 'chrome',
+          gpc: false,
+        }),
+        answers: {
+          tracking_protection_preference: 'medium',
+        },
+      }),
+    ).toBe(true)
+  })
+
+  it('does not match gpc extension recommendation when tracking preference is low', () => {
+    const rule = getRule('use_gpc_extension')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          browserFamily: 'chromium',
+          browser: 'chrome',
+          gpc: false,
+        }),
+        answers: {
+          tracking_protection_preference: 'low',
+        },
+      }),
+    ).toBe(false)
+  })
+
+  it('matches fingerprinting recommendation for balanced users with exposed signals', () => {
+    const rule = getRule('reduce_fingerprinting')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          fingerprintingExposure: {
+            deviceMemory: true,
+            hardwareConcurrency: true,
+            webGl: true,
+            canvas: true,
+            audioContext: false,
+            screen: false,
+            timezone: false,
+            languages: false,
+            platform: false,
+            touchSupport: false,
+          },
+        }),
+        answers: {
+          privacy_preference: 'balanced',
+        },
+      }),
+    ).toBe(true)
+  })
+
+  it('does not match fingerprinting recommendation for convenience focused users', () => {
+    const rule = getRule('reduce_fingerprinting')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          fingerprintingExposure: {
+            deviceMemory: true,
+            hardwareConcurrency: true,
+            webGl: true,
+            canvas: true,
+            audioContext: true,
+            screen: true,
+            timezone: true,
+            languages: false,
+            platform: false,
+            touchSupport: false,
+          },
+        }),
+        answers: {
+          privacy_preference: 'convenience',
+        },
+      }),
+    ).toBe(false)
   })
 
   it('does not match gpc extension recommendation for firefox with native gpc support', () => {

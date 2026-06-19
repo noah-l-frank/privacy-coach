@@ -157,6 +157,44 @@ export const recommendationContent = {
     ],
   },
 
+  reduce_fingerprinting: {
+    id: 'reduce-fingerprinting',
+    dynamic: false,
+
+    title: 'Reduce browser fingerprinting exposure',
+    description:
+      'Your browser exposes several signals that can make it easier for websites to recognize your device across visits.',
+
+    effort: 'medium',
+    impact: 'high',
+
+    why:
+      'Fingerprinting combines browser and device details such as canvas, WebGL, language, timezone, and hardware signals to create a recognizable profile without relying on cookies.',
+
+    steps: [
+      'Use a browser with stronger anti-fingerprinting protections',
+      'Avoid installing unnecessary browser extensions',
+      'Keep privacy and tracking protection settings enabled',
+      'Prefer common browser configurations over highly customized setups',
+    ],
+
+    links: [
+      {
+        label: 'Firefox fingerprinting protection',
+        url: 'https://support.mozilla.org/kb/firefox-protection-against-fingerprinting',
+      },
+      {
+        label: 'Brave fingerprinting protections',
+        url: 'https://support.brave.com/hc/articles/360022806212',
+      },
+    ],
+
+    tradeoffs: [
+      'Stronger anti-fingerprinting settings can occasionally reduce website compatibility.',
+      'Some signals are difficult to hide completely in normal browsers.',
+    ],
+  },
+
   use_adblock: {
     id: 'use-adblock',
     dynamic: false,

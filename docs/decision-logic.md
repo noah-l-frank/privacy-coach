@@ -25,6 +25,8 @@ The recommendation engine currently uses:
 - browserFamily
 - gpc
 - cookiesEnabled
+- cookieSettings
+- fingerprintingExposure
 - user answers from the follow-up question flow
 
 ### Scoring Inputs

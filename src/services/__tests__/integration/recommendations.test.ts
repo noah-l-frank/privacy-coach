@@ -122,6 +122,64 @@ describe('generateRecommendations', () => {
     )
   })
 
+  it('recommends reducing cookies for balanced users when persistent cookies are writable', () => {
+    const recommendations = generateRecommendations(
+      {
+        ...baseResult,
+        cookieSettings: {
+          cookiesEnabled: true,
+          firstPartyCookieWritable: true,
+          sessionCookieWritable: true,
+          persistentCookieWritable: true,
+        },
+      },
+      {
+        privacy_preference: 'balanced',
+        password_management: 'manager',
+      },
+    )
+
+    expect(recommendations).toContainEqual(
+      expect.objectContaining({
+        id: 'reduce-cookies',
+        title: 'Reduce cookie and tracking exposure',
+        effort: 'medium',
+      }),
+    )
+  })
+
+  it('recommends reducing fingerprinting exposure when several signals are exposed', () => {
+    const recommendations = generateRecommendations(
+      {
+        ...baseResult,
+        fingerprintingExposure: {
+          deviceMemory: true,
+          hardwareConcurrency: true,
+          webGl: true,
+          canvas: true,
+          audioContext: true,
+          screen: true,
+          timezone: true,
+          languages: false,
+          platform: false,
+          touchSupport: false,
+        },
+      },
+      {
+        privacy_preference: 'balanced',
+        password_management: 'manager',
+      },
+    )
+
+    expect(recommendations).toContainEqual(
+      expect.objectContaining({
+        id: 'reduce-fingerprinting',
+        title: 'Reduce browser fingerprinting exposure',
+        effort: 'medium',
+      }),
+    )
+  })
+
   it('recommends an ad blocker when privacy-focused users do not use one', () => {
     const recommendations = generateRecommendations(baseResult, {
       privacy_preference: 'privacy',
