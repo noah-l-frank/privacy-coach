@@ -31,39 +31,33 @@ test('completes the full privacy coach flow', async ({ page, browserName }) => {
 
   await expect(
     page.getByRole('heading', {
-      name: /how do you manage your passwords/i,
+      name: /which privacy tools do you use/i,
     }),
   ).toBeVisible()
 
+  await expect(page.getByRole('switch', { name: /password manager/i })).not.toBeChecked()
+  await expect(page.getByRole('switch', { name: /vpn/i })).not.toBeChecked()
+  await expect(page.getByRole('switch', { name: /ad blocker/i })).not.toBeChecked()
+
   await page
-    .getByRole('button', {
-      name: /i use a password manager/i,
+    .getByRole('switch', {
+      name: /password manager/i,
     })
     .click()
 
-  await expect(
-    page.getByRole('heading', {
-      name: /do you use a vpn/i,
-    }),
-  ).toBeVisible()
-
   await page
-    .getByRole('button', {
-      name: /yes, regularly/i,
+    .getByRole('switch', {
+      name: /vpn/i,
     })
     .click()
 
-  await expect(
-    page.getByRole('heading', {
-      name: /do you use an ad blocker/i,
-    }),
-  ).toBeVisible()
-
   await page
-    .getByRole('button', {
-      name: /^yes$/i,
+    .getByRole('switch', {
+      name: /ad blocker/i,
     })
     .click()
+
+  await page.getByRole('button', { name: /continue/i }).click()
 
   if (browserName === 'chromium') {
     await expect(

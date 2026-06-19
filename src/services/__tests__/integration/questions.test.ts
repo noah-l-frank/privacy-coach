@@ -25,44 +25,32 @@ describe('getNextFollowUpQuestion', () => {
     expect(question?.id).toBe('search_engine')
   })
 
-  it('returns the password management question after search engine was answered', () => {
+  it('returns the security tools block after search engine was answered', () => {
     const question = getNextFollowUpQuestion(baseResult, {
       privacy_preference: 'privacy',
       search_engine: 'google',
     })
 
-    expect(question?.id).toBe('password_management')
+    expect(question?.id).toBe('security_tools')
   })
 
-  it('returns the vpn usage question for privacy users after password management was answered', () => {
-    const question = getNextFollowUpQuestion(baseResult, {
-      privacy_preference: 'privacy',
-      search_engine: 'google',
-      password_management: 'manager',
-    })
-
-    expect(question?.id).toBe('vpn_usage')
-  })
-
-  it('returns the adblock usage question for privacy users after earlier privacy questions are answered', () => {
+  it('keeps the security tools block until all tool answers are present', () => {
     const question = getNextFollowUpQuestion(baseResult, {
       privacy_preference: 'privacy',
       search_engine: 'google',
       password_management: 'manager',
-      vpn_usage: 'yes',
     })
 
-    expect(question?.id).toBe('adblock_usage')
+    expect(question?.id).toBe('security_tools')
   })
 
-  it('skips vpn usage for balanced users', () => {
+  it('returns the security tools block for balanced users', () => {
     const question = getNextFollowUpQuestion(baseResult, {
       privacy_preference: 'balanced',
       search_engine: 'google',
-      password_management: 'manager',
     })
 
-    expect(question?.id).toBe('adblock_usage')
+    expect(question?.id).toBe('security_tools')
   })
 
   it('skips privacy questions for convenience users', () => {
@@ -176,24 +164,7 @@ describe('getNextFollowUpQuestion', () => {
         privacy_preference: 'privacy',
         search_engine: 'google',
       })?.id,
-    ).toBe('password_management')
-
-    expect(
-      getNextFollowUpQuestion(result, {
-        privacy_preference: 'privacy',
-        search_engine: 'google',
-        password_management: 'manager',
-      })?.id,
-    ).toBe('vpn_usage')
-
-    expect(
-      getNextFollowUpQuestion(result, {
-        privacy_preference: 'privacy',
-        search_engine: 'google',
-        password_management: 'manager',
-        vpn_usage: 'yes',
-      })?.id,
-    ).toBe('adblock_usage')
+    ).toBe('security_tools')
 
     expect(
       getNextFollowUpQuestion(result, {

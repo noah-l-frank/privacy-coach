@@ -44,20 +44,10 @@ export const questionFlow: QuestionFlowRule[] = [
   },
 
   {
-    id: 'password_management',
+    id: 'security_tools',
     shouldAsk: ({ answers }) =>
-      wantsNonConvenienceGuidance(answers) && !answers.password_management,
-  },
-
-  {
-    id: 'vpn_usage',
-    shouldAsk: ({ answers }) => wantsPrivacyGuidance(answers) && !answers.vpn_usage,
-  },
-
-  {
-    id: 'adblock_usage',
-    shouldAsk: ({ answers }) =>
-      wantsNonConvenienceGuidance(answers) && !answers.adblock_usage,
+      wantsNonConvenienceGuidance(answers) &&
+      (!answers.password_management || !answers.vpn_usage || !answers.adblock_usage),
   },
 
   {

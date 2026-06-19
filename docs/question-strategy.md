@@ -19,6 +19,7 @@ The system uses a **dynamic, step-by-step question flow** instead of showing all
 This means:
 
 - only one question is shown at a time
+- closely related yes/no habits can be grouped into one compact question block
 - each answer influences which question comes next
 - unnecessary questions are skipped automatically
 
@@ -45,6 +46,12 @@ The engine selects the next question dynamically based on the scan result and th
 The exact question order and conditions are defined in `src/services/questions/questionFlow.ts`.
 
 The privacy preference question includes a separate `maximum_privacy` option. Cookie guidance is reserved for that strongest preference because stricter cookie blocking can create more compatibility tradeoffs than other recommendations.
+
+The password manager, VPN, and ad blocker prompts are grouped into one `security_tools` block with one yes/no toggle per habit. Each toggle defaults to `no`, and submitting the block writes the existing answer keys used by recommendation rules:
+
+- `password_management`
+- `vpn_usage`
+- `adblock_usage`
 
 ### Question Roles
 

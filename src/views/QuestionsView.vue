@@ -9,7 +9,38 @@
           {{ currentQuestion.description }}
         </p>
 
-        <div class="options-list">
+        <div v-if="currentQuestion.type === 'toggle_group'" class="toggle-group">
+          <label
+            v-for="item in currentQuestion.items"
+            :key="item.id"
+            class="toggle-row"
+          >
+            <span class="toggle-question">{{ item.label }}</span>
+
+            <span class="toggle-control">
+              <span class="toggle-value">
+                {{ selectedToggles[item.id] ? 'Yes' : 'No' }}
+              </span>
+
+              <input
+                v-model="selectedToggles[item.id]"
+                class="toggle-input"
+                type="checkbox"
+                role="switch"
+              >
+
+              <span class="toggle-track" aria-hidden="true">
+                <span class="toggle-thumb"></span>
+              </span>
+            </span>
+          </label>
+
+          <button class="continue-button" @click="submitToggleAnswers(currentQuestion)">
+            Continue
+          </button>
+        </div>
+
+        <div v-else class="options-list">
           <button
             v-for="option in currentQuestion.options"
             :key="option.value"
@@ -30,15 +61,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted, reactive, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useScanStore } from '@/stores/scanStore'
 import { useQuestionsStore } from '@/stores/questionsStore'
 import { getNextFollowUpQuestion } from '@/services/questions'
+import type { ToggleGroupQuestion } from '@/services/questions/types'
 
 const router = useRouter()
 const scanStore = useScanStore()
 const questionsStore = useQuestionsStore()
+const selectedToggles = reactive<Record<string, boolean>>({})
 
 // Pinia state is reset on page reload, so redirect if no scan result exists
 
@@ -60,6 +93,15 @@ function updateAnswer(questionId: string, value: string) {
   questionsStore.setAnswer(questionId, value)
 }
 
+function submitToggleAnswers(question: ToggleGroupQuestion) {
+  question.items.forEach((item) => {
+    questionsStore.setAnswer(
+      item.id,
+      selectedToggles[item.id] ? item.yesValue : item.noValue,
+    )
+  })
+}
+
 function goToResults() {
   router.push('/results')
 }
@@ -69,6 +111,13 @@ watch(
   (question) => {
     if (scanStore.result && question === null) {
       router.push('/results')
+      return
+    }
+
+    if (question?.type === 'toggle_group') {
+      question.items.forEach((item) => {
+        selectedToggles[item.id] = questionsStore.answers[item.id] === item.yesValue
+      })
     }
   },
   { immediate: true },
@@ -115,6 +164,98 @@ h1 {
 .options-list {
   display: grid;
   gap: 0.9rem;
+}
+
+.toggle-group {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 1rem 1.1rem;
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.toggle-row:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.toggle-question {
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.toggle-control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-shrink: 0;
+}
+
+.toggle-value {
+  min-width: 2rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.toggle-input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.toggle-track {
+  position: relative;
+  width: 3.1rem;
+  height: 1.7rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  pointer-events: none;
+  transition: background-color 0.2s ease;
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 999px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+  transition: transform 0.2s ease;
+}
+
+.toggle-input:checked + .toggle-track {
+  background: #22c55e;
+}
+
+.toggle-input:checked + .toggle-track .toggle-thumb {
+  transform: translateX(1.4rem);
+}
+
+.toggle-input:focus-visible + .toggle-track {
+  outline: 3px solid rgba(255, 255, 255, 0.55);
+  outline-offset: 3px;
 }
 
 .option-button {
@@ -169,5 +310,17 @@ h1 {
 .continue-button:hover {
   transform: translateY(-1px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+@media (max-width: 640px) {
+  .toggle-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .toggle-control {
+    width: 100%;
+    justify-content: space-between;
+  }
 }
 </style>

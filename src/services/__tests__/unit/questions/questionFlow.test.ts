@@ -131,8 +131,8 @@ describe('questionFlow', () => {
     ).toBe(false)
   })
 
-  it('asks vpn usage only for privacy focused users', () => {
-    const rule = getRule('vpn_usage')
+  it('asks security tools for non-convenience users', () => {
+    const rule = getRule('security_tools')
 
     expect(
       rule.shouldAsk({
@@ -157,6 +157,15 @@ describe('questionFlow', () => {
         result: createDetectionResult(),
         answers: {
           privacy_preference: 'balanced',
+        },
+      }),
+    ).toBe(true)
+
+    expect(
+      rule.shouldAsk({
+        result: createDetectionResult(),
+        answers: {
+          privacy_preference: 'convenience',
         },
       }),
     ).toBe(false)
@@ -223,8 +232,8 @@ describe('questionFlow', () => {
     ).toBe(true)
   })
 
-  it('does not ask password management when it is already answered', () => {
-    const rule = getRule('password_management')
+  it('keeps security tools open until all tool answers are present', () => {
+    const rule = getRule('security_tools')
 
     expect(
       rule.shouldAsk({
@@ -234,17 +243,19 @@ describe('questionFlow', () => {
           password_management: 'manager',
         },
       }),
-    ).toBe(false)
+    ).toBe(true)
   })
 
-  it('does not ask adblock usage when it is already answered', () => {
-    const rule = getRule('adblock_usage')
+  it('does not ask security tools when every tool answer is already present', () => {
+    const rule = getRule('security_tools')
 
     expect(
       rule.shouldAsk({
         result: createDetectionResult(),
         answers: {
           privacy_preference: 'privacy',
+          password_management: 'manager',
+          vpn_usage: 'yes',
           adblock_usage: 'yes',
         },
       }),

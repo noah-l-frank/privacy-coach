@@ -15,9 +15,10 @@ async function completeFlowUntilResults(page: Page, browserName: string) {
 
   await page.getByRole('button', { name: /i prefer more privacy/i }).click()
   await page.getByRole('button', { name: /google/i }).click()
-  await page.getByRole('button', { name: /i use a password manager/i }).click()
-  await page.getByRole('button', { name: /yes, regularly/i }).click()
-  await page.getByRole('button', { name: /^yes$/i }).click()
+  await page.getByRole('switch', { name: /password manager/i }).click()
+  await page.getByRole('switch', { name: /vpn/i }).click()
+  await page.getByRole('switch', { name: /ad blocker/i }).click()
+  await page.getByRole('button', { name: /continue/i }).click()
 
   if (browserName === 'chromium') {
     await page.getByRole('button', { name: /^yes$/i }).click()
