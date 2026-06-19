@@ -52,4 +52,7 @@ export type CookieSettings = {
   firstPartyCookieWritable: boolean
   persistentCookieWritable: boolean
   sessionCookieWritable: boolean
+  thirdPartyCookieStatus?: ThirdPartyCookieStatus
 }
+
+export type ThirdPartyCookieStatus = 'likely-allowed' | 'likely-blocked' | 'unknown'

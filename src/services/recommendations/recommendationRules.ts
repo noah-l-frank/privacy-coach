@@ -49,13 +49,8 @@ function wantsTrackingProtection(answers: Record<string, string>): boolean {
   return answers.tracking_protection_preference !== 'low'
 }
 
-function hasCookieExposure(result: DetectionResult): boolean {
-  return (
-    result.cookiesEnabled ||
-    result.cookieSettings.firstPartyCookieWritable ||
-    result.cookieSettings.sessionCookieWritable ||
-    result.cookieSettings.persistentCookieWritable
-  )
+function areThirdPartyCookiesLikelyAllowed(result: DetectionResult): boolean {
+  return result.cookieSettings.thirdPartyCookieStatus === 'likely-allowed'
 }
 
 function hasMeaningfulFingerprintingExposure(result: DetectionResult): boolean {
@@ -113,7 +108,7 @@ export const recommendationRules: RecommendationRule[] = [
   {
     recommendation: 'reduce_cookies',
     shouldRecommend: ({ result, answers }) =>
-      hasCookieExposure(result) &&
+      areThirdPartyCookiesLikelyAllowed(result) &&
       wantsMaximumPrivacy(answers),
   },
 

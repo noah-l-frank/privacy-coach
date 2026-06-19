@@ -101,6 +101,7 @@ describe('detectEnvironment', () => {
     expect(result).toHaveProperty('cookiesEnabled')
     expect(result).toHaveProperty('https')
     expect(result).toHaveProperty('fingerprintingProtection')
+    expect(result.cookieSettings).toHaveProperty('thirdPartyCookieStatus')
   })
 
   it('returns values with the expected types', async () => {
@@ -114,6 +115,7 @@ describe('detectEnvironment', () => {
     expect(typeof result.cookiesEnabled).toBe('boolean')
     expect(typeof result.https).toBe('boolean')
     expect(typeof result.fingerprintingProtection?.status).toBe('string')
+    expect(typeof result.cookieSettings.thirdPartyCookieStatus).toBe('string')
   })
 })
 

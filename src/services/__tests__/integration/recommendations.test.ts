@@ -104,9 +104,21 @@ describe('generateRecommendations', () => {
     )
   })
 
-  it('recommends reducing cookies when cookies are enabled and maximum privacy is preferred', () => {
+  it('recommends reducing cookies when third-party cookies are likely allowed and maximum privacy is preferred', () => {
     const recommendations = generateRecommendations(
-      { ...baseResult, browserFamily: 'chromium', browser: 'edge', cookiesEnabled: true },
+      {
+        ...baseResult,
+        browserFamily: 'chromium',
+        browser: 'edge',
+        cookiesEnabled: true,
+        cookieSettings: {
+          cookiesEnabled: true,
+          firstPartyCookieWritable: true,
+          sessionCookieWritable: true,
+          persistentCookieWritable: true,
+          thirdPartyCookieStatus: 'likely-allowed',
+        },
+      },
       {
         privacy_preference: 'maximum_privacy',
         password_management: 'manager',
@@ -118,6 +130,32 @@ describe('generateRecommendations', () => {
         id: 'reduce-cookies',
         title: 'Reduce cookie and tracking exposure',
         effort: 'medium',
+      }),
+    )
+  })
+
+  it('does not recommend reducing cookies when only first-party cookies are writable', () => {
+    const recommendations = generateRecommendations(
+      {
+        ...baseResult,
+        cookiesEnabled: true,
+        cookieSettings: {
+          cookiesEnabled: true,
+          firstPartyCookieWritable: true,
+          sessionCookieWritable: true,
+          persistentCookieWritable: true,
+          thirdPartyCookieStatus: 'likely-blocked',
+        },
+      },
+      {
+        privacy_preference: 'maximum_privacy',
+        password_management: 'manager',
+      },
+    )
+
+    expect(recommendations).not.toContainEqual(
+      expect.objectContaining({
+        id: 'reduce-cookies',
       }),
     )
   })

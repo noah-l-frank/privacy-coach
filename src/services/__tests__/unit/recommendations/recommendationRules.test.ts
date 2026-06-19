@@ -217,19 +217,48 @@ describe('recommendationRules', () => {
     ).toBe(false)
   })
 
-  it('matches cookie recommendation only for maximum privacy users with cookies enabled', () => {
+  it('matches cookie recommendation only for maximum privacy users with likely allowed third-party cookies', () => {
     const rule = getRule('reduce_cookies')
 
     expect(
       rule.shouldRecommend({
         result: createDetectionResult({
           cookiesEnabled: true,
+          cookieSettings: {
+            cookiesEnabled: true,
+            firstPartyCookieWritable: true,
+            sessionCookieWritable: true,
+            persistentCookieWritable: true,
+            thirdPartyCookieStatus: 'likely-allowed',
+          },
         }),
         answers: {
           privacy_preference: 'maximum_privacy',
         },
       }),
     ).toBe(true)
+  })
+
+  it('does not match cookie recommendation when third-party cookies are likely blocked', () => {
+    const rule = getRule('reduce_cookies')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          cookiesEnabled: true,
+          cookieSettings: {
+            cookiesEnabled: true,
+            firstPartyCookieWritable: true,
+            sessionCookieWritable: true,
+            persistentCookieWritable: true,
+            thirdPartyCookieStatus: 'likely-blocked',
+          },
+        }),
+        answers: {
+          privacy_preference: 'maximum_privacy',
+        },
+      }),
+    ).toBe(false)
   })
 
   it('does not match cookie recommendation for privacy users with writable cookies', () => {

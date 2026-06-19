@@ -26,7 +26,7 @@ export async function detectEnvironment(): Promise<DetectionResult> {
 
   const fingerprintingProtection = detectFingerprintingProtection()
 
-  const cookieSettings = detectCookieSettings()
+  const cookieSettings = detectCookieSettings(browser)
 
   return {
     browserFamily,
@@ -54,6 +54,7 @@ export type {
   FingerprintingRiskLevel,
   NavigatorWithGPC,
   CookieSettings,
+  ThirdPartyCookieStatus,
 } from './types'
 
 export {
