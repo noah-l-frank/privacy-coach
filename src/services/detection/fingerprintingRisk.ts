@@ -1,4 +1,4 @@
-import type { FingerprintingExposure } from './types'
+import type { FingerprintingExposure, FingerprintingRiskLevel } from './types'
 
 export function countFingerprintingExposure(exposure: FingerprintingExposure): number {
   return Object.values(exposure).filter(Boolean).length
@@ -12,4 +12,13 @@ export function hasMediumFingerprintingExposure(exposure: FingerprintingExposure
   const exposedSignals = countFingerprintingExposure(exposure)
 
   return exposedSignals >= 4 && exposedSignals < 7
+}
+
+export function getFingerprintingRiskLevel(
+  exposure: FingerprintingExposure,
+): FingerprintingRiskLevel {
+  if (hasHighFingerprintingExposure(exposure)) return 'high'
+  if (hasMediumFingerprintingExposure(exposure)) return 'medium'
+
+  return 'low'
 }

@@ -6,15 +6,23 @@ export type CookieSettings = {
 }
 
 export function detectCookieSettings(): CookieSettings {
+  const cookiesEnabled = navigator.cookieEnabled
+
   return {
-    cookiesEnabled: navigator.cookieEnabled,
-    firstPartyCookieWritable: canWriteCookie('privacy_coach_first_party', '1'),
-    sessionCookieWritable: canWriteCookie('privacy_coach_session', '1'),
-    persistentCookieWritable: canWritePersistentCookie('privacy_coach_persistent', '1'),
+    cookiesEnabled,
+    firstPartyCookieWritable: cookiesEnabled && canWriteCookie('privacy_coach_first_party'),
+    sessionCookieWritable: cookiesEnabled && canWriteCookie('privacy_coach_session'),
+    persistentCookieWritable: cookiesEnabled && canWritePersistentCookie('privacy_coach_persistent'),
   }
 }
 
-function canWriteCookie(name: string, value: string): boolean {
+function createCookieValue(): string {
+  return `${Date.now()}_${Math.random().toString(36).slice(2)}`
+}
+
+function canWriteCookie(name: string): boolean {
+  const value = createCookieValue()
+
   document.cookie = `${name}=${value}; SameSite=Lax; path=/`
 
   const exists = document.cookie.includes(`${name}=${value}`)
@@ -24,7 +32,9 @@ function canWriteCookie(name: string, value: string): boolean {
   return exists
 }
 
-function canWritePersistentCookie(name: string, value: string): boolean {
+function canWritePersistentCookie(name: string): boolean {
+  const value = createCookieValue()
+
   document.cookie = `${name}=${value}; Max-Age=3600; SameSite=Lax; path=/`
 
   const exists = document.cookie.includes(`${name}=${value}`)

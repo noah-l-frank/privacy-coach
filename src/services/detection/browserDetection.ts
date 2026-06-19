@@ -22,6 +22,11 @@ const browserRules = [
     browser: 'firefox',
   },
   {
+    tokens: ['fxios'],
+    browserFamily: 'webkit',
+    browser: 'firefox-ios',
+  },
+  {
     tokens: ['edg'],
     browserFamily: 'chromium',
     browser: 'edge',
@@ -32,18 +37,35 @@ const browserRules = [
     browser: 'opera',
   },
   {
+    tokens: ['samsungbrowser'],
+    browserFamily: 'chromium',
+    browser: 'samsung-internet',
+  },
+  {
     tokens: ['brave'],
     browserFamily: 'chromium',
     browser: 'brave',
+  },
+  {
+    tokens: ['crios'],
+    browserFamily: 'webkit',
+    browser: 'chrome-ios',
   },
   {
     tokens: ['chrome', 'chromium'],
     browserFamily: 'chromium',
     browser: 'chrome',
   },
+  {
+    tokens: ['safari'],
+    excludedTokens: ['chrome', 'chromium', 'crios', 'fxios', 'edg', 'opr', 'opera', 'android'],
+    browserFamily: 'webkit',
+    browser: 'safari',
+  },
 ] satisfies Array<
   BrowserDetection & {
     tokens: string[]
+    excludedTokens?: string[]
   }
 >
 
@@ -77,7 +99,8 @@ export function detectBrowser(userAgent: string): BrowserDetection {
   const ua = userAgent.toLowerCase()
 
   const match = browserRules.find((rule) =>
-    rule.tokens.some((token) => ua.includes(token)),
+    rule.tokens.some((token) => ua.includes(token)) &&
+    !rule.excludedTokens?.some((token) => ua.includes(token)),
   )
 
   if (!match) return UNKNOWN_BROWSER

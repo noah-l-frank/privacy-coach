@@ -9,6 +9,7 @@ The current detection layer provides the following data:
 - browser
 - browserFamily
 - os
+- deviceType
 - gpc
 - cookiesEnabled
 - https

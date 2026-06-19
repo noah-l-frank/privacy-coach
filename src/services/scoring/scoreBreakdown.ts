@@ -1,7 +1,6 @@
 import type { DetectionResult } from '@/services/detection'
 import {
-  hasHighFingerprintingExposure,
-  hasMediumFingerprintingExposure,
+  getFingerprintingRiskLevel,
 } from '@/services/detection'
 import { scoringRules } from './scoringRules'
 
@@ -56,10 +55,7 @@ export function getPositiveScoreFactors(result: DetectionResult): PositiveScoreF
     })
   }
 
-  if (
-    !hasMediumFingerprintingExposure(result.fingerprintingExposure) &&
-    !hasHighFingerprintingExposure(result.fingerprintingExposure)
-  ) {
+  if (getFingerprintingRiskLevel(result.fingerprintingExposure) === 'low') {
     factors.push({
       id: 'fingerprinting-exposure-limited',
       title: 'Fingerprinting exposure is limited',

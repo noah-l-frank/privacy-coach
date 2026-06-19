@@ -7,12 +7,17 @@ export type DetectionResult = {
   browserFamily: string
   browser: string
   os: string
+  deviceType?: DeviceType
   gpc: boolean
   cookiesEnabled: boolean
-  https: boolean,
-  fingerprintingExposure: FingerprintingExposure,
+  https: boolean
+  fingerprintingExposure: FingerprintingExposure
   cookieSettings: CookieSettings
 }
+
+export type DeviceType = 'desktop' | 'mobile' | 'tablet' | 'unknown'
+
+export type FingerprintingRiskLevel = 'low' | 'medium' | 'high'
 
 export type FingerprintingExposure = {
   deviceMemory: boolean

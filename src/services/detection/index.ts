@@ -1,5 +1,5 @@
 import { detectBrowser } from './browserDetection'
-import { detectOS } from './osDetection'
+import { detectDeviceType, detectOS } from './osDetection'
 
 import type { DetectionResult, NavigatorWithGPC } from './types'
 import { detectFingerprintingExposure } from './fingerprintingDetection'
@@ -13,6 +13,8 @@ export async function detectEnvironment(): Promise<DetectionResult> {
 
   const os = detectOS(userAgent)
 
+  const deviceType = detectDeviceType(userAgent)
+
   const gpc = (navigator as NavigatorWithGPC).globalPrivacyControl === true
 
   const https = window.location.protocol === 'https:'
@@ -25,6 +27,7 @@ export async function detectEnvironment(): Promise<DetectionResult> {
     browserFamily,
     browser,
     os,
+    deviceType,
     gpc,
     cookiesEnabled: cookieSettings.cookiesEnabled,
     https,
@@ -34,14 +37,21 @@ export async function detectEnvironment(): Promise<DetectionResult> {
 }
 
 export { detectBrowser } from './browserDetection'
-export { detectOS } from './osDetection'
+export { detectDeviceType, detectOS } from './osDetection'
 
-export type { DetectionResult, NavigatorWithGPC, CookieSettings } from './types'
+export type {
+  DetectionResult,
+  DeviceType,
+  FingerprintingRiskLevel,
+  NavigatorWithGPC,
+  CookieSettings,
+} from './types'
 
 export { detectFingerprintingExposure } from './fingerprintingDetection'
 export { detectCookieSettings } from './cookieDetection'
 export {
   countFingerprintingExposure,
+  getFingerprintingRiskLevel,
   hasHighFingerprintingExposure,
   hasMediumFingerprintingExposure,
 } from './fingerprintingRisk'
