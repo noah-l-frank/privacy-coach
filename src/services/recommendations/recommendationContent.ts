@@ -5,20 +5,21 @@ export const recommendationContent = {
     id: 'switch-to-firefox',
     dynamic: false,
 
-    title: 'Switch to a privacy-focused browser',
+    title: 'Try Firefox for stronger privacy controls',
     description:
-      'Firefox offers stronger built-in privacy protections and gives users more control over tracking and data collection.',
+      'Firefox is independent from the Chromium ecosystem and gives you detailed control over tracking protection, cookies, and privacy signals.',
 
     effort: 'medium',
     impact: 'high',
 
     why:
-      'Firefox includes stronger tracking protection by default and is developed independently from the Chromium ecosystem dominated by Google.',
+      'Using a browser outside the Chromium ecosystem reduces dependence on one browser engine and gives you privacy controls that are easier to inspect and adjust.',
 
     steps: [
       'Download and install Firefox',
-      'Import your bookmarks and passwords',
-      'Enable Enhanced Tracking Protection in settings',
+      'Import only the data you actually need',
+      'Set Enhanced Tracking Protection to Strict if websites still work well for you',
+      'Check whether Global Privacy Control is enabled',
     ],
 
     links: [
@@ -29,7 +30,8 @@ export const recommendationContent = {
     ],
 
     tradeoffs: [
-      'Some websites may behave slightly differently compared to Chrome.',
+      'A few websites may behave differently than they do in Chrome-based browsers.',
+      'Browser sync, profiles, and extensions may need some setup time.',
     ],
   },
 
@@ -39,18 +41,19 @@ export const recommendationContent = {
 
     title: 'Consider a more private Chromium-based browser',
     description:
-      'Brave provides stronger privacy protections while keeping a familiar Chromium-based browsing experience.',
+      'Brave keeps a familiar Chromium-based browsing experience while adding stronger default blocking for ads, trackers, and some fingerprinting techniques.',
 
     effort: 'easy',
     impact: 'medium',
 
     why:
-      'Brave blocks many ads and trackers automatically while still feeling very similar to Chrome.',
+      'For people who rely on Chrome-like compatibility, Brave can reduce tracking exposure without requiring a completely different browsing workflow.',
 
     steps: [
       'Download and install Brave',
-      'Import your Chrome data',
+      'Import only the bookmarks, passwords, or settings you actually need',
       'Review Brave Shields settings',
+      'Keep optional features you do not use turned off',
     ],
 
     links: [
@@ -62,6 +65,8 @@ export const recommendationContent = {
 
     tradeoffs: [
       'Some privacy features may occasionally break website functionality.',
+      'Brave is still Chromium-based, so it does not reduce browser-engine concentration.',
+      'Optional features such as Rewards, Wallet, or VPN should be reviewed before use.',
     ],
   },
 
@@ -71,13 +76,13 @@ export const recommendationContent = {
 
     title: 'Enable Global Privacy Control',
     description:
-      'Global Privacy Control tells websites that you do not want your data to be sold or shared.',
+      'Global Privacy Control sends a signal that you do not want your personal data sold or shared where websites recognize that preference.',
 
     effort: 'easy',
     impact: 'medium',
 
     why:
-      'Some websites and regions legally recognize the GPC signal as a privacy preference.',
+      'GPC is designed as a browser-level privacy preference, so you do not have to look for separate opt-out links on every website.',
 
     steps: [
       '[Dynamic browser specific GPC steps will appear here]',
@@ -91,7 +96,8 @@ export const recommendationContent = {
     ],
 
     tradeoffs: [
-      'Not all websites currently respect the signal.',
+      'Not every website recognizes or honors the signal.',
+      'The legal effect depends on where you live and which laws apply to the website.',
     ],
   },
 
@@ -101,18 +107,19 @@ export const recommendationContent = {
 
     title: 'Send a Global Privacy Control signal',
     description:
-      'Your browser does not appear to support Global Privacy Control natively, but a privacy extension can send the signal for you.',
+      'Your browser does not appear to support Global Privacy Control natively, but a carefully chosen privacy extension can send the signal for you.',
 
     effort: 'easy',
     impact: 'medium',
 
     why:
-      'GPC communicates that you do not want your data sold or shared, and some websites are legally required to respect it.',
+      'GPC communicates a broad opt-out preference for data sale or sharing, and extensions can add that signal to browsers that do not expose it directly.',
 
     steps: [
-      'Install a trusted privacy extension that supports Global Privacy Control',
-      'Open the extension settings',
-      'Confirm that Global Privacy Control is enabled',
+      'Choose a reputable extension that explicitly supports Global Privacy Control',
+      'Review the extension permissions before installing it',
+      'Open the extension settings and enable Global Privacy Control',
+      'Verify the signal on the official GPC test page',
     ],
 
     links: [
@@ -123,7 +130,8 @@ export const recommendationContent = {
     ],
 
     tradeoffs: [
-      'Browser extensions can access sensitive browsing data, so choose one carefully.',
+      'Browser extensions can access sensitive browsing data, so extension choice matters.',
+      'Using fewer high-trust extensions is usually safer than installing many small privacy tools.',
     ],
   },
 
@@ -139,7 +147,7 @@ export const recommendationContent = {
     impact: 'high',
 
     why:
-      'Advertising networks often use cookies to track browsing behavior across multiple websites.',
+      'Advertising and analytics networks can use cookies to recognize your browser across multiple websites and sessions.',
 
     steps: [
       '[Dynamic browser specific cookie settings steps will appear here]',
@@ -153,7 +161,8 @@ export const recommendationContent = {
     ],
 
     tradeoffs: [
-      'Some websites may require cookies to function correctly.',
+      'Blocking too many cookies can sign you out or break shopping carts and account pages.',
+      'Blocking third-party cookies is usually a better first step than blocking every cookie.',
     ],
   },
 
@@ -207,12 +216,13 @@ export const recommendationContent = {
     impact: 'high',
 
     why:
-      'Many advertisements contain tracking scripts that monitor browsing behavior across websites.',
+      'Many ads load third-party scripts that can track browsing behavior across websites, even when the visible ad itself seems harmless.',
 
     steps: [
       'Install uBlock Origin',
       'Keep the default filter lists enabled',
-      'Restart your browser if necessary',
+      'Avoid installing multiple overlapping content blockers',
+      'Allowlist individual sites only when you trust them and something important breaks',
     ],
 
     links: [
@@ -224,6 +234,7 @@ export const recommendationContent = {
 
     tradeoffs: [
       'Some websites may ask you to disable your ad blocker.',
+      'Overly aggressive filter lists can occasionally break page features.',
     ],
   },
 
@@ -267,20 +278,21 @@ export const recommendationContent = {
     id: 'use-vpn',
     dynamic: false,
 
-    title: 'Use a VPN for better privacy',
+    title: 'Use a VPN on untrusted networks',
     description:
-      'A VPN can hide your IP address from websites and protect traffic on public networks.',
+      'A VPN can be useful on public or untrusted networks, but it is not a complete privacy solution.',
 
     effort: 'advanced',
     impact: 'medium',
 
     why:
-      'Without a VPN, websites and network providers can often see your real IP address and browsing activity.',
+      'A VPN can hide your traffic from the local network operator and change the IP address websites see, but the VPN provider then becomes a party you must trust.',
 
     steps: [
-      'Choose a trusted VPN provider',
+      'Use a VPN especially on public Wi-Fi or networks you do not trust',
+      'Choose a provider with a clear privacy policy and a business model you understand',
       'Install the VPN application',
-      'Enable the VPN on untrusted networks',
+      'Keep HTTPS enabled and do not treat the VPN as anonymity by itself',
     ],
 
     links: [
@@ -293,6 +305,8 @@ export const recommendationContent = {
     tradeoffs: [
       'VPNs can reduce connection speed.',
       'You must trust the VPN provider.',
+      'A VPN does not stop tracking through cookies, login accounts, or browser fingerprinting.',
+      'Some websites may show more CAPTCHAs or block VPN traffic.',
     ],
   },
 } satisfies Record<string, Recommendation>

@@ -36,7 +36,8 @@ function getCookieSteps(browser: string): string[] {
     return [
       'Open Firefox settings',
       'Navigate to Privacy & Security',
-      'Enable Strict Tracking Protection',
+      'Set Enhanced Tracking Protection to Strict if the websites you use still work well',
+      'Keep third-party cookie blocking enabled',
     ]
   }
 
@@ -44,6 +45,7 @@ function getCookieSteps(browser: string): string[] {
     return [
       'Open Chrome settings',
       'Navigate to Privacy and security',
+      'Open Third-party cookies',
       'Block third-party cookies',
     ]
   }
@@ -53,6 +55,7 @@ function getCookieSteps(browser: string): string[] {
       'Open Edge settings',
       'Navigate to Cookies and site permissions',
       'Block third-party cookies',
+      'Review exceptions for sites you trust',
     ]
   }
 
@@ -99,6 +102,7 @@ function getGpcSteps(browser: string): string[] {
       'Open Firefox settings',
       'Go to Privacy & Security',
       'Enable Global Privacy Control',
+      'Verify the signal on globalprivacycontrol.org',
     ]
   }
 
@@ -108,6 +112,7 @@ function getGpcSteps(browser: string): string[] {
       'Go to Privacy and security',
       'Open Security or Shields settings',
       'Enable Global Privacy Control',
+      'Verify the signal on globalprivacycontrol.org',
     ]
   }
 
@@ -115,6 +120,6 @@ function getGpcSteps(browser: string): string[] {
     'Open your browser privacy settings',
     'Search for Global Privacy Control',
     'Enable the setting if your browser supports it',
+    'Verify the signal on globalprivacycontrol.org',
   ]
 }
-

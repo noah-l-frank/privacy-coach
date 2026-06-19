@@ -43,7 +43,7 @@ describe('generateRecommendations', () => {
     expect(recommendations).toContainEqual(
       expect.objectContaining({
         id: 'switch-to-firefox',
-        title: 'Switch to a privacy-focused browser',
+        title: 'Try Firefox for stronger privacy controls',
         effort: 'medium',
       }),
     )
@@ -221,7 +221,7 @@ describe('generateRecommendations', () => {
     expect(recommendations).toContainEqual(
       expect.objectContaining({
         id: 'use-vpn',
-        title: 'Use a VPN for better privacy',
+        title: 'Use a VPN on untrusted networks',
         effort: 'advanced',
       }),
     )
