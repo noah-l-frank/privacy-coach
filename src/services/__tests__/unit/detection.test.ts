@@ -67,6 +67,10 @@ describe('detectDeviceType', () => {
     )
   })
 
+  it('detects android phones as mobile devices', () => {
+    expect(detectDeviceType('mozilla/5.0 (linux; android 14; pixel 8) mobile')).toBe('mobile')
+  })
+
   it('detects tablets', () => {
     expect(detectDeviceType('mozilla/5.0 (linux; android 14; tablet)')).toBe('tablet')
   })
@@ -222,6 +226,26 @@ describe('detectBrowser', () => {
     expect(result).toEqual({
       browserFamily: 'chromium',
       browser: 'brave',
+    })
+  })
+
+  it('falls back to user agent detection when Brave API throws', async () => {
+    Object.defineProperty(navigator, 'brave', {
+      configurable: true,
+      value: {
+        isBrave: async () => {
+          throw new Error('Brave detection failed')
+        },
+      },
+    })
+
+    const result = await detectBrowserEnvironment(
+      'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'.toLowerCase(),
+    )
+
+    expect(result).toEqual({
+      browserFamily: 'chromium',
+      browser: 'chrome',
     })
   })
 
