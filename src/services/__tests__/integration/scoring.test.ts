@@ -67,10 +67,19 @@ describe('calculatePrivacyScore', () => {
     expect(calculatePrivacyScore(createDetectionResult({ gpc: false }))).toBe(90)
   })
 
-  it('subtracts points when cookies are enabled', () => {
+  it('subtracts cookie points when maximum privacy users likely allow third-party cookies', () => {
     expect(
       calculatePrivacyScore(
-        createDetectionResult({ cookiesEnabled: true }),
+        createDetectionResult({
+          cookiesEnabled: true,
+          cookieSettings: {
+            cookiesEnabled: true,
+            firstPartyCookieWritable: true,
+            sessionCookieWritable: true,
+            persistentCookieWritable: true,
+            thirdPartyCookieStatus: 'likely-allowed',
+          },
+        }),
         { answers: { privacy_preference: 'maximum_privacy' } },
       ),
     ).toBe(90)
@@ -79,13 +88,22 @@ describe('calculatePrivacyScore', () => {
   it('does not subtract cookie points below maximum privacy', () => {
     expect(
       calculatePrivacyScore(
-        createDetectionResult({ cookiesEnabled: true }),
+        createDetectionResult({
+          cookiesEnabled: true,
+          cookieSettings: {
+            cookiesEnabled: true,
+            firstPartyCookieWritable: true,
+            sessionCookieWritable: true,
+            persistentCookieWritable: true,
+            thirdPartyCookieStatus: 'likely-allowed',
+          },
+        }),
         { answers: { privacy_preference: 'privacy' } },
       ),
     ).toBe(100)
   })
 
-  it('subtracts points when persistent cookies are writable', () => {
+  it('does not subtract cookie points when only first-party cookies are writable', () => {
     expect(
       calculatePrivacyScore(
         createDetectionResult({
@@ -94,11 +112,12 @@ describe('calculatePrivacyScore', () => {
             firstPartyCookieWritable: true,
             sessionCookieWritable: true,
             persistentCookieWritable: true,
+            thirdPartyCookieStatus: 'likely-blocked',
           },
         }),
         { answers: { privacy_preference: 'maximum_privacy' } },
       ),
-    ).toBe(95)
+    ).toBe(100)
   })
 
   it('subtracts points for medium fingerprinting exposure', () => {
@@ -145,7 +164,7 @@ describe('calculatePrivacyScore', () => {
     ).toBe(88)
   })
 
-  it('does not subtract fingerprinting points below maximum privacy', () => {
+  it('subtracts fingerprinting points for balanced users', () => {
     expect(
       calculatePrivacyScore(
         createDetectionResult({
@@ -164,6 +183,28 @@ describe('calculatePrivacyScore', () => {
         }),
         { answers: { privacy_preference: 'balanced' } },
       ),
+    ).toBe(88)
+  })
+
+  it('does not subtract fingerprinting points for convenience users', () => {
+    expect(
+      calculatePrivacyScore(
+        createDetectionResult({
+          fingerprintingExposure: {
+            deviceMemory: true,
+            hardwareConcurrency: true,
+            webGl: true,
+            canvas: true,
+            audioContext: true,
+            screen: true,
+            timezone: true,
+            languages: false,
+            platform: false,
+            touchSupport: false,
+          },
+        }),
+        { answers: { privacy_preference: 'convenience' } },
+      ),
     ).toBe(100)
   })
 
@@ -179,6 +220,7 @@ describe('calculatePrivacyScore', () => {
         firstPartyCookieWritable: true,
         sessionCookieWritable: true,
         persistentCookieWritable: true,
+        thirdPartyCookieStatus: 'likely-allowed',
       },
       fingerprintingExposure: {
         deviceMemory: true,
@@ -198,7 +240,7 @@ describe('calculatePrivacyScore', () => {
       calculatePrivacyScore(result, {
         answers: { privacy_preference: 'maximum_privacy' },
       }),
-    ).toBe(23)
+    ).toBe(28)
   })
 
   it('never returns less than 0', () => {

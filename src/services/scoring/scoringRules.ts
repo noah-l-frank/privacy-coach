@@ -21,8 +21,31 @@ function wantsMaximumPrivacy(context?: ScoringContext): boolean {
   return context?.answers?.privacy_preference === 'maximum_privacy'
 }
 
+function wantsPrivacyOrBalancedGuidance(context?: ScoringContext): boolean {
+  return context?.answers?.privacy_preference !== 'convenience'
+}
+
 function isDevelopmentServer(context?: ScoringContext): boolean {
   return context?.isDevelopmentServer === true
+}
+
+function areThirdPartyCookiesLikelyAllowed(result: DetectionResult): boolean {
+  return result.cookieSettings.thirdPartyCookieStatus === 'likely-allowed'
+}
+
+function hasMeaningfulFingerprintingExposure(result: DetectionResult): boolean {
+  if (
+    result.browser === 'firefox' &&
+    result.fingerprintingProtection &&
+    result.fingerprintingProtection.status !== 'not-detected'
+  ) {
+    return false
+  }
+
+  return (
+    hasMediumFingerprintingExposure(result.fingerprintingExposure) ||
+    hasHighFingerprintingExposure(result.fingerprintingExposure)
+  )
 }
 
 export const scoringRules: ScoringRule[] = [
@@ -90,22 +113,13 @@ export const scoringRules: ScoringRule[] = [
   },
 
   {
-    id: 'cookies-enabled',
-    title: 'Cookies are enabled',
+    id: 'third-party-cookies-likely-allowed',
+    title: 'Third-party cookies are likely allowed',
     description:
-      'Cookies are useful for logins, but they can also support cross-site tracking and long-lived identifiers.',
+      'Third-party cookies can support cross-site tracking while normal first-party cookies stay useful for logins and site features.',
     penalty: 10,
-    applies: (result, context) => result.cookiesEnabled && wantsMaximumPrivacy(context),
-  },
-
-  {
-    id: 'persistent-cookies-writable',
-    title: 'Persistent cookies are writable',
-    description:
-      'Persistent cookies can survive browser restarts and make tracking identifiers last longer.',
-    penalty: 5,
     applies: (result, context) =>
-      result.cookieSettings.persistentCookieWritable &&
+      areThirdPartyCookiesLikelyAllowed(result) &&
       wantsMaximumPrivacy(context),
   },
 
@@ -117,7 +131,8 @@ export const scoringRules: ScoringRule[] = [
     penalty: 6,
     applies: (result, context) =>
       hasMediumFingerprintingExposure(result.fingerprintingExposure) &&
-      wantsMaximumPrivacy(context),
+      hasMeaningfulFingerprintingExposure(result) &&
+      wantsPrivacyOrBalancedGuidance(context),
   },
 
   {
@@ -128,6 +143,7 @@ export const scoringRules: ScoringRule[] = [
     penalty: 12,
     applies: (result, context) =>
       hasHighFingerprintingExposure(result.fingerprintingExposure) &&
-      wantsMaximumPrivacy(context),
+      hasMeaningfulFingerprintingExposure(result) &&
+      wantsPrivacyOrBalancedGuidance(context),
   },
 ]

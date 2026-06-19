@@ -38,16 +38,16 @@ The scoring logic currently uses:
 
 - browser
 - gpc
-- cookiesEnabled
 - https
-- persistentCookieWritable
+- thirdPartyCookieStatus
 - fingerprintingExposure
+- fingerprintingProtection
 
-Additional detected values such as `os` and non-persistent cookie details are already collected but are not yet part of the active recommendation/scoring rules.
+Additional detected values such as `os` and first-party cookie writability details are already collected but are not yet part of the active recommendation/scoring rules.
 
-Score deductions use the same preference context as recommendations for stricter tracking surfaces: cookie, persistent-cookie, and fingerprinting penalties are only applied after the user chooses `maximum_privacy`. The HTTPS score deduction is skipped in the local development server because that server intentionally runs without HTTPS.
+Score deductions use the same tracking-surface context as recommendations. Cookie penalties are only applied after the user chooses `maximum_privacy` and third-party cookies are likely allowed. Fingerprinting penalties follow the fingerprinting recommendation logic, including Firefox protection-signal suppression and the convenience-user opt-out. The HTTPS score deduction is skipped in the local development server because that server intentionally runs without HTTPS.
 
-Cookie recommendations are narrower than the raw cookie scan: `reduce_cookies` is shown only for `maximum_privacy` users when third-party cookies are likely allowed. First-party cookies alone do not trigger that recommendation because disabling all cookies would break many normal website flows.
+Cookie recommendations and score deductions are narrower than the raw cookie scan: `reduce_cookies` and the matching score penalty are shown only for `maximum_privacy` users when third-party cookies are likely allowed. First-party cookies alone do not trigger that guidance because disabling all cookies would break many normal website flows.
 
 ## Design Notes
 

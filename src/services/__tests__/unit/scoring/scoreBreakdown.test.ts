@@ -43,6 +43,13 @@ describe('score breakdown', () => {
       browserFamily: 'chromium',
       gpc: false,
       cookiesEnabled: true,
+      cookieSettings: {
+        cookiesEnabled: true,
+        firstPartyCookieWritable: true,
+        sessionCookieWritable: true,
+        persistentCookieWritable: true,
+        thirdPartyCookieStatus: 'likely-allowed',
+      },
     }), {
       answers: { privacy_preference: 'maximum_privacy' },
     })
@@ -60,15 +67,15 @@ describe('score breakdown', () => {
           penalty: 10,
         }),
         expect.objectContaining({
-          id: 'cookies-enabled',
-          title: 'Cookies are enabled',
+          id: 'third-party-cookies-likely-allowed',
+          title: 'Third-party cookies are likely allowed',
           penalty: 10,
         }),
       ]),
     )
   })
 
-  it('omits cookie and fingerprinting deductions below maximum privacy', () => {
+  it('omits cookie and fingerprinting deductions for convenience users', () => {
     const deductions = getScoreDeductions(
       createDetectionResult({
         cookiesEnabled: true,
@@ -89,15 +96,15 @@ describe('score breakdown', () => {
           firstPartyCookieWritable: true,
           sessionCookieWritable: true,
           persistentCookieWritable: true,
+          thirdPartyCookieStatus: 'likely-allowed',
         },
       }),
-      { answers: { privacy_preference: 'balanced' } },
+      { answers: { privacy_preference: 'convenience' } },
     )
 
     expect(deductions.map((deduction) => deduction.id)).not.toEqual(
       expect.arrayContaining([
-        'cookies-enabled',
-        'persistent-cookies-writable',
+        'third-party-cookies-likely-allowed',
         'high-fingerprinting-exposure',
       ]),
     )

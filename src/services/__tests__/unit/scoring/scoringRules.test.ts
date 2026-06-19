@@ -114,29 +114,53 @@ describe('scoringRules', () => {
     expect(rule.applies(createDetectionResult({ gpc: true }))).toBe(false)
   })
 
-  it('applies enabled cookies penalty', () => {
-    const rule = getRule('cookies-enabled')
+  it('applies third-party cookie penalty for maximum privacy users', () => {
+    const rule = getRule('third-party-cookies-likely-allowed')
 
     expect(
-      rule.applies(createDetectionResult({ cookiesEnabled: true }), {
-        answers: { privacy_preference: 'maximum_privacy' },
-      }),
+      rule.applies(
+        createDetectionResult({
+          cookiesEnabled: true,
+          cookieSettings: {
+            cookiesEnabled: true,
+            firstPartyCookieWritable: true,
+            sessionCookieWritable: true,
+            persistentCookieWritable: true,
+            thirdPartyCookieStatus: 'likely-allowed',
+          },
+        }),
+        {
+          answers: { privacy_preference: 'maximum_privacy' },
+        },
+      ),
     ).toBe(true)
     expect(rule.applies(createDetectionResult({ cookiesEnabled: false }))).toBe(false)
   })
 
-  it('does not apply enabled cookies penalty below maximum privacy', () => {
-    const rule = getRule('cookies-enabled')
+  it('does not apply third-party cookie penalty below maximum privacy', () => {
+    const rule = getRule('third-party-cookies-likely-allowed')
 
     expect(
-      rule.applies(createDetectionResult({ cookiesEnabled: true }), {
-        answers: { privacy_preference: 'privacy' },
-      }),
+      rule.applies(
+        createDetectionResult({
+          cookiesEnabled: true,
+          cookieSettings: {
+            cookiesEnabled: true,
+            firstPartyCookieWritable: true,
+            sessionCookieWritable: true,
+            persistentCookieWritable: true,
+            thirdPartyCookieStatus: 'likely-allowed',
+          },
+        }),
+        {
+          answers: { privacy_preference: 'privacy' },
+        },
+      ),
     ).toBe(false)
   })
 
-  it('applies persistent cookie writable penalty', () => {
-    const rule = getRule('persistent-cookies-writable')
+  it('does not apply cookie penalty when only first-party cookies are writable', () => {
+    const rule = getRule('third-party-cookies-likely-allowed')
 
     expect(
       rule.applies(
@@ -146,12 +170,12 @@ describe('scoringRules', () => {
             firstPartyCookieWritable: true,
             sessionCookieWritable: true,
             persistentCookieWritable: true,
+            thirdPartyCookieStatus: 'likely-blocked',
           },
         }),
         { answers: { privacy_preference: 'maximum_privacy' } },
       ),
-    ).toBe(true)
-    expect(rule.applies(createDetectionResult())).toBe(false)
+    ).toBe(false)
   })
 
   it('applies medium fingerprinting exposure penalty', () => {
@@ -197,6 +221,89 @@ describe('scoringRules', () => {
           touchSupport: false,
         },
       })),
+    ).toBe(false)
+  })
+
+  it('applies high fingerprinting exposure penalty for balanced users', () => {
+    const rule = getRule('high-fingerprinting-exposure')
+
+    expect(
+      rule.applies(
+        createDetectionResult({
+          fingerprintingExposure: {
+            deviceMemory: true,
+            hardwareConcurrency: true,
+            webGl: true,
+            canvas: true,
+            audioContext: true,
+            screen: true,
+            timezone: true,
+            languages: false,
+            platform: false,
+            touchSupport: false,
+          },
+        }),
+        { answers: { privacy_preference: 'balanced' } },
+      ),
+    ).toBe(true)
+  })
+
+  it('does not apply fingerprinting exposure penalty for convenience users', () => {
+    const rule = getRule('high-fingerprinting-exposure')
+
+    expect(
+      rule.applies(
+        createDetectionResult({
+          fingerprintingExposure: {
+            deviceMemory: true,
+            hardwareConcurrency: true,
+            webGl: true,
+            canvas: true,
+            audioContext: true,
+            screen: true,
+            timezone: true,
+            languages: false,
+            platform: false,
+            touchSupport: false,
+          },
+        }),
+        { answers: { privacy_preference: 'convenience' } },
+      ),
+    ).toBe(false)
+  })
+
+  it('does not apply fingerprinting exposure penalty for Firefox with likely active protection', () => {
+    const rule = getRule('high-fingerprinting-exposure')
+
+    expect(
+      rule.applies(
+        createDetectionResult({
+          browser: 'firefox',
+          browserFamily: 'firefox',
+          fingerprintingExposure: {
+            deviceMemory: true,
+            hardwareConcurrency: true,
+            webGl: true,
+            canvas: true,
+            audioContext: true,
+            screen: true,
+            timezone: true,
+            languages: false,
+            platform: false,
+            touchSupport: false,
+          },
+          fingerprintingProtection: {
+            status: 'likely-active',
+            signals: {
+              canvasNoise: true,
+              hardwareConcurrencyBucketed: true,
+              touchPointsBucketed: false,
+              screenDimensionsStandardized: false,
+            },
+          },
+        }),
+        { answers: { privacy_preference: 'maximum_privacy' } },
+      ),
     ).toBe(false)
   })
 

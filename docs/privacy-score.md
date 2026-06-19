@@ -29,10 +29,9 @@ The final score is clamped between **0 and 100**.
 | Browser (Firefox) | browser === 'firefox' | 0 |
 | HTTPS | https === false and the app is not running on the development server | -25 |
 | Global Privacy Control | gpc === false | -10 |
-| Cookies | cookiesEnabled === true and privacy_preference === 'maximum_privacy' | -10 |
-| Persistent cookies | persistentCookieWritable === true and privacy_preference === 'maximum_privacy' | -5 |
-| Medium fingerprinting exposure | medium fingerprinting risk and privacy_preference === 'maximum_privacy' | -6 |
-| High fingerprinting exposure | high fingerprinting risk and privacy_preference === 'maximum_privacy' | -12 |
+| Third-party cookies | thirdPartyCookieStatus === 'likely-allowed' and privacy_preference === 'maximum_privacy' | -10 |
+| Medium fingerprinting exposure | medium fingerprinting risk, matching the fingerprinting recommendation logic | -6 |
+| High fingerprinting exposure | high fingerprinting risk, matching the fingerprinting recommendation logic | -12 |
 
 ---
 
@@ -41,7 +40,8 @@ The final score is clamped between **0 and 100**.
 - HTTPS (-25): highest impact because secure transport is fundamental. This is skipped on the local development server because Vite is intentionally served over HTTP.
 - Browser penalties (0 to -15): browser defaults differ in privacy behavior, so penalties are browser-specific.
 - Global Privacy Control (-10): medium-impact user intent signal.
-- Cookie and fingerprinting penalties are reserved for `maximum_privacy`, where the user explicitly accepts stricter privacy tradeoffs.
+- Cookie penalties are reserved for `maximum_privacy` users when third-party cookies are likely allowed. Persistent first-party cookies do not carry a separate score deduction.
+- Fingerprinting penalties follow the recommendation logic: they apply for balanced or privacy-oriented users, but not for convenience-focused users or Firefox profiles where protection signals are likely active or inconclusive.
 
 ---
 

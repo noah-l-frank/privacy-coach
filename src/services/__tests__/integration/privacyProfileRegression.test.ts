@@ -70,7 +70,7 @@ describe('privacy profile regressions', () => {
 
     expect(calculatePrivacyScore(result, {
       answers: { privacy_preference: 'balanced' },
-    })).toBe(75)
+    })).toBe(63)
     expect(
       getRecommendationIds(result, {
         privacy_preference: 'balanced',
