@@ -53,7 +53,8 @@ function hasCookieExposure(result: DetectionResult): boolean {
 function hasMeaningfulFingerprintingExposure(result: DetectionResult): boolean {
   if (
     result.browser === 'firefox' &&
-    result.fingerprintingProtection?.status === 'likely-active'
+    result.fingerprintingProtection &&
+    result.fingerprintingProtection?.status !== 'not-detected'
   ) {
     return false
   }

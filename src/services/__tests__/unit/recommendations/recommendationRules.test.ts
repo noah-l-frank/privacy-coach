@@ -465,6 +465,43 @@ describe('recommendationRules', () => {
     ).toBe(false)
   })
 
+  it('does not match fingerprinting recommendation for Firefox when protection signals are inconclusive', () => {
+    const rule = getRule('reduce_fingerprinting')
+
+    expect(
+      rule.shouldRecommend({
+        result: createDetectionResult({
+          browser: 'firefox',
+          browserFamily: 'firefox',
+          fingerprintingExposure: {
+            deviceMemory: true,
+            hardwareConcurrency: true,
+            webGl: true,
+            canvas: true,
+            audioContext: true,
+            screen: true,
+            timezone: true,
+            languages: false,
+            platform: false,
+            touchSupport: false,
+          },
+          fingerprintingProtection: {
+            status: 'inconclusive',
+            signals: {
+              canvasNoise: false,
+              hardwareConcurrencyBucketed: true,
+              touchPointsBucketed: false,
+              screenDimensionsStandardized: false,
+            },
+          },
+        }),
+        answers: {
+          privacy_preference: 'balanced',
+        },
+      }),
+    ).toBe(false)
+  })
+
   it('matches fingerprinting recommendation for Firefox when protection signals are not detected', () => {
     const rule = getRule('reduce_fingerprinting')
 
