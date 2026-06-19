@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "test:unit": "vitest src/**/__tests__/unit",
     "test:integration": "vitest src/**/__tests__/integration",
-    "test:accessibility": "playwright test tests/accessibility",
+    "test:accessibility": "playwright test --config=playwright.accessibility.config.ts",
     "test": "vitest src/**/__tests__",
     "test:selenium": "tsx tests/selenium/scan.test.ts",
     "test:e2e": "playwright test",

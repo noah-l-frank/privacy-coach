@@ -14,51 +14,51 @@ const expanded = ref(false)
 const getEffortStyle = (effort: string) => {
   if (effort === 'easy') {
     return {
-      color: '#22c55e',
-      background: 'rgba(34, 197, 94, 0.12)',
-      border: '1px solid rgba(34, 197, 94, 0.22)',
-      boxShadow: '0 0 10px rgba(34, 197, 94, 0.16)',
+      color: '#166534',
+      background: '#dcfce7',
+      border: '1px solid #86efac',
+      boxShadow: '0 0 10px rgba(22, 101, 52, 0.12)',
     }
   }
 
   if (effort === 'medium') {
     return {
-      color: '#eab308',
-      background: 'rgba(234, 179, 8, 0.12)',
-      border: '1px solid rgba(234, 179, 8, 0.22)',
-      boxShadow: '0 0 10px rgba(234, 179, 8, 0.14)',
+      color: '#854d0e',
+      background: '#fef3c7',
+      border: '1px solid #facc15',
+      boxShadow: '0 0 10px rgba(133, 77, 14, 0.12)',
     }
   }
 
   return {
-    color: '#ef4444',
-    background: 'rgba(239, 68, 68, 0.12)',
-    border: '1px solid rgba(239, 68, 68, 0.22)',
-    boxShadow: '0 0 10px rgba(239, 68, 68, 0.14)',
+    color: '#991b1b',
+    background: '#fee2e2',
+    border: '1px solid #fca5a5',
+    boxShadow: '0 0 10px rgba(153, 27, 27, 0.12)',
   }
 }
 
 const getImpactStyle = (impact: string) => {
   if (impact === 'high') {
     return {
-      color: '#2563eb',
-      background: 'rgba(37, 99, 235, 0.12)',
-      border: '1px solid rgba(37, 99, 235, 0.22)',
+      color: '#1e40af',
+      background: '#dbeafe',
+      border: '1px solid #93c5fd',
     }
   }
 
   if (impact === 'medium') {
     return {
-      color: '#7c3aed',
-      background: 'rgba(124, 58, 237, 0.12)',
-      border: '1px solid rgba(124, 58, 237, 0.22)',
+      color: '#5b21b6',
+      background: '#ede9fe',
+      border: '1px solid #c4b5fd',
     }
   }
 
   return {
-    color: '#6b7280',
-    background: 'rgba(107, 114, 128, 0.12)',
-    border: '1px solid rgba(107, 114, 128, 0.22)',
+    color: '#374151',
+    background: '#f3f4f6',
+    border: '1px solid #d1d5db',
   }
 }
 </script>
@@ -79,7 +79,7 @@ const getImpactStyle = (impact: string) => {
 
     <div class="recommendation-content">
       <div class="recommendation-header">
-        <h3>{{ recommendation.title }}</h3>
+        <h2>{{ recommendation.title }}</h2>
 
         <div class="recommendation-badges">
           <span class="impact-badge" :style="getImpactStyle(recommendation.impact)">
@@ -212,7 +212,7 @@ const getImpactStyle = (impact: string) => {
   margin-bottom: 0.8rem;
 }
 
-.recommendation-header h3 {
+.recommendation-header h2 {
   margin: 0;
   font-size: 1.05rem;
   line-height: 1.35;

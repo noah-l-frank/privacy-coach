@@ -8,6 +8,8 @@ Currently, the pipeline includes:
 
 - TypeScript type checking
 - Unit tests with Vitest
+- Playwright end-to-end tests
+- Playwright/axe accessibility checks
 - Production build validation
 - Automatic Docker image builds and publishing via GitHub Container Registry (GHCR)
 

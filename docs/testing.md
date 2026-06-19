@@ -136,7 +136,9 @@ npm run test:e2e
 
 In CI, Playwright runs Chromium only to keep the pipeline fast and stable. Local runs can cover Chromium, Firefox, and Edge depending on the installed browsers.
 
-Selenium and accessibility tests are currently not integrated into the CI pipeline and are intended to be run locally. Integrating them into CI would be a possible future improvement.
+Accessibility tests run in CI on Chromium. Selenium tests are currently kept as
+local cross-browser checks because they depend on real browser installations and
+debug-route builds.
 
 
 ## Test Scripts
@@ -171,7 +173,7 @@ Script overview:
   Runs cross-browser Selenium scan tests in real browser environments.
 
 - `test:accessibility`
-  Runs automated accessibility checks using Playwright and axe-core.
+  Runs automated accessibility checks for the homepage, question flow, and results view using Playwright and axe-core.
 
 - `test:e2e`
   Runs Playwright end-to-end tests for the full user flow
@@ -182,7 +184,7 @@ This structure keeps the tests fast, focused, and aligned with the architecture.
 
 - Unit tests verify isolated rules and data structures.
 - Integration tests verify service-level behavior.
-- Selenium tests verify real browser behavior.
-- Accessibility tests verify basic accessibility compliance.
+- Selenium tests verify real browser behavior locally.
+- Accessibility tests verify basic accessibility compliance in CI.
 
 This improves maintainability while keeping the test setup pragmatic and easy to extend.
