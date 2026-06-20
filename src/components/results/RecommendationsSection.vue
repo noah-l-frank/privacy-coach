@@ -7,6 +7,7 @@ import { useScanStore } from '@/stores/scanStore'
 import { useQuestionsStore } from '@/stores/questionsStore'
 
 import { generateRecommendations } from '@/services/recommendations'
+import type { Recommendation } from '@/services/recommendations'
 
 const scanStore = useScanStore()
 const questionsStore = useQuestionsStore()
@@ -19,12 +20,63 @@ const effortOrder = {
   advanced: 2,
 }
 
+type RecommendationGroup = {
+  id: string
+  title: string
+  description: string
+  recommendations: Recommendation[]
+}
+
 const recommendations = computed(() => {
   if (!scanStore.result) return []
 
   return generateRecommendations(scanStore.result, questionsStore.answers).sort(
     (a, b) => effortOrder[a.effort] - effortOrder[b.effort],
   )
+})
+
+const recommendationGroups = computed<RecommendationGroup[]>(() => {
+  const important: Recommendation[] = []
+  const optional: Recommendation[] = []
+  const maximumPrivacy: Recommendation[] = []
+
+  recommendations.value.forEach((recommendation) => {
+    if (
+      recommendation.id === 'reduce_cookies' ||
+      recommendation.id === 'use_vpn'
+    ) {
+      maximumPrivacy.push(recommendation)
+      return
+    }
+
+    if (recommendation.impact === 'high') {
+      important.push(recommendation)
+      return
+    }
+
+    optional.push(recommendation)
+  })
+
+  return [
+    {
+      id: 'important',
+      title: 'Important',
+      description: 'Start here for the clearest privacy improvements.',
+      recommendations: important,
+    },
+    {
+      id: 'optional',
+      title: 'Optional',
+      description: 'Useful upgrades when they fit how you browse.',
+      recommendations: optional,
+    },
+    {
+      id: 'maximum-privacy',
+      title: 'Maximum Privacy',
+      description: 'Stricter actions for people who accept more tradeoffs.',
+      recommendations: maximumPrivacy,
+    },
+  ].filter((group) => group.recommendations.length > 0)
 })
 </script>
 
@@ -56,12 +108,26 @@ const recommendations = computed(() => {
       </span>
     </button>
 
-    <div v-if="showRecommendations && recommendations.length" class="recommendations-list">
-      <RecommendationCard
-        v-for="recommendation in recommendations"
-        :key="recommendation.id"
-        :recommendation="recommendation"
-      />
+    <div v-if="showRecommendations && recommendations.length" class="recommendations-groups">
+      <section
+        v-for="group in recommendationGroups"
+        :key="group.id"
+        class="recommendation-group"
+      >
+        <div class="group-header">
+          <h2>{{ group.title }}</h2>
+
+          <p>{{ group.description }}</p>
+        </div>
+
+        <div class="recommendations-list">
+          <RecommendationCard
+            v-for="recommendation in group.recommendations"
+            :key="recommendation.id"
+            :recommendation="recommendation"
+          />
+        </div>
+      </section>
     </div>
 
     <p v-else-if="!recommendations.length" class="empty-state">
@@ -153,6 +219,28 @@ const recommendations = computed(() => {
 .toggle-chevron.open {
   transform: rotate(-90deg);
   color: #0f172a;
+}
+
+.recommendations-groups {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.recommendation-group {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.group-header h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.group-header p {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.55;
 }
 
 .recommendations-list {
