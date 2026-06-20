@@ -117,7 +117,7 @@ test('completes the full privacy coach flow', async ({ page, browserName }) => {
 
   await expect(
     page.getByRole('button', {
-      name: /start new scan/i,
+      name: /run scan again/i,
     }),
   ).toBeVisible()
 })
