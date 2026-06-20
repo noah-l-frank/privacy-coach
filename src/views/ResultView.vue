@@ -76,7 +76,7 @@ async function copySettingsChecklist() {
         type="button"
         @click="focusRecommendations"
       >
-        Fix the top issue
+        Open top recommendation
       </button>
 
       <button
@@ -84,7 +84,7 @@ async function copySettingsChecklist() {
         type="button"
         @click="copySettingsChecklist"
       >
-        {{ copiedChecklist ? 'Checklist copied' : 'Copy settings checklist' }}
+        {{ copiedChecklist ? 'Checklist copied' : 'Copy checklist' }}
       </button>
 
       <button class="secondary-button" type="button" @click="restartScan">

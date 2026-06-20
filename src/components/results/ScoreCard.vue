@@ -51,9 +51,9 @@ const privacyProfile = computed(() => {
 
   if (preference === 'maximum_privacy') {
     return {
-      label: 'Maximum privacy profile',
+      label: 'Strict privacy profile',
       description:
-        'This result is judged against a strict privacy setup, so tracking and fingerprinting signals matter more.',
+        'Tracking, cookies, and fingerprinting carry more weight because you chose the strictest setup.',
     }
   }
 
@@ -61,7 +61,7 @@ const privacyProfile = computed(() => {
     return {
       label: 'Privacy-oriented profile',
       description:
-        'This result favors privacy improvements while keeping practical browser compatibility in mind.',
+        'The score favors stronger defaults while still leaving room for everyday compatibility.',
     }
   }
 
@@ -69,7 +69,7 @@ const privacyProfile = computed(() => {
     return {
       label: 'Balanced profile',
       description:
-        'This result focuses on meaningful privacy wins without pushing every strict setting.',
+        'The score focuses on the changes that matter most without pushing every strict setting.',
     }
   }
 
@@ -77,14 +77,14 @@ const privacyProfile = computed(() => {
     return {
       label: 'Convenience profile',
       description:
-        'This result keeps compatibility and low-friction browsing ahead of stricter privacy tradeoffs.',
+        'The score keeps low-friction browsing ahead of stricter privacy tradeoffs.',
     }
   }
 
   return {
     label: 'Browser privacy profile',
     description:
-      'This result combines your browser scan with the privacy preferences you selected.',
+      'The score combines your browser scan with your selected privacy profile.',
   }
 })
 
@@ -173,7 +173,7 @@ const scoreDeductionSummary = computed(() => {
               <h4>{{ deduction.title }}</h4>
               <p>{{ deduction.description }}</p>
               <p class="factor-reason">
-                Counts because this signal matched your scan and selected profile.
+                Counted because it matched your scan and profile.
               </p>
             </div>
 
@@ -191,7 +191,7 @@ const scoreDeductionSummary = computed(() => {
         class="factor-section skipped-factors-panel"
       >
         <summary>
-          <h3>Not counted</h3>
+          <h3>Ignored for this profile</h3>
 
           <span>{{ skippedScoreFactors.length }} explained</span>
         </summary>

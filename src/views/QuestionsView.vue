@@ -4,7 +4,7 @@
       <div class="profile-header">
         <span class="profile-label">Privacy profile</span>
 
-        <span class="profile-progress">Item {{ answeredCount + 1 }}</span>
+        <span class="profile-progress">Step {{ answeredCount + 1 }}</span>
       </div>
 
       <div v-if="currentQuestion">
@@ -57,7 +57,7 @@
       </div>
 
       <div v-else class="empty-state">
-        <p>No follow-up questions needed.</p>
+        <p>Your privacy profile is ready.</p>
         <button class="continue-button" @click="goToResults">Continue</button>
       </div>
     </section>

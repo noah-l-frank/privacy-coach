@@ -18,11 +18,11 @@ const browserContext = computed(() => {
     return {
       label: 'Firefox context',
       title: hasProtectionSignal
-        ? 'Firefox protection signals were detected'
+        ? 'Firefox protections are visible'
         : 'Firefox gives you strong privacy controls',
       description: hasProtectionSignal
-        ? 'Privacy Coach treats those signals as meaningful context, so fingerprinting exposure is not scored as harshly as it would be in a browser without those protections.'
-        : 'Enhanced Tracking Protection, cookie controls, and Global Privacy Control are built in, so small settings changes can have a direct effect.',
+        ? 'Those signals reduce the weight of fingerprinting exposure in this result.'
+        : 'Enhanced Tracking Protection, cookie controls, and Global Privacy Control are built in.',
     }
   }
 
@@ -31,7 +31,7 @@ const browserContext = computed(() => {
       label: 'Brave context',
       title: 'Brave starts from stronger privacy defaults',
       description:
-        'The score still checks Chromium-based browser signals, but Brave Shields and built-in blocking usually reduce the amount of setup needed.',
+        'Brave Shields and built-in blocking usually reduce the amount of setup needed.',
     }
   }
 
@@ -40,7 +40,7 @@ const browserContext = computed(() => {
       label: 'Safari context',
       title: 'Safari has strong platform-level tracking protection',
       description:
-        'Privacy Coach still highlights browser signals it can observe, while Safari-specific protections may handle some cross-site tracking behind the scenes.',
+        'Safari may handle some cross-site tracking behind the scenes, so the scan focuses on visible browser signals.',
     }
   }
 
@@ -49,7 +49,7 @@ const browserContext = computed(() => {
       label: 'Chromium context',
       title: 'Compatibility is strong, privacy defaults vary',
       description:
-        'Chrome-like browsers work almost everywhere, so the most useful improvements are usually tracking protection, GPC, extensions, and third-party cookie settings.',
+        'The highest-value changes are usually tracking protection, GPC, trusted extensions, and third-party cookie settings.',
     }
   }
 
@@ -57,7 +57,7 @@ const browserContext = computed(() => {
     label: 'Browser context',
     title: 'Privacy Coach could not fully classify this browser',
     description:
-      'The scan still uses observable privacy signals, but browser-specific recommendations may be more general.',
+      'The scan still uses visible privacy signals, but browser-specific guidance may be more general.',
   }
 })
 </script>

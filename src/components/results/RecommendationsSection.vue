@@ -42,8 +42,8 @@ const recommendationGroups = computed<RecommendationGroup[]>(() => {
 
   recommendations.value.forEach((recommendation) => {
     if (
-      recommendation.id === 'reduce_cookies' ||
-      recommendation.id === 'use_vpn'
+      recommendation.id === 'reduce-cookies' ||
+      recommendation.id === 'use-vpn'
     ) {
       maximumPrivacy.push(recommendation)
       return
@@ -61,19 +61,19 @@ const recommendationGroups = computed<RecommendationGroup[]>(() => {
     {
       id: 'important',
       title: 'Important',
-      description: 'Start here for the clearest privacy improvements.',
+      description: 'Start here for the clearest privacy wins.',
       recommendations: important,
     },
     {
       id: 'optional',
       title: 'Optional',
-      description: 'Useful upgrades when they fit how you browse.',
+      description: 'Useful when they fit the way you browse.',
       recommendations: optional,
     },
     {
       id: 'maximum-privacy',
       title: 'Maximum Privacy',
-      description: 'Stricter actions for people who accept more tradeoffs.',
+      description: 'Stricter actions with clearer tradeoffs.',
       recommendations: maximumPrivacy,
     },
   ].filter((group) => group.recommendations.length > 0)
@@ -86,8 +86,7 @@ const recommendationGroups = computed<RecommendationGroup[]>(() => {
       <h1 class="section-title">Privacy recommendations</h1>
 
       <p class="section-subtitle">
-        Based on your scan results and answers, here are the most relevant next
-        steps.
+        The most relevant changes for this browser and privacy profile.
       </p>
     </div>
 
