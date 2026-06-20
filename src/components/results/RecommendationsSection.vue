@@ -81,7 +81,7 @@ const recommendationGroups = computed<RecommendationGroup[]>(() => {
 </script>
 
 <template>
-  <section class="recommendations-section">
+  <section id="recommended-actions" class="recommendations-section">
     <div class="section-header">
       <h1 class="section-title">Privacy recommendations</h1>
 
