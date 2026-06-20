@@ -45,6 +45,48 @@ const scoreColor = computed(() => {
   return '#22c55e'
 })
 
+const privacyProfile = computed(() => {
+  const preference = questionsStore.answers.privacy_preference
+
+  if (preference === 'maximum_privacy') {
+    return {
+      label: 'Maximum privacy profile',
+      description:
+        'This result is judged against a strict privacy setup, so tracking and fingerprinting signals matter more.',
+    }
+  }
+
+  if (preference === 'privacy') {
+    return {
+      label: 'Privacy-oriented profile',
+      description:
+        'This result favors privacy improvements while keeping practical browser compatibility in mind.',
+    }
+  }
+
+  if (preference === 'balanced') {
+    return {
+      label: 'Balanced profile',
+      description:
+        'This result focuses on meaningful privacy wins without pushing every strict setting.',
+    }
+  }
+
+  if (preference === 'convenience') {
+    return {
+      label: 'Convenience profile',
+      description:
+        'This result keeps compatibility and low-friction browsing ahead of stricter privacy tradeoffs.',
+    }
+  }
+
+  return {
+    label: 'Browser privacy profile',
+    description:
+      'This result combines your browser scan with the privacy preferences you selected.',
+  }
+})
+
 const scoreDeductions = computed(() => {
   if (!scanStore.result) return []
 
@@ -63,6 +105,14 @@ const scoreDeductionSummary = computed(() => {
 
 <template>
   <section class="score-card">
+    <div class="profile-summary">
+      <span class="profile-eyebrow">Your result</span>
+
+      <h1>{{ privacyProfile.label }}</h1>
+
+      <p>{{ privacyProfile.description }}</p>
+    </div>
+
     <div class="score-top-row">
       <div>
         <p class="score-label">Privacy Score</p>
@@ -139,6 +189,32 @@ const scoreDeductionSummary = computed(() => {
   box-shadow:
     0 18px 40px rgba(15, 23, 42, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.profile-summary {
+  margin-bottom: 1.5rem;
+}
+
+.profile-eyebrow {
+  display: inline-block;
+  margin-bottom: 0.45rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.profile-summary h1 {
+  margin: 0 0 0.45rem;
+  font-size: 1.65rem;
+  line-height: 1.2;
+}
+
+.profile-summary p {
+  max-width: 66ch;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.76);
+  line-height: 1.6;
 }
 
 .score-top-row {
