@@ -7,6 +7,7 @@ import { useScanStore } from '@/stores/scanStore'
 import {
   calculatePrivacyScore,
   getScoreDeductions,
+  getSkippedScoreFactors,
 } from '@/services/scoring'
 
 const scanStore = useScanStore()
@@ -45,10 +46,58 @@ const scoreColor = computed(() => {
   return '#22c55e'
 })
 
+const privacyProfile = computed(() => {
+  const preference = questionsStore.answers.privacy_preference
+
+  if (preference === 'maximum_privacy') {
+    return {
+      label: 'Strict privacy profile',
+      description:
+        'Tracking, cookies, and fingerprinting carry more weight because you chose the strictest setup.',
+    }
+  }
+
+  if (preference === 'privacy') {
+    return {
+      label: 'Privacy-oriented profile',
+      description:
+        'The score favors stronger defaults while still leaving room for everyday compatibility.',
+    }
+  }
+
+  if (preference === 'balanced') {
+    return {
+      label: 'Balanced profile',
+      description:
+        'The score focuses on the changes that matter most without pushing every strict setting.',
+    }
+  }
+
+  if (preference === 'convenience') {
+    return {
+      label: 'Convenience profile',
+      description:
+        'The score keeps low-friction browsing ahead of stricter privacy tradeoffs.',
+    }
+  }
+
+  return {
+    label: 'Browser privacy profile',
+    description:
+      'The score combines your browser scan with your selected privacy profile.',
+  }
+})
+
 const scoreDeductions = computed(() => {
   if (!scanStore.result) return []
 
   return getScoreDeductions(scanStore.result, scoringContext.value)
+})
+
+const skippedScoreFactors = computed(() => {
+  if (!scanStore.result) return []
+
+  return getSkippedScoreFactors(scanStore.result, scoringContext.value)
 })
 
 const scoreDeductionSummary = computed(() => {
@@ -63,6 +112,14 @@ const scoreDeductionSummary = computed(() => {
 
 <template>
   <section class="score-card">
+    <div class="profile-summary">
+      <span class="profile-eyebrow">Your result</span>
+
+      <h1>{{ privacyProfile.label }}</h1>
+
+      <p>{{ privacyProfile.description }}</p>
+    </div>
+
     <div class="score-top-row">
       <div>
         <p class="score-label">Privacy Score</p>
@@ -115,6 +172,9 @@ const scoreDeductionSummary = computed(() => {
             <div>
               <h4>{{ deduction.title }}</h4>
               <p>{{ deduction.description }}</p>
+              <p class="factor-reason">
+                Counted because it matched your scan and profile.
+              </p>
             </div>
 
             <strong>-{{ deduction.penalty }}</strong>
@@ -124,6 +184,30 @@ const scoreDeductionSummary = computed(() => {
         <p v-else class="factor-empty">
           No score deductions were applied.
         </p>
+      </details>
+
+      <details
+        v-if="skippedScoreFactors.length"
+        class="factor-section skipped-factors-panel"
+      >
+        <summary>
+          <h3>Ignored for this profile</h3>
+
+          <span>{{ skippedScoreFactors.length }} explained</span>
+        </summary>
+
+        <div class="factor-list">
+          <article
+            v-for="factor in skippedScoreFactors"
+            :key="factor.id"
+            class="factor-item skipped"
+          >
+            <div>
+              <h4>{{ factor.title }}</h4>
+              <p>{{ factor.description }}</p>
+            </div>
+          </article>
+        </div>
       </details>
     </div>
   </section>
@@ -139,6 +223,32 @@ const scoreDeductionSummary = computed(() => {
   box-shadow:
     0 18px 40px rgba(15, 23, 42, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.profile-summary {
+  margin-bottom: 1.5rem;
+}
+
+.profile-eyebrow {
+  display: inline-block;
+  margin-bottom: 0.45rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.profile-summary h1 {
+  margin: 0 0 0.45rem;
+  font-size: 1.65rem;
+  line-height: 1.2;
+}
+
+.profile-summary p {
+  max-width: 66ch;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.76);
+  line-height: 1.6;
 }
 
 .score-top-row {
@@ -222,6 +332,8 @@ const scoreDeductionSummary = computed(() => {
 }
 
 .score-breakdown {
+  display: grid;
+  gap: 0.75rem;
   margin-top: 1.5rem;
 }
 
@@ -318,5 +430,13 @@ const scoreDeductionSummary = computed(() => {
   color: #fca5a5;
   font-size: 0.95rem;
   white-space: nowrap;
+}
+
+.factor-reason {
+  margin-top: 0.35rem;
+}
+
+.factor-item.skipped {
+  border-color: rgba(147, 197, 253, 0.18);
 }
 </style>

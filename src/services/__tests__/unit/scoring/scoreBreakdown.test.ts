@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   getScoreDeductions,
+  getSkippedScoreFactors,
 } from '../../../scoring'
 import type { DetectionResult } from '../../../detection'
 
@@ -106,6 +107,31 @@ describe('score breakdown', () => {
       expect.arrayContaining([
         'third-party-cookies-likely-allowed',
         'high-fingerprinting-exposure',
+      ]),
+    )
+  })
+
+  it('explains why relevant score factors were not counted', () => {
+    const skippedFactors = getSkippedScoreFactors(
+      createDetectionResult({
+        cookiesEnabled: true,
+        cookieSettings: {
+          cookiesEnabled: true,
+          firstPartyCookieWritable: true,
+          sessionCookieWritable: true,
+          persistentCookieWritable: true,
+          thirdPartyCookieStatus: 'likely-allowed',
+        },
+      }),
+      { answers: { privacy_preference: 'balanced' } },
+    )
+
+    expect(skippedFactors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'third-party-cookies-likely-allowed',
+          description: 'This is only scored for a maximum-privacy profile.',
+        }),
       ]),
     )
   })

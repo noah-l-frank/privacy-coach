@@ -1,7 +1,11 @@
 <template>
   <main class="questions-view">
     <section class="question-card">
-      <p class="question-step">Question {{ answeredCount + 1 }}</p>
+      <div class="profile-header">
+        <span class="profile-label">Privacy profile</span>
+
+        <span class="profile-progress">Step {{ answeredCount + 1 }}</span>
+      </div>
 
       <div v-if="currentQuestion">
         <h1>{{ currentQuestion.title }}</h1>
@@ -53,7 +57,7 @@
       </div>
 
       <div v-else class="empty-state">
-        <p>No follow-up questions needed.</p>
+        <p>Your privacy profile is ready.</p>
         <button class="continue-button" @click="goToResults">Continue</button>
       </div>
     </section>
@@ -132,23 +136,35 @@ watch(
 }
 
 .question-card {
-  background: linear-gradient(180deg, #111827 0%, #1f2937 100%);
+  background: #111827;
   color: white;
-  border-radius: 20px;
+  border-radius: 16px;
   padding: 1.5rem;
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-.question-step {
-  font-size: 0.95rem;
-  opacity: 0.8;
-  margin: 0 0 0.75rem;
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.profile-label,
+.profile-progress {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.profile-label {
+  text-transform: uppercase;
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.65rem;
   margin: 0 0 0.75rem;
   line-height: 1.2;
 }
@@ -163,12 +179,13 @@ h1 {
 
 .options-list {
   display: grid;
-  gap: 0.9rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
 }
 
 .toggle-group {
   display: grid;
-  gap: 0.9rem;
+  gap: 0.75rem;
 }
 
 .toggle-row {
@@ -262,7 +279,8 @@ h1 {
   width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 16px;
-  padding: 1rem 1.1rem;
+  min-height: 4rem;
+  padding: 0.9rem 1rem;
   font: inherit;
   font-weight: 600;
   text-align: left;
