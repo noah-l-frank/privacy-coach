@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import ScoreCard from '@/components/results/ScoreCard.vue'
 import RecommendationsSection from '@/components/results/RecommendationsSection.vue'
 import PositiveFindingsSection from '@/components/results/PositiveFindingsSection.vue'
+import BrowserContextSection from '@/components/results/BrowserContextSection.vue'
 
 import { useScanStore } from '@/stores/scanStore'
 
@@ -28,6 +29,8 @@ async function restartScan() {
 <template>
   <main class="results-view">
     <ScoreCard />
+
+    <BrowserContextSection />
 
     <RecommendationsSection />
 
