@@ -4,12 +4,13 @@ import {
   hasMediumFingerprintingExposure,
 } from '@/services/detection'
 
-type ScoringRule = {
+export type ScoringRule = {
   id: string
   title: string
   description: string
   penalty: number
   applies: (result: DetectionResult, context?: ScoringContext) => boolean
+  skippedDescription?: (result: DetectionResult, context?: ScoringContext) => string | null
 }
 
 export type ScoringContext = {
@@ -33,19 +34,27 @@ function areThirdPartyCookiesLikelyAllowed(result: DetectionResult): boolean {
   return result.cookieSettings.thirdPartyCookieStatus === 'likely-allowed'
 }
 
-function hasMeaningfulFingerprintingExposure(result: DetectionResult): boolean {
-  if (
-    result.browser === 'firefox' &&
-    result.fingerprintingProtection &&
-    result.fingerprintingProtection.status !== 'not-detected'
-  ) {
-    return false
-  }
-
+function hasAnyFingerprintingExposure(result: DetectionResult): boolean {
   return (
     hasMediumFingerprintingExposure(result.fingerprintingExposure) ||
     hasHighFingerprintingExposure(result.fingerprintingExposure)
   )
+}
+
+function hasFirefoxFingerprintingProtectionSignal(result: DetectionResult): boolean {
+  return Boolean(
+    result.browser === 'firefox' &&
+    result.fingerprintingProtection &&
+    result.fingerprintingProtection.status !== 'not-detected',
+  )
+}
+
+function hasMeaningfulFingerprintingExposure(result: DetectionResult): boolean {
+  if (hasFirefoxFingerprintingProtectionSignal(result)) {
+    return false
+  }
+
+  return hasAnyFingerprintingExposure(result)
 }
 
 export const scoringRules: ScoringRule[] = [
@@ -101,6 +110,14 @@ export const scoringRules: ScoringRule[] = [
       'Without HTTPS, pages can be easier to inspect or manipulate on the network path.',
     penalty: 25,
     applies: (result, context) => !result.https && !isDevelopmentServer(context),
+    skippedDescription: (result, context) => {
+      if (result.https) return 'This connection already uses HTTPS.'
+      if (isDevelopmentServer(context)) {
+        return 'Local development HTTP is ignored so it does not distort the production score.'
+      }
+
+      return null
+    },
   },
 
   {
@@ -121,6 +138,17 @@ export const scoringRules: ScoringRule[] = [
     applies: (result, context) =>
       areThirdPartyCookiesLikelyAllowed(result) &&
       wantsMaximumPrivacy(context),
+    skippedDescription: (result, context) => {
+      if (!areThirdPartyCookiesLikelyAllowed(result)) {
+        return 'Third-party cookies do not look allowed, so normal first-party cookies are not penalized.'
+      }
+
+      if (!wantsMaximumPrivacy(context)) {
+        return 'This is only scored for a maximum-privacy profile.'
+      }
+
+      return null
+    },
   },
 
   {
@@ -133,6 +161,18 @@ export const scoringRules: ScoringRule[] = [
       hasMediumFingerprintingExposure(result.fingerprintingExposure) &&
       hasMeaningfulFingerprintingExposure(result) &&
       wantsPrivacyOrBalancedGuidance(context),
+    skippedDescription: (result, context) => {
+      if (!hasAnyFingerprintingExposure(result)) return null
+      if (hasFirefoxFingerprintingProtectionSignal(result)) {
+        return 'Firefox protection signals are present, so this exposure is not counted as a score penalty.'
+      }
+
+      if (!wantsPrivacyOrBalancedGuidance(context)) {
+        return 'Convenience-focused profiles do not receive fingerprinting score penalties.'
+      }
+
+      return null
+    },
   },
 
   {
@@ -145,5 +185,17 @@ export const scoringRules: ScoringRule[] = [
       hasHighFingerprintingExposure(result.fingerprintingExposure) &&
       hasMeaningfulFingerprintingExposure(result) &&
       wantsPrivacyOrBalancedGuidance(context),
+    skippedDescription: (result, context) => {
+      if (!hasAnyFingerprintingExposure(result)) return null
+      if (hasFirefoxFingerprintingProtectionSignal(result)) {
+        return 'Firefox protection signals are present, so this exposure is not counted as a score penalty.'
+      }
+
+      if (!wantsPrivacyOrBalancedGuidance(context)) {
+        return 'Convenience-focused profiles do not receive fingerprinting score penalties.'
+      }
+
+      return null
+    },
   },
 ]

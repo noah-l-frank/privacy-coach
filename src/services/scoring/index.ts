@@ -14,7 +14,9 @@ export function calculatePrivacyScore(
 
 export {
   getScoreDeductions,
+  getSkippedScoreFactors,
   type ScoreDeduction,
+  type SkippedScoreFactor,
 } from './scoreBreakdown'
 
 export type { ScoringContext } from './scoringRules'

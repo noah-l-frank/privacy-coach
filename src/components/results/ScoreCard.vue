@@ -7,6 +7,7 @@ import { useScanStore } from '@/stores/scanStore'
 import {
   calculatePrivacyScore,
   getScoreDeductions,
+  getSkippedScoreFactors,
 } from '@/services/scoring'
 
 const scanStore = useScanStore()
@@ -93,6 +94,12 @@ const scoreDeductions = computed(() => {
   return getScoreDeductions(scanStore.result, scoringContext.value)
 })
 
+const skippedScoreFactors = computed(() => {
+  if (!scanStore.result) return []
+
+  return getSkippedScoreFactors(scanStore.result, scoringContext.value)
+})
+
 const scoreDeductionSummary = computed(() => {
   const count = scoreDeductions.value.length
 
@@ -165,6 +172,9 @@ const scoreDeductionSummary = computed(() => {
             <div>
               <h4>{{ deduction.title }}</h4>
               <p>{{ deduction.description }}</p>
+              <p class="factor-reason">
+                Counts because this signal matched your scan and selected profile.
+              </p>
             </div>
 
             <strong>-{{ deduction.penalty }}</strong>
@@ -174,6 +184,30 @@ const scoreDeductionSummary = computed(() => {
         <p v-else class="factor-empty">
           No score deductions were applied.
         </p>
+      </details>
+
+      <details
+        v-if="skippedScoreFactors.length"
+        class="factor-section skipped-factors-panel"
+      >
+        <summary>
+          <h3>Not counted</h3>
+
+          <span>{{ skippedScoreFactors.length }} explained</span>
+        </summary>
+
+        <div class="factor-list">
+          <article
+            v-for="factor in skippedScoreFactors"
+            :key="factor.id"
+            class="factor-item skipped"
+          >
+            <div>
+              <h4>{{ factor.title }}</h4>
+              <p>{{ factor.description }}</p>
+            </div>
+          </article>
+        </div>
       </details>
     </div>
   </section>
@@ -298,6 +332,8 @@ const scoreDeductionSummary = computed(() => {
 }
 
 .score-breakdown {
+  display: grid;
+  gap: 0.75rem;
   margin-top: 1.5rem;
 }
 
@@ -394,5 +430,13 @@ const scoreDeductionSummary = computed(() => {
   color: #fca5a5;
   font-size: 0.95rem;
   white-space: nowrap;
+}
+
+.factor-reason {
+  margin-top: 0.35rem;
+}
+
+.factor-item.skipped {
+  border-color: rgba(147, 197, 253, 0.18);
 }
 </style>
