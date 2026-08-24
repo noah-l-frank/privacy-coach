@@ -27,16 +27,30 @@ describe('recommendationContent', () => {
     })
   })
 
-  it('does not expose placeholder content in static recommendation copy', () => {
+  it('does not expose placeholder content', () => {
     Object.values(recommendationContent).forEach((recommendation) => {
-      expect(recommendation.title).not.toContain('[Dynamic')
-      expect(recommendation.description).not.toContain('[Dynamic')
-      expect(recommendation.why).not.toContain('[Dynamic')
+      const copy = [
+        recommendation.title,
+        recommendation.description,
+        recommendation.why,
+        ...recommendation.steps,
+        ...recommendation.tradeoffs,
+        ...recommendation.links.flatMap((link) => [link.label, link.url]),
+      ]
 
-      recommendation.tradeoffs.forEach((tradeoff) => {
-        expect(tradeoff).not.toContain('[Dynamic')
+      copy.forEach((value) => {
+        expect(value).not.toContain('[Dynamic')
+        expect(value).not.toContain('example.com')
       })
     })
   })
 
+  it('uses secure web links for every recommendation resource', () => {
+    Object.values(recommendationContent).forEach((recommendation) => {
+      recommendation.links.forEach((link) => {
+        expect(() => new URL(link.url)).not.toThrow()
+        expect(new URL(link.url).protocol).toBe('https:')
+      })
+    })
+  })
 })

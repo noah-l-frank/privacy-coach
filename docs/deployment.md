@@ -1,6 +1,6 @@
 # Deployment
 
-Currently, the deployed version tracks the `dev` branch because no stable production release has been merged into `main` yet.
+The current deployment tracks the `dev` image until the first stable release is merged into `main`. After that release, production should be configured to track the `main` image, while `dev` remains available for pre-release validation.
 
 The currently deployed version of the application is available at <https://pc.noah-frank.de>.
 

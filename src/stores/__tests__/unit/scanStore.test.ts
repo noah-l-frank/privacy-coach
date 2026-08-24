@@ -6,7 +6,7 @@ import { useQuestionsStore } from '../../questionsStore'
 import { useScanStore } from '../../scanStore'
 
 vi.mock('../../../services/detection', () => ({
-  detectEnvironment: vi.fn(),
+  detectEnvironment: vi.fn<() => Promise<DetectionResult>>(),
 }))
 
 function createDetectionResult(overrides: Partial<DetectionResult> = {}): DetectionResult {

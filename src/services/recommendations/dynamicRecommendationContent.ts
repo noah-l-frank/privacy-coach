@@ -26,12 +26,10 @@ export function enhanceRecommendation(
     }
   }
 
-
   return recommendation
 }
 
 function getCookieSteps(browser: string): string[] {
-
   if (browser.includes('firefox')) {
     return [
       'Open Firefox settings',
@@ -59,15 +57,10 @@ function getCookieSteps(browser: string): string[] {
     ]
   }
 
-  return [
-    'Open your browser privacy settings',
-    'Review cookie and tracking settings',
-  ]
+  return ['Open your browser privacy settings', 'Review cookie and tracking settings']
 }
 
 function getCookieLink(browser: string) {
-
-
   if (browser.includes('firefox')) {
     return {
       label: 'Firefox cookie settings',
@@ -91,10 +84,9 @@ function getCookieLink(browser: string) {
 
   return {
     label: 'Browser cookie settings',
-    url: 'https://www.allaboutcookies.org/',
+    url: 'https://developer.mozilla.org/en-US/docs/Web/Privacy/Guides/Third-party_cookies',
   }
 }
-
 
 function getGpcSteps(browser: string): string[] {
   if (browser === 'firefox') {
