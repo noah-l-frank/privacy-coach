@@ -1,4 +1,3 @@
-import { detectBrowser } from './browserDetection'
 import { detectDeviceType, detectOS } from './osDetection'
 
 import type { DetectionResult, NavigatorWithGPC } from './types'
