@@ -1,0 +1,15 @@
+services:
+  privacy-coach:
+    image: ghcr.io/noah-be/privacy-coach:dev
+    container_name: privacy-coach
+    restart: unless-stopped
+    ports:
+      - '5699:5699'
+    networks:
+      - proxy
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+networks:
+  proxy:
+    external: true
