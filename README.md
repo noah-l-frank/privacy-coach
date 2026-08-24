@@ -16,7 +16,7 @@ Live demo: https://pc.noah-frank.de
 
 - Browser and operating system detection
 - Cookie and Global Privacy Control detection
-- Fingerprinting exposure detection (currently only collected but not yet part of active scoring/recommendation rules)
+- Fingerprinting exposure detection with context-aware scoring and recommendations
 - Adaptive follow-up questions
 - Privacy scoring system
 - Personalized privacy recommendations
@@ -31,7 +31,7 @@ Live demo: https://pc.noah-frank.de
 ## Installation
 
 ```sh
-npm install
+npm ci
 npm run dev
 ```
 
@@ -42,16 +42,19 @@ After completing the installation steps, open the application in your browser an
 ## Tech Stack
 
 ### Frontend
+
 - Vue 3
 - TypeScript
 - Pinia
 
 ### Testing
+
 - Vitest
 - Playwright
 - Selenium
 
 ### DevOps
+
 - Docker
 - GitHub Actions
 

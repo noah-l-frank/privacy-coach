@@ -12,8 +12,7 @@ export const recommendationContent = {
     effort: 'medium',
     impact: 'high',
 
-    why:
-      'Using a browser outside the Chromium ecosystem reduces dependence on one browser engine and gives you privacy controls that are easier to inspect and adjust.',
+    why: 'Using a browser outside the Chromium ecosystem reduces dependence on one browser engine and gives you privacy controls that are easier to inspect and adjust.',
 
     steps: [
       'Download and install Firefox',
@@ -46,8 +45,7 @@ export const recommendationContent = {
     effort: 'easy',
     impact: 'medium',
 
-    why:
-      'For people who rely on Chrome-like compatibility, Brave can reduce tracking exposure without requiring a completely different browsing workflow.',
+    why: 'For people who rely on Chrome-like compatibility, Brave can reduce tracking exposure without requiring a completely different browsing workflow.',
 
     steps: [
       'Download and install Brave',
@@ -81,11 +79,13 @@ export const recommendationContent = {
     effort: 'easy',
     impact: 'medium',
 
-    why:
-      'GPC is designed as a browser-level privacy preference, so you do not have to look for separate opt-out links on every website.',
+    why: 'GPC is designed as a browser-level privacy preference, so you do not have to look for separate opt-out links on every website.',
 
     steps: [
-      '[Dynamic browser specific GPC steps will appear here]',
+      'Open your browser privacy settings',
+      'Search for Global Privacy Control',
+      'Enable the setting if your browser supports it',
+      'Verify the signal on globalprivacycontrol.org',
     ],
 
     links: [
@@ -112,8 +112,7 @@ export const recommendationContent = {
     effort: 'easy',
     impact: 'medium',
 
-    why:
-      'GPC communicates a broad opt-out preference for data sale or sharing, and extensions can add that signal to browsers that do not expose it directly.',
+    why: 'GPC communicates a broad opt-out preference for data sale or sharing, and extensions can add that signal to browsers that do not expose it directly.',
 
     steps: [
       'Choose a reputable extension that explicitly supports Global Privacy Control',
@@ -146,17 +145,18 @@ export const recommendationContent = {
     effort: 'medium',
     impact: 'high',
 
-    why:
-      'Advertising and analytics networks can use cookies to recognize your browser across multiple websites and sessions.',
+    why: 'Advertising and analytics networks can use cookies to recognize your browser across multiple websites and sessions.',
 
     steps: [
-      '[Dynamic browser specific cookie settings steps will appear here]',
+      'Open your browser privacy settings',
+      'Review cookie and tracking settings',
+      'Block third-party cookies where your browser supports it',
     ],
 
     links: [
       {
-        label: '[Dynamic browser specific cookie settings link]',
-        url: 'https://example.com',
+        label: 'Learn about managing browser cookies',
+        url: 'https://developer.mozilla.org/en-US/docs/Web/Privacy/Guides/Third-party_cookies',
       },
     ],
 
@@ -177,8 +177,7 @@ export const recommendationContent = {
     effort: 'medium',
     impact: 'high',
 
-    why:
-      'Fingerprinting combines browser and device details such as canvas, WebGL, language, timezone, and hardware signals to create a recognizable profile without relying on cookies.',
+    why: 'Fingerprinting combines browser and device details such as canvas, WebGL, language, timezone, and hardware signals to create a recognizable profile without relying on cookies.',
 
     steps: [
       'Use a browser with stronger anti-fingerprinting protections',
@@ -215,8 +214,7 @@ export const recommendationContent = {
     effort: 'easy',
     impact: 'high',
 
-    why:
-      'Many ads load third-party scripts that can track browsing behavior across websites, even when the visible ad itself seems harmless.',
+    why: 'Many ads load third-party scripts that can track browsing behavior across websites, even when the visible ad itself seems harmless.',
 
     steps: [
       'Install uBlock Origin',
@@ -249,8 +247,7 @@ export const recommendationContent = {
     effort: 'easy',
     impact: 'high',
 
-    why:
-      'Reusing passwords increases the risk that one leaked password compromises multiple accounts.',
+    why: 'Reusing passwords increases the risk that one leaked password compromises multiple accounts.',
 
     steps: [
       'Choose a password manager',
@@ -269,9 +266,7 @@ export const recommendationContent = {
       },
     ],
 
-    tradeoffs: [
-      'You must remember your master password carefully.',
-    ],
+    tradeoffs: ['You must remember your master password carefully.'],
   },
 
   use_vpn: {
@@ -285,8 +280,7 @@ export const recommendationContent = {
     effort: 'advanced',
     impact: 'medium',
 
-    why:
-      'A VPN can hide your traffic from the local network operator and change the IP address websites see, but the VPN provider then becomes a party you must trust.',
+    why: 'A VPN can hide your traffic from the local network operator and change the IP address websites see, but the VPN provider then becomes a party you must trust.',
 
     steps: [
       'Use a VPN especially on public Wi-Fi or networks you do not trust',
